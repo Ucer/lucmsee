@@ -76,7 +76,7 @@ export default {
   methods: {
     ...mapActions([
       'handleLogin',
-      'getUserInfo'
+      'getUserInfoExcute'
     ]),
     handleSubmit() {
       let t = this
@@ -87,7 +87,7 @@ export default {
             email: t.formData.email,
             password: t.formData.password,
             captcha: t.formData.captcha,
-            captcha_key: t.formData.captcha_key,
+            captcha_key: t.formData.captcha_key
           }).then(res => {
             t.getUserInfo().then(res => {
               t.$router.push({

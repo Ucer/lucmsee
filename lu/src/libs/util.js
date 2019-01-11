@@ -4,13 +4,13 @@ import config from '@/config'
 import { forEach, hasOneOf, objEqual } from '@/libs/tools'
 const { title, cookieExpires, useI18n } = config
 
-export const TOKEN_KEY = 'token'
+export const TOKEN_KEY = 'access_token'
 
-export const setToken = (token) => {
+export const setTokenToCookies = (token) => {
   Cookies.set(TOKEN_KEY, token, { expires: cookieExpires || 1 })
 }
 
-export const getToken = () => {
+export const getTokenFromCookies = () => {
   const token = Cookies.get(TOKEN_KEY)
   if (token) return token
   else return false
