@@ -15,7 +15,7 @@
             <Input prefix="md-lock" type="password" v-model="formData.password" placeholder="请输入密码" />
           </FormItem>
           <FormItem prop="captcha" class="captcha-img">
-            <Input v-model="formData.captcha" placeholder="请输入验证码a">
+            <Input v-model="formData.captcha" placeholder="请输入验证码">
             <img style="padding:0" @click="getCaptchaExcute()" slot="append" :src="captcha_url" alt="" />
             </Input>
           </FormItem>
