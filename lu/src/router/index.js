@@ -10,11 +10,16 @@ const { homeName } = config
 Vue.use(Router)
 const router = new Router({
   routes,
-  // 是否开启 url 美化
-  // mode: 'history'
+  // mode: 'history' // 是否开启 url 美化
 })
 const LOGIN_PAGE_NAME = 'login'
 
+/**
+ * 权鉴方法调用入口
+ * @param {*} name 即将跳转的路由name
+ * @param {*} access 用户权限数组
+ * @param {*} routes 路由列表
+ */
 const turnTo = (to, access, next) => {
   if (canTurnTo(to.name, access, routes)) next() // 有权限，可访问
   else next({ replace: true, name: 'error_401' }) // 无权限，重定向到401页面

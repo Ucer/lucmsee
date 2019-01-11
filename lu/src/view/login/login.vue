@@ -1,45 +1,114 @@
 <style lang="less">
-  @import './login.less';
+@import './login.less';
 </style>
 
 <template>
-  <div class="login">
-    <div class="login-con">
-      <Card icon="log-in" title="欢迎登录" :bordered="false">
-        <div class="form-con">
-          <login-form @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">输入任意用户名和密码即可</p>
-        </div>
-      </Card>
-    </div>
+<div class="login">
+  <div class="login-con">
+    <Card icon="log-in" title="欢迎登录" :bordered="false">
+      <div class="form-con">
+        <Form ref="formData" :model="formData" :rules="rules" @keydown.enter.native="handleSubmit">
+          <FormItem prop="email">
+            <Input prefix="ios-person" v-model="formData.email" placeholder="请输入用户名" />
+          </FormItem>
+          <FormItem prop="password">
+            <Input prefix="md-lock" type="password" v-model="formData.password" placeholder="请输入密码" />
+          </FormItem>
+          <FormItem prop="captcha" class="captcha-img">
+            <Input v-model="formData.captcha" placeholder="请输入验证码a">
+            <img style="padding:0" @click="getCaptchaExcute()" slot="append" :src="captcha_url" alt="" />
+            </Input>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" :loading="saveLoading" @click="handleSubmit">
+              <span v-if="!saveLoading">登录</span>
+              <span v-else>正在登录...</span>
+            </Button>
+          </FormItem>
+        </Form>
+        <p class="login-tip">Lucms EE © 2019 Powered by Ucer ❤</p>
+      </div>
+    </Card>
   </div>
+</div>
 </template>
 
 <script>
-import LoginForm from '_c/login-form'
-import { mapActions } from 'vuex'
+import {
+  getCaptcha,
+} from '@/api/common'
+import {
+  mapActions
+} from 'vuex'
 export default {
-  components: {
-    LoginForm
+  data() {
+    return {
+      saveLoading: false,
+      captcha_url: '',
+      formData: {
+        email: '',
+        password: '',
+        captcha: '',
+        captcha_key: '',
+      },
+      rules: {
+        email: [{
+          required: true,
+          message: '账号不能为空',
+          trigger: 'blur'
+        }],
+        password: [{
+          required: true,
+          message: '密码不能为空',
+          trigger: 'blur'
+        }],
+        captcha: [{
+          required: true,
+          message: '验证码不能为空',
+          trigger: 'blur'
+        }],
+      },
+    }
+  },
+  created() {
+    this.getCaptchaExcute()
   },
   methods: {
     ...mapActions([
       'handleLogin',
       'getUserInfo'
     ]),
-    handleSubmit ({ userName, password }) {
-      this.handleLogin({ userName, password }).then(res => {
-        this.getUserInfo().then(res => {
-          this.$router.push({
-            name: this.$config.homeName
+    handleSubmit() {
+      let t = this
+      t.$refs.formData.validate((valid) => {
+        if (valid) {
+          t.saveLoading = true
+          this.handleLogin({
+            email: t.formData.email,
+            password: t.formData.password,
+            captcha: t.formData.captcha,
+            captcha_key: t.formData.captcha_key,
+          }).then(res => {
+            t.getUserInfo().then(res => {
+              t.$router.push({
+                name: 'home'
+              })
+            })
+          }).catch((err) => {
+            t.saveLoading = false
           })
-        })
+        }
       })
-    }
+
+    },
+    getCaptchaExcute() {
+      let t = this
+      getCaptcha().then(res => {
+        const response_data = res.data
+        t.captcha_url = response_data.img
+        t.formData.captcha_key = response_data.key
+      }, function(error) {})
+    },
   }
 }
 </script>
-
-<style>
-
-</style>
