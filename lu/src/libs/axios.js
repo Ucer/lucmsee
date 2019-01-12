@@ -67,7 +67,7 @@ class HttpRequest {
       } else {
         addErrorLog(errorInfo)
       }
-      Notice.error({title: '出错了', desc: statusText})
+      Notice.error({title: '出错了', desc: responseData?responseData.message:statusText})
       return Promise.reject(response)
     })
   }

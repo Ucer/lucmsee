@@ -1,11 +1,13 @@
 import axios from '@/libs/api.request'
 
-export const login = ({userName, password}) => {
+export const login = ({email, password, captcha, captcha_key}) => {
   const data = {
-    userName,
-    password
-  }
-  return axios.request({url: 'login', data, method: 'post'})
+    email,
+    password,
+    captcha,
+    captcha_key
+  };
+  return axios.request({url: 'api/login', data, method: 'post'})
 }
 
 export const getUserInfo = () => {
@@ -13,7 +15,7 @@ export const getUserInfo = () => {
 }
 
 export const logout = (token) => {
-  return axios.request({url: 'logout', method: 'post'})
+  return axios.request({url: 'api/logout', method: 'post'})
 }
 
 export const getUnreadCount = () => {
