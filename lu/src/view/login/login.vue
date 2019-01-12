@@ -89,7 +89,7 @@ export default {
             captcha: t.formData.captcha,
             captcha_key: t.formData.captcha_key
           }).then(res => {
-            t.getUserInfo().then(res => {
+            t.getUserInfoExcute().then(res => {
               t.$router.push({
                 name: 'home'
               })

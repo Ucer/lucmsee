@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
+use Laravel\Passport\RouteRegistrar;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,7 +26,14 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+        Passport::routes(function (RouteRegistrar $router) {
+            $router->forAccessTokens();
+        }, ['prefix' => 'api/oauth']);
+//    }, ['prefix' => 'api/oauth', 'middleware' => 'passport-administrators']);
 
-        //
+//        Passport::tokensExpireIn(now()->addMinute(1));
+//        Passport::refreshTokensExpireIn(now()->addDay(1));
+        Passport::tokensExpireIn(now()->addDay(3));
+        Passport::refreshTokensExpireIn(now()->addDay(3));
     }
 }

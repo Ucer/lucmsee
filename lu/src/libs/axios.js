@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import {Notice} from 'iview'
+import {getTokenFromCookies} from '@/libs/util'
 
 const addErrorLog = errorInfo => {
   const { statusText, status,responseData, request: { responseURL } } = errorInfo
@@ -21,11 +22,11 @@ class HttpRequest {
     this.queue = {}
   }
   getInsideConfig () {
-    // window.access_token = Cookies.get(TOKEN_KEY)
+    window.access_token = getTokenFromCookies()
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        Authorization:'123123ccc'
+        Authorization: window.access_token
       }
     }
     return config

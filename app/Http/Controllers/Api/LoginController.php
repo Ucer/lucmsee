@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Validates\LoginValidate;
 use App\Models\User;
-
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Hash;
+use App\Http\Controllers\Api\Traits\ProxyTrait;
 
 class LoginController extends ApiController
 {
+    use AuthenticatesUsers,ProxyTrait;
 
     public function __construct()
     {
@@ -27,7 +30,7 @@ class LoginController extends ApiController
             return $this->failed('操作过于频繁，请稍后再试', 429);
         }
 
-        $user = User::enable()
+        $user = User::enableSearch('T')
             ->where('email', $request->email)
             ->isAdminSearch('T')
             ->firstOrFail();
