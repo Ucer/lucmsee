@@ -14,5 +14,6 @@ Route::namespace('Admin')->group(function () {
 
     /**       ==========================          自带 Api           ====================   */
     Route::get('admin/users/current_user', 'UserController@currentUser')->name('users.current_user');
+    Route::get('admin/statistics', 'StatisticsController@base')->name('statistics.base');
 
 });
