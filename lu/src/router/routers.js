@@ -27,8 +27,7 @@ export default[
       hideInMenu: true
     },
     component: () => import ('@/view/login/login.vue')
-  },
-  {
+  }, {
     path: '/',
     name: '_home',
     redirect: '/home',
@@ -47,26 +46,67 @@ export default[
           notCache: true,
           icon: 'md-home'
         },
-        component: () => import('@/view/single-page/home')
+        component: () => import ('@/view/single-page/home')
       }
     ]
-  },
-   {
-    path : '/401',
+  }, {
+    path: '/privileges',
+    name: 'privilegess',
+    component: Main,
+    meta: {
+      icon: 'ios-lock',
+      title: '权限管理',
+      access: ['Founder']
+    },
+    children: [
+      {
+        path: '/permission-list',
+        name: 'permission-list',
+        meta: {
+          title: '权限列表'
+        },
+        component: () => import ('@/view/privileges/permissions/list.vue')
+      }, {
+        path: '/permission-list',
+        name: 'permission-list',
+        meta: {
+          title: '权限列表'
+        },
+        component: () => import ('@/view/privileges/permissions/list.vue')
+      },
+      // {
+      //   path: '/role-list',
+      //   name: 'role-list',
+      //   meta: {
+      //     title: '角色列表',
+      //      href: 'https://lison16.github.io/iview-admin-doc/#/'
+      //   },
+      //   component: () => import ('@/view/privileges/roles/list.vue')
+      // }, {
+      //   path: '/administrator-list',
+      //   name: 'administrator-list',
+      //   meta: {
+      //     title: '用户列表'
+      //   },
+      //   component: () => import ('@/view/privileges/users/list.vue')
+      // }
+    ]
+  }, {
+    path: '/401',
     name: 'error_401',
     meta: {
       hideInMenu: true
     },
     component: () => import ('@/view/error-page/401.vue')
   }, {
-    path : '/500',
+    path: '/500',
     name: 'error_500',
     meta: {
       hideInMenu: true
     },
     component: () => import ('@/view/error-page/500.vue')
   }, {
-    path : '*',
+    path: '*',
     name: 'error_404',
     meta: {
       hideInMenu: true
