@@ -21,9 +21,8 @@ export default[
   {
     path: '/login',
     name: 'login',
-    component: Main,
     meta: {
-      title: 'Login - 登录',
+      title: '登录',
       hideInMenu: true
     },
     component: () => import ('@/view/login/login.vue')
@@ -51,7 +50,7 @@ export default[
     ]
   }, {
     path: '/privileges',
-    name: 'privilegess',
+    name: 'privileges',
     component: Main,
     meta: {
       icon: 'ios-lock',
@@ -60,15 +59,8 @@ export default[
     },
     children: [
       {
-        path: '/permission-list',
-        name: 'permission-list',
-        meta: {
-          title: '权限列表'
-        },
-        component: () => import ('@/view/privileges/permissions/list.vue')
-      }, {
-        path: '/permission-list',
-        name: 'permission-list',
+        path: '/permissionLlist',
+        name: 'permissionLlist',
         meta: {
           title: '权限列表'
         },

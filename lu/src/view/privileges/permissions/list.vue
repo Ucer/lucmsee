@@ -1,5 +1,3 @@
-
-
 <template>
 <div id="privileges-users-list">
   <Row :gutter="24">
@@ -14,7 +12,6 @@
     </Col>
   </Row>
   <br>
-
   <Row>
     <div class="demo-spin-container" v-if="tableLoading">
       <Spin fix>
