@@ -20,7 +20,6 @@ class  PermissionValidate extends Validate
                 'regex: /^\w+$/',
                 'unique:permissions'
             ],
-            'guard_name' => 'required|between:2,30',
             'description' => 'required'
         ];
         $rest_validate = $this->validate($request_data, $rules);
@@ -42,7 +41,6 @@ class  PermissionValidate extends Validate
                 'regex: /^\w+$/',
                 Rule::unique('permissions')->ignore($table_id),
             ],
-            'guard_name' => 'required|between:2,30',
             'description' => 'required'
         ];
         $rest_validate = $this->validate($request_data, $rules);
@@ -62,8 +60,6 @@ class  PermissionValidate extends Validate
             'name.required' => '权限名称不能为空',
             'name.between' => '权限名称只能在:min-:max个字符范围',
             'name.unique' => '权限名称已经被占用',
-            'guard_name.required' => '看守噐不能为空',
-            'guard_name.between' => '看守器只能在:min-:max个字符范围',
             'description.required' => '说明不能为空',
         ];
         $validator = Validator::make($request_data, $rules, $message);

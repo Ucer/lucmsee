@@ -16,12 +16,12 @@ class PermissionsController extends AdminController
         $this->middleware('auth:api');
     }
 
-    public function permissionList(Request $request, Permission $model)
+    public function list(Request $request, Permission $model)
     {
         $search_data = json_decode($request->get('search_data'), true);
         $name = isset_and_not_empty($search_data, 'name');
         if ($name) {
-            $model = $model->columnLikeSearch('name', $name);
+            $model = $model->columnLikeSearch('name', '%' . $name);
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
@@ -55,23 +55,26 @@ class PermissionsController extends AdminController
         return $this->success($return);
     }
 
-    public function addEdit(Request $request, Permission $model, PermissionValidate $validate)
+    public function store(Request $request, Permission $model, PermissionValidate $validate)
     {
-        $request_data = $request->only('id', 'name', 'guard_name', 'description');
-        $permission_id = $request->post('id', 0);
-        if ($permission_id > 0) {
-            $model = $model->findOrFail($permission_id);
-            $rest_validate = $validate->updateValidate($request_data, $permission_id);
-        } else {
-            $rest_validate = $validate->storeValidate($request_data);
-        }
-
-
+        $request_data = $request->only('id', 'name', 'description');
+        $rest_validate = $validate->storeValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
-        $res = $model->saveData($request_data);
-        if ($res) return $this->message('操作成功');
-        return $this->failed('内部错误');
+        $res = $model->storeAction($request_data);
+        if ($res['status'] === true) return $this->message($res['message']);
+        return $this->failed($res['message']);
+    }
+
+    public function update(Request $request, Permission $model, PermissionValidate $validate)
+    {
+        $request_data = $request->only('id', 'name', 'description');
+        $rest_validate = $validate->updateValidate($request_data);
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+
+        $res = $model->updateAction($request_data);
+        if ($res['status'] === true) return $this->message($res['message']);
+        return $this->failed($res['message']);
     }
 
     public function destroy(Permission $model, PermissionValidate $validate)

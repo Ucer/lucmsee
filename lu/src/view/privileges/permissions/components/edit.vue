@@ -6,16 +6,13 @@
       <FormItem label="权限名称" prop="name">
         <Input v-model="formData.name" placeholder="请输入"></Input>
       </FormItem>
-      <FormItem label="看守器" prop="guard_name">
-        <Input v-model="formData.guard_name" placeholder="请输入"></Input>
-      </FormItem>
       <FormItem label="权限描述" prop="description">
         <Input type="textarea" :rows="3" v-model="formData.description" placeholder="请输入"></Input>
       </FormItem>
     </Form>
     <div slot="footer">
       <Button type="text" @click="cancel">取消</Button>
-      <Button type="primary" @click="addEditExcute" :loading='saveLoading'>保存 </Button>
+      <Button type="primary" @click="editExcute" :loading='saveLoading'>保存 </Button>
     </div>
     <div class="demo-spin-container" v-if='spinLoading === true'>
       <Spin fix>
@@ -28,7 +25,7 @@
 </template>
 <script>
 import {
-  addEdit,
+  edit,
   getInfoById
 } from '@/api/permission'
 
@@ -46,7 +43,6 @@ export default {
       spinLoading: true,
       formData: {
         name: '',
-        guard_name: '',
         description: '',
       },
       rules: {
@@ -83,12 +79,12 @@ export default {
       })
 
     },
-    addEditExcute() {
+    editExcute() {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
-          addEdit(t.formData).then(res => {
+          edit(t.formData, t.formData.id).then(res => {
             t.saveLoading = false
             t.modalShow = false
             t.$emit('on-edit-modal-success')

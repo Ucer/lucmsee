@@ -6,23 +6,20 @@
       <FormItem label="权限名称" prop="name">
         <Input v-model="formData.name" placeholder="请输入"></Input>
       </FormItem>
-      <FormItem label="看守器" prop="guard_name">
-        <Input v-model="formData.guard_name" placeholder="请输入"></Input>
-      </FormItem>
       <FormItem label="权限描述" prop="description">
         <Input type="textarea" :rows="3"  v-model="formData.description" placeholder="请输入"></Input>
       </FormItem>
     </Form>
     <div slot="footer">
       <Button type="text" @click="cancel">取消</Button>
-      <Button type="primary" @click="addEditExcute" :loading='saveLoading'>保存 </Button>
+      <Button type="primary" @click="addExcute" :loading='saveLoading'>保存 </Button>
     </div>
   </Modal>
 </div>
 </template>
 <script>
 import {
-  addEdit
+  add
 } from '@/api/permission'
 
 export default {
@@ -32,7 +29,6 @@ export default {
       saveLoading: false,
       formData: {
         name: '',
-        guard_name: '',
         description: '',
       },
       rules: {
@@ -50,12 +46,12 @@ export default {
     }
   },
   methods: {
-    addEditExcute() {
+    addExcute() {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
-          addEdit(t.formData).then(res => {
+          add(t.formData).then(res => {
             t.saveLoading = false
             t.modalShow = false
             t.$emit('on-add-modal-success')

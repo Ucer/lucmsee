@@ -17,8 +17,9 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/statistics', 'StatisticsController@base')->name('statistics.base');
 
 
-    Route::get('admin/permissions', 'PermissionsController@permissionList')->name('permissions.list');
-    Route::post('admin/permissions', 'PermissionsController@addEdit')->name('permissions.add_edit');
+    Route::get('admin/permissions', 'PermissionsController@list')->name('permissions.list');
+    Route::post('admin/permissions', 'PermissionsController@store')->name('permissions.store');
+    Route::patch('admin/permissions/{permission}', 'PermissionsController@update')->name('permissions.update');
     Route::get('admin/all_permissions', 'PermissionsController@allPermissions')->name('permissions.all');
     Route::get('admin/permissions/{permission}', 'PermissionsController@show')->name('permissions.show');
     Route::delete('admin/permissions/{permission}', 'PermissionsController@destroy')->name('permissions.destroy');

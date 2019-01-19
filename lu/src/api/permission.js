@@ -9,8 +9,19 @@ export const getTableData = (searchData) => {
     method: 'get'
   })
 };
-export const addEdit = (saveData) => {
-  return axios.request({url: '/api/admin/permissions', data: saveData, method: 'post'})
+export const add = (formData) => {
+  return axios.request({
+    url: '/api/admin/permissions',
+    data: formData,
+    method: 'post'
+  })
+};
+export const edit = (formData, id) => {
+  return axios.request({
+    url: '/api/admin/permissions/' + id,
+    data: formData,
+    method: 'patch'
+  })
 };
 export const destroy = (id) => {
   return axios.request({
