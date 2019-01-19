@@ -1,59 +1,161 @@
 <template>
-  <div class="user-avator-dropdown">
-    <Dropdown @on-click="handleClick">
-      <Badge :dot="!!messageUnreadCount">
-        <Avatar :src="userAvator"/>
-      </Badge>
-      <Icon :size="18" type="md-arrow-dropdown"></Icon>
-      <DropdownMenu slot="list">
-        <DropdownItem name="message">
-          消息中心<Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>
-        </DropdownItem>
-        <DropdownItem name="logout">退出登录</DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
-  </div>
+<div class="user-avator-dropdown">
+  <Dropdown @on-click="handleClick">
+    <Avatar :src="userAvator" />
+    <span>{{ userEmail }}</span>
+    <Icon :size="18" type="md-arrow-dropdown"></Icon>
+    <DropdownMenu slot="list">
+      <DropdownItem name="profile">个人资料</DropdownItem>
+      <DropdownItem name="editPassword">修改密码</DropdownItem>
+      <DropdownItem name="logout">退出登录</DropdownItem>
+    </DropdownMenu>
+  </Dropdown>
+  <show-info v-if='showInfoModal.show' :info='showInfoModal.info' @show-modal-close="showModalClose"></show-info>
+
+  <Modal v-model="modalShow" :closable='false' :mask-closable=false width="500">
+    <p slot="header">登录密码修改</p>
+    <Form ref="editPasswordFormData" :model="formData" :rules="rules" label-position="left" :label-width="100">
+      <FormItem label="新密码：" prop="password">
+        <Input type="password" v-model="formData.password"></Input>
+      </FormItem>
+      <FormItem label="密码确认：" prop="password_confirmation">
+        <Input type="password" v-model="formData.password_confirmation"></Input>
+      </FormItem>
+    </Form>
+    <div slot="footer">
+      <Button type="text" @click="cancel">取消</Button>
+      <Button type="primary" @click="updatePasswordExcute" :loading='saveLoading'>修改 </Button>
+    </div>
+  </Modal>
+</div>
 </template>
 
 <script>
 import './user.less'
-import { mapActions } from 'vuex'
+import ShowInfo from './components/show-info'
+import {
+  getUserInfo
+} from '@/api/user'
+import {
+  updatePassword
+} from '@/api/user'
+import {
+  mapActions
+} from 'vuex'
 export default {
-  name: 'User',
-  props: {
-    userAvator: {
-      type: String,
-      default: ''
-    },
-    messageUnreadCount: {
-      type: Number,
-      default: 0
+  components: {
+    ShowInfo
+  },
+  data() {
+    const validatePassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入登录密码'))
+      } else {
+        if (this.formData.password !== '') {
+          // 对第二个密码框单独验证
+          this.$refs.editPasswordFormData.validateField('password_confirmation')
+        }
+        callback()
+      }
     }
+    const validatePasswordConfirm = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入确认密码'))
+      } else if (value !== this.formData.password) {
+        callback(new Error('两次密码不一致 '))
+      } else {
+        callback()
+      }
+    }
+    return {
+      showInfoModal: {
+        show: false,
+        info: ''
+      },
+      modalShow: false,
+      formData: {
+        password: '',
+        password_confirmation: '',
+      },
+      saveLoading: false,
+      rules: {
+        password: [{
+          validator: validatePassword,
+          trigger: 'blur'
+        }],
+        password_confirmation: [{
+          validator: validatePasswordConfirm,
+          trigger: 'blur'
+        }],
+      },
+    }
+  },
+  computed: {
+    userAvator() {
+      return this.$store.state.user.avatorImgPath
+    },
+    userEmail() {
+      return this.$store.state.user.name
+    },
   },
   methods: {
     ...mapActions([
-      'handleLogOut'
+      'handleLogOut',
     ]),
-    logout () {
-      this.handleLogOut().then(() => {
-        this.$router.push({
-          name: 'login'
-        })
-      })
-    },
-    message () {
-      this.$router.push({
-        name: 'message_page'
-      })
-    },
-    handleClick (name) {
+    handleClick(name) {
       switch (name) {
-        case 'logout': this.logout()
-          break
-        case 'message': this.message()
-          break
+        case 'logout':
+          this.handleLogOut().then(() => {
+            this.$router.push({
+              name: 'login'
+            })
+          })
+          break;
+        case 'profile':
+          this.getUserInfoExcute()
+          break;
+        case 'editPassword':
+          this.modalShow = true
+          break;
       }
-    }
+    },
+    showModalClose() {
+      this.showInfoModal.show = false
+    },
+    getUserInfoExcute() {
+      let t = this;
+      getUserInfo().then(res => {
+        let res_data = res.data
+        t.showInfoModal.info = res_data
+        t.showInfoModal.show = true
+      })
+    },
+    updatePasswordExcute() {
+      let t = this;
+      t.$refs.editPasswordFormData.validate((valid) => {
+        if (valid) {
+          t.saveLoading = true
+          updatePassword(t.formData).then(res => {
+            t.saveLoading = false
+            t.modalShow = false
+            t.$Notice.success({
+              title: res.message
+            })
+          }, function(error) {
+            t.saveLoading = false;
+          })
+        } else {
+          t.saveLoading = false
+        }
+      })
+    },
+    cancel() {
+      this.modalShow = false
+      this.formData = {
+        password: '',
+        password_confirmation: '',
+      }
+    },
   }
 }
 </script>

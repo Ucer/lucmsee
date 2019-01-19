@@ -42,6 +42,48 @@ Vue.prototype.$config = config
 importDirective(Vue)
 Vue.directive('clickOutside', clickOutside)
 
+Vue.prototype.globalPlatformType = function() {
+    function IsPC() {
+        var userAgentInfo = navigator.userAgent;
+        var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        return 'mobile' // iphone
+    } else if (/(Android)/i.test(navigator.userAgent)) {
+        return 'mobile' // Android
+    } else {
+        return 'pc'
+    }
+}
+
+Vue.prototype.globalFancybox = function() {
+    this.$nextTick(() => {
+        $(function() {
+            $('.fancybox').attr('rel', 'media-gallery').fancybox({
+                openEffect: 'none',
+                closeEffect: 'none',
+                prevEffect: 'none',
+                nextEffect: 'none',
+
+                arrows: false,
+                helpers: {
+                    media: {},
+                    buttons: {}
+                }
+            });
+        })
+})
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
