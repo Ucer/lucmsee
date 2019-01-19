@@ -5,14 +5,13 @@
     <Button type="success" icon="plus" @click="addBtn()">添加</Button>
     </Col>
     <Col :xs="12" :lg="4" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入角色名称..." v-model="searchForm.name" />
+        <Input icon="search" placeholder="请输入角色名称..." v-model="searchForm.name" />
     </Col>
     <Col :xs="3" :lg="3" class="hidden-mobile">
-    <Button type="primary" icon="ios-search" @click="getTableDataExcute()">Search</Button>
+      <Button type="primary" icon="ios-search" @click="getTableDataExcute()">Search</Button>
     </Col>
   </Row>
   <br>
-
   <Row>
     <div class="demo-spin-container" v-if="tableLoading">
       <Spin fix>
@@ -22,7 +21,6 @@
     </div>
     <Table border :columns="columns" :data="dataList" @on-sort-change='onSortChange'></Table>
   </Row>
-
   <Modal v-model="permissionModal.show" :closable='false' :mask-closable=false width="800">
     <h3 slot="header" style="color:#2D8CF0">分配权限</h3>
     <Transfer v-if="permissionModal.show" :data="permissionModal.allPermissions" :target-keys="permissionModal.hasPermissions" :render-format="renderFormat" :operations="['移除权限','添加权限']" :list-style="permissionModal.listStyle" filterable @on-change="handleTransferChange">
@@ -32,13 +30,11 @@
       <Button type="primary" @click="giveRolePermissionExcute">保存 </Button>
     </div>
   </Modal>
-
   <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute' @on-add-modal-hide="addModalHide"></add-component>
   <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute' @on-edit-modal-hide="editModalHide"> </edit-component>
 
 </div>
 </template>
-
 
 <script>
 import AddComponent from './components/add'
@@ -50,7 +46,7 @@ import {
   getRolePermissions,
   giveRolePermission,
   destroy
-} from '@/api/roles'
+} from '@/api/role'
 
 export default {
   components: {
@@ -62,12 +58,8 @@ export default {
       searchForm: {
         order_by: 'id,desc'
       },
-      tableLoading: false,
+      tableLoading: true,
       dataList: [],
-      modalHeadImage: {
-        show: false,
-        url: null
-      },
       permissionModal: {
         id: 0,
         allPermissions: [],

@@ -6,16 +6,13 @@
       <FormItem label="角色名称" prop="name">
         <Input v-model="formData.name" placeholder="请输入"></Input>
       </FormItem>
-      <FormItem label="看守器" prop="guard_name">
-        <Input v-model="formData.guard_name" placeholder="请输入"></Input>
-      </FormItem>
       <FormItem label="角色描述" prop="description">
         <Input type="textarea" :rows="3" v-model="formData.description" placeholder="请输入"></Input>
       </FormItem>
     </Form>
     <div slot="footer">
       <Button type="text" @click="cancel">取消</Button>
-      <Button type="primary" @click="addEditExcute" :loading='saveLoading'>保存 </Button>
+      <Button type="primary" @click="editExcute" :loading='saveLoading'>保存 </Button>
     </div>
     <div class="demo-spin-container" v-if='spinLoading === true'>
       <Spin fix>
@@ -28,9 +25,9 @@
 </template>
 <script>
 import {
-  addEdit,
+  edit,
   getInfoById
-} from '@/api/roles'
+} from '@/api/role'
 
 export default {
   props: {
@@ -55,11 +52,6 @@ export default {
           message: '请填写角色限名称',
           trigger: 'blur'
         }],
-        guard_name: [{
-          required: true,
-          message: '请填写看守器',
-          trigger: 'blur'
-        }],
       },
     }
   },
@@ -76,19 +68,18 @@ export default {
         t.formData = {
           id: res_data.id,
           name: res_data.name,
-          guard_name: res_data.guard_name,
           description: res_data.description
         }
         t.spinLoading = false;
       })
 
     },
-    addEditExcute() {
+    editExcute() {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
-          addEdit(t.formData).then(res => {
+          edit(t.formData, t.formData.id).then(res => {
             t.saveLoading = false
             t.modalShow = false
             t.$emit('on-edit-modal-success')

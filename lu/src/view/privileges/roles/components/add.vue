@@ -6,24 +6,21 @@
       <FormItem label="角色名称" prop="name">
         <Input v-model="formData.name" placeholder="请输入"></Input>
       </FormItem>
-      <FormItem label="看守器" prop="guard_name">
-        <Input v-model="formData.guard_name" placeholder="请输入"></Input>
-      </FormItem>
       <FormItem label="角色描述" prop="description">
         <Input type="textarea" :rows="3" v-model="formData.description" placeholder="请输入"></Input>
       </FormItem>
     </Form>
     <div slot="footer">
       <Button type="text" @click="cancel">取消</Button>
-      <Button type="primary" @click="addEditExcute" :loading='saveLoading'>保存 </Button>
+      <Button type="primary" @click="addExcute" :loading='saveLoading'>保存 </Button>
     </div>
   </Modal>
 </div>
 </template>
 <script>
 import {
-  addEdit
-} from '@/api/roles'
+  add
+} from '@/api/role'
 
 export default {
   data() {
@@ -41,21 +38,16 @@ export default {
           message: '请填写角色限名称',
           trigger: 'blur'
         }],
-        guard_name: [{
-          required: true,
-          message: '请填写看守器',
-          trigger: 'blur'
-        }],
       },
     }
   },
   methods: {
-    addEditExcute() {
+    addExcute() {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
-          addEdit(t.formData).then(res => {
+          add(t.formData).then(res => {
             t.saveLoading = false
             t.modalShow = false
             t.$emit('on-add-modal-success')

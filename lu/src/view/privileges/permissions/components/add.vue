@@ -37,11 +37,6 @@ export default {
           message: '请填写权限名称',
           trigger: 'blur'
         }],
-        guard_name: [{
-          required: true,
-          message: '请填写看守器',
-          trigger: 'blur'
-        }],
       },
     }
   },

@@ -47,12 +47,8 @@ export default {
       searchForm: {
         order_by: 'id,desc'
       },
-      tableLoading: false,
+      tableLoading: true,
       dataList: [],
-      modalHeadImage: {
-        show: false,
-        url: null
-      },
       addModal: {
         show: false
       },

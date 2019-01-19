@@ -17,15 +17,15 @@ import parentView from '@/components/parent-view'
  * }
  */
 
-export default[
-  {
+export default [{
     path: '/login',
     name: 'login',
     meta: {
       title: '登录',
       hideInMenu: true
     },
-    component: () => import ('@/view/login/login.vue')
+    component: () =>
+      import ('@/view/login/login.vue')
   }, {
     path: '/',
     name: '_home',
@@ -35,19 +35,18 @@ export default[
       hideInMenu: true,
       notCache: true
     },
-    children: [
-      {
-        path: '/home',
-        name: 'home',
-        meta: {
-          hideInMenu: true,
-          title: '首页',
-          notCache: true,
-          icon: 'md-home'
-        },
-        component: () => import ('@/view/single-page/home')
-      }
-    ]
+    children: [{
+      path: '/home',
+      name: 'home',
+      meta: {
+        hideInMenu: true,
+        title: '首页',
+        notCache: true,
+        icon: 'md-home'
+      },
+      component: () =>
+        import ('@/view/single-page/home')
+    }]
   }, {
     path: '/privileges',
     name: 'privileges',
@@ -57,52 +56,59 @@ export default[
       title: '权限管理',
       access: ['Founder']
     },
-    children: [
-      {
+    children: [{
         path: '/permissionLlist',
         name: 'permissionLlist',
         meta: {
           title: '权限列表'
         },
-        component: () => import ('@/view/privileges/permissions/list.vue')
+        component: () =>
+          import ('@/view/privileges/permissions/list.vue')
+      },
+      {
+        path: '/roleList',
+        name: 'roleList',
+        meta: {
+          title: '角色列表',
+        },
+        component: () =>
+          import ('@/view/privileges/roles/list.vue')
       },
       // {
-      //   path: '/role-list',
-      //   name: 'role-list',
-      //   meta: {
-      //     title: '角色列表',
-      //      href: 'https://lison16.github.io/iview-admin-doc/#/'
-      //   },
-      //   component: () => import ('@/view/privileges/roles/list.vue')
-      // }, {
-      //   path: '/administrator-list',
-      //   name: 'administrator-list',
-      //   meta: {
-      //     title: '用户列表'
-      //   },
-      //   component: () => import ('@/view/privileges/users/list.vue')
-      // }
-    ]
-  }, {
-    path: '/401',
-    name: 'error_401',
-    meta: {
-      hideInMenu: true
+        //   path: '/administrator-list',
+        //   name: 'administrator-list',
+        //   meta: {
+        //     title: '用户列表'
+        //   },
+        //   component: () => import ('@/view/privileges/users/list.vue')
+        // }
+      ]
     },
-    component: () => import ('@/view/error-page/401.vue')
-  }, {
-    path: '/500',
-    name: 'error_500',
-    meta: {
-      hideInMenu: true
+    {
+      path: '/401',
+      name: 'error_401',
+      meta: {
+        hideInMenu: true
+      },
+      component: () =>
+        import ('@/view/error-page/401.vue')
     },
-    component: () => import ('@/view/error-page/500.vue')
-  }, {
-    path: '*',
-    name: 'error_404',
-    meta: {
-      hideInMenu: true
+    {
+      path: '/500',
+      name: 'error_500',
+      meta: {
+        hideInMenu: true
+      },
+      component: () =>
+        import ('@/view/error-page/500.vue')
     },
-    component: () => import ('@/view/error-page/404.vue')
-  }
-]
+    {
+      path: '*',
+      name: 'error_404',
+      meta: {
+        hideInMenu: true
+      },
+      component: () =>
+        import ('@/view/error-page/404.vue')
+    }
+  ]
