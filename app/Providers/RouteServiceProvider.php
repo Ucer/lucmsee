@@ -33,9 +33,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('role', function ($value) {
             return Role::findOrFail($value);
         });
-        Route::bind('user', function ($value) {
-            return Role::findOrFail($value);
-        });
     }
 
     /**

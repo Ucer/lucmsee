@@ -36,24 +36,26 @@ class RolesController extends AdminController
     {
         return $this->success($model);
     }
-
-    public function addEdit(Request $request, Role $model, RoleValidate $validate)
+    public function store(Request $request, Role $model, RoleValidate $validate)
     {
-        $request_data = $request->only('id', 'name', 'guard_name', 'description');
-        $role_id = $request->post('id', 0);
-        if ($role_id > 0) {
-            $model = $model->findOrFail($role_id);
-            $rest_validate = $validate->updateValidate($request_data, $role_id);
-        } else {
-            $rest_validate = $validate->storeValidate($request_data);
-        }
-
+        $request_data = $request->only('name', 'description');
+        $rest_validate = $validate->storeValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
-        $res = $model->saveData($request_data);
+        $res = $model->storeAction($request_data);
+        if ($res['status'] === true) return $this->message($res['message']);
+        return $this->failed($res['message']);
+    }
 
-        if ($res) return $this->message('操作成功');
-        return $this->failed('内部错误');
+    public function update(Request $request, Role $model, RoleValidate $validate)
+    {
+        $request_data = $request->only('name', 'description');
+        $rest_validate = $validate->updateValidate($request_data,$model->id);
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+
+        $res = $model->updateAction($request_data);
+        if ($res['status'] === true) return $this->message($res['message']);
+        return $this->failed($res['message']);
     }
 
     public function getRolePermissions(Role $model)

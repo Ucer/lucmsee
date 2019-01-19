@@ -89,6 +89,28 @@ class Role extends Model implements RoleContract
         return $role;
     }
 
+    public function storeAction($input)
+    {
+        $input['guard_name'] = 'web';
+        try {
+            $this->fill($input);
+            $this->save();
+            return $this->baseSucceed([], '操作成功');
+        } catch (\Exception $e) {
+            return $this->baseFailed('内部错误');
+        }
+    }
+
+    public function updateAction($input)
+    {
+        try {
+            $this->fill($input)->save();
+            return $this->baseSucceed([], '操作成功');
+        } catch (\Exception $e) {
+            return $this->baseFailed('内部错误');
+        }
+    }
+
     /**
      * Find or create role by its name (and optionally guardName).
      *

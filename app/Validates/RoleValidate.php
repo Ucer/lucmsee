@@ -20,7 +20,6 @@ class  RoleValidate extends Validate
                 'regex: /^\w+$/',
                 'unique:roles'
             ],
-            'guard_name' => 'required|between:2,30',
             'description' => 'required'
         ];
         $rest_validate = $this->validate($request_data, $rules);
@@ -42,7 +41,6 @@ class  RoleValidate extends Validate
                 'regex: /^\w+$/',
                 Rule::unique('roles')->ignore($table_id),
             ],
-            'guard_name' => 'required|between:2,30',
             'description' => 'required'
         ];
         $rest_validate = $this->validate($request_data, $rules);
@@ -62,8 +60,6 @@ class  RoleValidate extends Validate
             'name.required' => '角色名称不能为空',
             'name.between' => '角色名称只能在:min-:max个字符范围',
             'name.unique' => '角色名称已经被占用',
-            'guard_name.required' => '看守噐不能为空',
-            'guard_name.between' => '看守噐只能在:min-:max个字符范围',
             'description.required' => '描述不能为空',
         ];
         $validator = Validator::make($request_data, $rules, $message);

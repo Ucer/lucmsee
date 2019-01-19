@@ -57,7 +57,7 @@ class PermissionsController extends AdminController
 
     public function store(Request $request, Permission $model, PermissionValidate $validate)
     {
-        $request_data = $request->only('id', 'name', 'description');
+        $request_data = $request->only('name', 'description');
         $rest_validate = $validate->storeValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
@@ -68,8 +68,8 @@ class PermissionsController extends AdminController
 
     public function update(Request $request, Permission $model, PermissionValidate $validate)
     {
-        $request_data = $request->only('id', 'name', 'description');
-        $rest_validate = $validate->updateValidate($request_data);
+        $request_data = $request->only('name', 'description');
+        $rest_validate = $validate->updateValidate($request_data,$model->id);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
         $res = $model->updateAction($request_data);

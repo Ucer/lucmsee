@@ -24,4 +24,13 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/permissions/{permission}', 'PermissionsController@show')->name('permissions.show');
     Route::delete('admin/permissions/{permission}', 'PermissionsController@destroy')->name('permissions.destroy');
 
+    Route::get('admin/roles', 'RolesController@roleList')->name('roles.list');
+    Route::get('admin/all_roles', 'RolesController@allRoles')->name('roles.all');
+    Route::post('admin/roles', 'RolesController@store')->name('roles.store');
+    Route::patch('admin/roles/{role}', 'RolesController@update')->name('roles.update');
+    Route::get('admin/roles/{role}', 'RolesController@show')->name('roles.show');
+    Route::get('admin/roles/{role}/permissions', 'RolesController@getRolePermissions')->name('roles.get_role_permissions');
+    Route::post('admin/give/{role}/permissions', 'RolesController@giveRolePermissions')->name('roles.give_role_permissions');
+    Route::delete('admin/roles/{role}', 'RolesController@destroy')->name('roles.destroy');
+
 });
