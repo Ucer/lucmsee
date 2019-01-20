@@ -61,8 +61,8 @@ class HttpRequest {
         request: { responseURL: config.url }
       }
       if (status === 401) { // 未登录，不记录错误日志
-        // Cookies.remove(TOKEN_KEY)
-        // window.location.href = window.location.pathname + '#/login'
+        Cookies.remove(TOKEN_KEY)
+        window.location.href = window.location.pathname + '#/login'
       } else if (status === 412) {  // 输入验证失败，不记录错误日志
 
       } else {

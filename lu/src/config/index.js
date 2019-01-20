@@ -1,3 +1,9 @@
+/**
+  配置文件中的配置项名称不能随意改动，否则会影响到其它地方
+  如： store/module/app.js中
+  import config from '@/config'
+   const { homeName } = config
+*/
 export default {
   /**
    * @description 配置显示在浏览器标签的title
@@ -23,7 +29,7 @@ export default {
   /**
    * @description 默认打开的首页的路由name值，默认为home
    */
-  homePageName: 'home',
+  homeName: 'home',
   /**
    * @description 需要加载的插件
    */

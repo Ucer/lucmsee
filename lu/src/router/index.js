@@ -5,7 +5,7 @@ import store from '@/store'
 import iView from 'iview'
 import {setTokenToCookies, getTokenFromCookies, canTurnTo, setTitle} from '@/libs/util'
 import config from '@/config'
-const {homePageName} = config
+const {homeName} = config
 
 Vue.use(Router)
 const router = new Router({
@@ -43,7 +43,7 @@ router.beforeEach((to, from, next) => {
     // window.location.href = 'home'
     /**
     next({
-      name: homePageName // 跳转到homeName页
+      name: homeName // 跳转到homeName页
     })
     */
   } else {

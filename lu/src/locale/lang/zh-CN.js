@@ -2,7 +2,8 @@ export default {
   login: '登录',
   home: '首页',
   privileges: '权限',
-  permissionLlist: '权限列表',
+  permissionList: '权限列表',
+  roleList: '角色列表',
 
 
   components: '组件',

@@ -41,7 +41,7 @@ export default [{
       meta: {
         hideInMenu: true,
         title: '首页',
-        notCache: true,
+        // notCache: true,
         icon: 'md-home'
       },
       component: () =>
@@ -54,11 +54,12 @@ export default [{
     meta: {
       icon: 'ios-lock',
       title: '权限管理',
-      access: ['Founder']
+      access: ['Founder'],
+      showAlways: true
     },
     children: [{
-        path: '/permissionLlist',
-        name: 'permissionLlist',
+        path: '/permissionList',
+        name: 'permissionList',
         meta: {
           title: '权限列表'
         },
@@ -75,40 +76,40 @@ export default [{
           import ('@/view/privileges/roles/list.vue')
       },
       // {
-        //   path: '/administrator-list',
-        //   name: 'administrator-list',
-        //   meta: {
-        //     title: '用户列表'
-        //   },
-        //   component: () => import ('@/view/privileges/users/list.vue')
-        // }
-      ]
+      //   path: '/administrator-list',
+      //   name: 'administrator-list',
+      //   meta: {
+      //     title: '用户列表'
+      //   },
+      //   component: () => import ('@/view/privileges/users/list.vue')
+      // }
+    ]
+  },
+  {
+    path: '/401',
+    name: 'error_401',
+    meta: {
+      hideInMenu: true
     },
-    {
-      path: '/401',
-      name: 'error_401',
-      meta: {
-        hideInMenu: true
-      },
-      component: () =>
-        import ('@/view/error-page/401.vue')
+    component: () =>
+      import ('@/view/error-page/401.vue')
+  },
+  {
+    path: '/500',
+    name: 'error_500',
+    meta: {
+      hideInMenu: true
     },
-    {
-      path: '/500',
-      name: 'error_500',
-      meta: {
-        hideInMenu: true
-      },
-      component: () =>
-        import ('@/view/error-page/500.vue')
+    component: () =>
+      import ('@/view/error-page/500.vue')
+  },
+  {
+    path: '*',
+    name: 'error_404',
+    meta: {
+      hideInMenu: true
     },
-    {
-      path: '*',
-      name: 'error_404',
-      meta: {
-        hideInMenu: true
-      },
-      component: () =>
-        import ('@/view/error-page/404.vue')
-    }
-  ]
+    component: () =>
+      import ('@/view/error-page/404.vue')
+  }
+]

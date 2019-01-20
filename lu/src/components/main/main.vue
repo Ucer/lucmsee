@@ -1,3 +1,4 @@
+
 <template>
 <Layout style="height: 100%" class="main">
   <Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
@@ -20,7 +21,7 @@
   <Layout>
     <Header class="header-con">
       <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-        <user/>
+        <user />
         <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px;" :lang="local" />
         <error-store v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader" :has-read="hasReadErrorPage" :count="errorCount"></error-store>
         <!-- <fullscreen v-model="isFullscreen" style="margin-right: 10px;" /> -->
@@ -132,8 +133,9 @@ export default {
         params,
         query
       } = {}
-      if (typeof route === 'string') name = route
-      else {
+      if (typeof route === 'string') {
+        name = route
+      } else {
         name = route.name
         params = route.params
         query = route.query
