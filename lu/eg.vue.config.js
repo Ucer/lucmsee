@@ -13,7 +13,7 @@ const resolve = dir => {
 // 需要将它改为'/my-app/'
 const BASE_URL = process.env.NODE_ENV === 'production'
   ? 'http://lucmsee.test/lu/dist/'
-  : ''
+  : '/dashboard'
 
 const luOutPath = '../'
 
