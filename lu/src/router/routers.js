@@ -18,7 +18,7 @@ import parentView from '@/components/parent-view'
  */
 
 export default [{
-    path: '/login',
+    path: '/dashboard/login',
     name: 'login',
     meta: {
       title: '登录',
@@ -27,7 +27,7 @@ export default [{
     component: () =>
       import ('@/view/login/login.vue')
   }, {
-    path: '/',
+    path: '/dashboard',
     name: '_home',
     redirect: '/home',
     component: Main,
@@ -36,7 +36,7 @@ export default [{
       notCache: true
     },
     children: [{
-      path: '/home',
+      path: '/dashboard/home',
       name: 'home',
       meta: {
         hideInMenu: true,
@@ -48,7 +48,7 @@ export default [{
         import ('@/view/single-page/home')
     }]
   }, {
-    path: '/privileges',
+    path: '/dashboard/privileges',
     name: 'privileges',
     component: Main,
     meta: {
@@ -58,7 +58,7 @@ export default [{
       showAlways: true
     },
     children: [{
-        path: '/permissionList',
+        path: '/dashboard/permissionList',
         name: 'permissionList',
         meta: {
           title: '权限列表'
@@ -67,7 +67,7 @@ export default [{
           import ('@/view/privileges/permissions/list.vue')
       },
       {
-        path: '/roleList',
+        path: '/dashboard/roleList',
         name: 'roleList',
         meta: {
           title: '角色列表',
@@ -86,7 +86,7 @@ export default [{
     ]
   },
   {
-    path: '/401',
+    path: '/dashboard/401',
     name: 'error_401',
     meta: {
       hideInMenu: true
@@ -95,7 +95,7 @@ export default [{
       import ('@/view/error-page/401.vue')
   },
   {
-    path: '/500',
+    path: '/dashboard/500',
     name: 'error_500',
     meta: {
       hideInMenu: true
@@ -104,7 +104,7 @@ export default [{
       import ('@/view/error-page/500.vue')
   },
   {
-    path: '*',
+    path: 'dashboard/*',
     name: 'error_404',
     meta: {
       hideInMenu: true

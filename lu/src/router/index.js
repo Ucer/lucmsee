@@ -17,7 +17,7 @@ const {
 Vue.use(Router)
 const router = new Router({
   routes,
-  // mode: 'history'  是否开启 url 美化
+  mode: 'history'  //是否开启 url 美化，发现 bug ：如果不开启 history， vue-router 的 next({name:'login'})操作不会走 afterEach
 })
 const LOGIN_PAGE_NAME = 'login'
 
@@ -49,6 +49,7 @@ router.beforeEach((to, from, next) => {
     next() // 跳转
   } else if (token && to.name === LOGIN_PAGE_NAME) {
     // 已登录且要跳转的页面是登录页
+    next('/')
     next({
       name: homeName // 跳转到homeName页
     })

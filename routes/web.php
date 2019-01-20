@@ -1,5 +1,8 @@
 <?php
 
-Route::get('/dashboard', 'IndexController@dashboard')->name('web.dashboard');
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::get('{path?}', 'IndexController@dashboard')->where('path', '[\/\w\.-]*');
+});
+
 
 
