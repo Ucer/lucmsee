@@ -587,9 +587,6 @@
         padding: 1rem;
         background-color: #f5f8fc;
         color: #8796A8;
-    / / border-left: none;
-    / / background-color: rgba(54, 56, 58, 0.9);
-    / / color: white;
         border-left: 4px solid #7AD03A;
     }
 
