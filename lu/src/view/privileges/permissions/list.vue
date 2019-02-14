@@ -16,7 +16,7 @@
     <div class="demo-spin-container" v-if="tableLoading">
       <Spin fix>
         <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
-        <div>加载中...</div>
+        <div>{{ $t('table_loading') }}</div>
       </Spin>
     </div>
 

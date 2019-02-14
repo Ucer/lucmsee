@@ -13,6 +13,7 @@ export default {
   cancel:'取消',
   save:'保存',
   all:'全部',
+  table_loading:'加载中...',
 
 
   components: '组件',
