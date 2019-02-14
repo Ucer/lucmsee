@@ -3,7 +3,7 @@
 <div>
   <Row :gutter="24">
     <Col :xs="7" :lg="11">
-    <Button type="success" icon="plus" @click="addBtn()">添加</Button>
+    <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.enable" placeholder="请选择状态">
@@ -33,7 +33,17 @@
         <div>{{ $t('table_loading') }}</div>
       </Spin>
     </div>
-    <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'></Table>
+    <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
+
+      <template slot-scope="{ row, index }" slot="avatar">
+        <img :src="row.avatar" class="fancybox" :href="row.avatar" tatle="头像" alt="" style="width:40px;height:40px">
+      </template>
+      <!-- <template slot-scope="{ row, index }" slot="action">
+        <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
+        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserPermission(row,index)">{{ $t('permission') }}</Button>
+        <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
+      </template> -->
+    </Table>
     <div style="margin: 10px;overflow: hidden">
       <div style="float: right;">
         <Page :total="feeds.total" :current="feeds.current_page" :page-size="feeds.per_page" class="paging" show-elevator show-total show-sizer @on-change="handleOnPageChange" @on-page-size-change='onPageSizeChange'></Page>
@@ -51,8 +61,8 @@
     </div>
   </Modal>
 
-  <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
-  <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component>
+  <!-- <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component> -->
+  <!-- <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component> -->
 
 </div>
 </template>
@@ -129,25 +139,26 @@ export default {
           title: '头像',
           key: '',
           minWidth: 150,
-          render: (h, params) => {
-            let t = this;
-            if (params.row.avatar) {
-              return h('div', [
-                h('img', {
-                  attrs: {
-                    src: params.row.avatar,
-                    class: 'fancybox',
-                    href: params.row.avatar,
-                    title: '图片'
-                  },
-                  style: {
-                    width: '40px',
-                    height: '40px'
-                  },
-                }),
-              ]);
-            }
-          }
+          slot:'avatar'
+          // render: (h, params) => {
+          //   let t = this;
+          //   if (params.row.avatar) {
+          //     return h('div', [
+          //       h('img', {
+          //         attrs: {
+          //           src: params.row.avatar,
+          //           class: 'fancybox',
+          //           href: params.row.avatar,
+          //           title: '图片'
+          //         },
+          //         style: {
+          //           width: '40px',
+          //           height: '40px'
+          //         },
+          //       }),
+          //     ]);
+          //   }
+          // }
         },
         {
           title: '邮箱',
@@ -283,8 +294,8 @@ export default {
   created() {
     let t = this
     t.getTableStatusExcute('users')
-    t.getAllRoleExcute()
-    t.getTableDataExcute(t.feeds.current_page)
+    // t.getAllRoleExcute()
+    // t.getTableDataExcute(t.feeds.current_page)
   },
   methods: {
     handleOnPageChange: function(to_page) {

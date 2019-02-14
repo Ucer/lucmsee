@@ -22,7 +22,8 @@ export const getUnreadCount = () => {
   return axios.request({url: 'message/count', method: 'get'})
 }
 
-export const getTabledata = (searchdata) => {
+
+export const getTableData = (searchdata) => {
   return axios.request({
     url: '/api/admin/users',
     params: {

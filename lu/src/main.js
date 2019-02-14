@@ -25,6 +25,12 @@ import 'v-org-tree/dist/v-org-tree.css'
 
 require('./assets/vendor/fancybox/jquery.fancybox');
 
+window.uploadUrl = {
+  imageUploadToFileSystemUrl: config.domainForFileSystem + '/api/image_upload/' + config.platName,
+  fileUploadToFileSystemUrl: config.domainForFileSystem + '/api/file_upload/' + config.platName,
+  // imageUploadToLocaleUrl: appUrl + 'api/image_upload'
+}
+
 Vue.use(iView, {
   i18n: (key, value) => i18n.t(key, value)
 })

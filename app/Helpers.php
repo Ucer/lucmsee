@@ -210,3 +210,14 @@ function http_get_request($url, string $params)
     return $result;
 }
 
+function pr($str) {
+    if(is_array($str) || is_object($str)) {
+        echo '<pre>';
+        print_r($str);
+        echo '</pre>';
+    } else {
+        echo $str;
+    }
+    die;
+}
+

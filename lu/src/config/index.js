@@ -38,5 +38,7 @@ export default {
       showInHeader: true, // 设为false后不会在顶部显示错误日志徽标
       developmentOff: true // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
     }
-  }
+  },
+  domainForFileSystem: 'https://filesystem.codehaoshi.com', // 文件管理系统域名，[图片文件传到文件服务器上]
+  platName: 'lucmsee' // 平台名称  plat，文件上传时用到
 }

@@ -6,6 +6,11 @@ Route::namespace('Api')->group(function () {
     Route::get('get_captcha', 'OtherController@getCaptcha')->name('other.get_captcha');
 
     Route::post('login', 'LoginController@login')->name('login');
+
+    Route::post('common_switch_enable', 'CommonController@switchEnable');
+    Route::post('common_switch_talbe_status', 'CommonController@switchTableStatus')->name('common.switch_table_status');
+    Route::get('common_get_table_status/{table_name}/{column_name?}', 'CommonController@getTableStatus');
+    Route::get('common_get_system_config/{search_data}', 'CommonController@getSystemConfig')->name('common.get_system_config');
 });
 
 
