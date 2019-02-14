@@ -9,7 +9,7 @@ Route::namespace('Api')->group(function () {
 });
 
 
-    /**       ==========================          后台APi           ====================   */
+/**       ==========================          后台APi           ====================   */
 Route::namespace('Admin')->group(function () {
 
     /**       ==========================          自带 Api           ====================   */
@@ -32,5 +32,10 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/roles/{role}/permissions', 'RolesController@getRolePermissions')->name('roles.get_role_permissions');
     Route::post('admin/give/{role}/permissions', 'RolesController@giveRolePermissions')->name('roles.give_role_permissions');
     Route::delete('admin/roles/{role}', 'RolesController@destroy')->name('roles.destroy');
+
+    Route::get('admin/users', 'UsersController@list')->name('users.list');
+    Route::post('admin/users', 'UsersController@store')->name('users.store');
+    Route::patch('admin/users/{user}', 'UsersController@update')->name('users.update');
+    Route::delete('admin/users/{user}', 'UsersController@destroy')->name('users.destroy');
 
 });

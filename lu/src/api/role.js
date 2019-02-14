@@ -1,10 +1,10 @@
 import axios from '@/libs/api.request'
 
-export const getTableData = (searchData) => {
+export const getTableData = (searchdata) => {
   return axios.request({
     url: '/api/admin/roles',
     params: {
-      search_data: JSON.stringify(searchData)
+      search_data: JSON.stringify(searchdata)
     },
     method: 'get'
   })

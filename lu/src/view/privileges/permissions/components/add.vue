@@ -1,18 +1,18 @@
 <template>
 <div>
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
-    <p slot="header">添加</p>
+    <p slot="header">{{ $t('add') }}</p>
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
       <FormItem label="权限名称" prop="name">
         <Input v-model="formData.name" placeholder="请输入"></Input>
       </FormItem>
       <FormItem label="权限描述" prop="description">
-        <Input type="textarea" :rows="3"  v-model="formData.description" placeholder="请输入"></Input>
+        <Input type="textarea" :rows="3" v-model="formData.description" placeholder="请输入"></Input>
       </FormItem>
     </Form>
     <div slot="footer">
-      <Button type="text" @click="cancel">取消</Button>
-      <Button type="primary" @click="addExcute" :loading='saveLoading'>保存 </Button>
+      <Button type="text" @click="cancel">{{ $t('cancel') }}</Button>
+      <Button type="primary" @click="addExcute" :loading='saveLoading'>{{ $t('save') }} </Button>
     </div>
   </Modal>
 </div>

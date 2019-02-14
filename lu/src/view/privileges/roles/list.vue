@@ -2,13 +2,13 @@
 <div>
   <Row :gutter="24">
     <Col :xs="8" :lg="16">
-    <Button type="success" icon="plus" @click="addBtn()">添加</Button>
+    <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="12" :lg="4" class="hidden-mobile">
-        <Input icon="search" placeholder="请输入角色名称..." v-model="searchForm.name" />
+    <Input icon="search" placeholder="请输入角色名称..." v-model="searchForm.name" />
     </Col>
     <Col :xs="3" :lg="3" class="hidden-mobile">
-      <Button type="primary" icon="ios-search" @click="getTableDataExcute()">Search</Button>
+    <Button type="primary" icon="ios-search" @click="getTableDataExcute()">{{ $t('search') }}</Button>
     </Col>
   </Row>
   <br>
@@ -19,15 +19,21 @@
         <div>加载中...</div>
       </Spin>
     </div>
-    <Table border :columns="columns" :data="dataList" @on-sort-change='onSortChange'></Table>
+    <Table border :columns="columns" :data="dataList" @on-sort-change='onSortChange'>
+      <template slot-scope="{ row, index }" slot="action">
+        <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
+        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserPermission(row,index)">{{ $t('permission') }}</Button>
+        <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
+      </template>
+    </Table>
   </Row>
   <Modal v-model="permissionModal.show" :closable='false' :mask-closable=false width="800">
     <h3 slot="header" style="color:#2D8CF0">分配权限</h3>
     <Transfer v-if="permissionModal.show" :data="permissionModal.allPermissions" :target-keys="permissionModal.hasPermissions" :render-format="renderFormat" :operations="['移除权限','添加权限']" :list-style="permissionModal.listStyle" filterable @on-change="handleTransferChange">
     </Transfer>
     <div slot="footer">
-      <Button type="text" @click="cancelPermissionModal">取消</Button>
-      <Button type="primary" @click="giveRolePermissionExcute">保存 </Button>
+      <Button type="text" @click="cancelPermissionModal">{{ $t('cancel') }}</Button>
+      <Button type="primary" @click="giveRolePermissionExcute">{{ $t('save') }} </Button>
     </div>
   </Modal>
   <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute' @on-add-modal-hide="addModalHide"></add-component>
@@ -112,69 +118,8 @@ export default {
         {
           title: '操作',
           minWidth: 200,
-          render: (h, params) => {
-            let t = this
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'success',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.editModal.show = true
-                    this.editModal.id = params.row.id
-                  }
-                }
-
-              }, '修改'),
-              h('Button', {
-                props: {
-                  type: 'info',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    t.getRolePermissionsExcute(params.row.id)
-                    t.permissionModal.show = true
-                    t.permissionModal.id = params.row.id
-                  }
-                }
-
-              }, '权限'),
-
-              h('Poptip', {
-                props: {
-                  confirm: true,
-                  title: '您确定要删除「' + params.row.name + '」角色？',
-                  transfer: true
-                },
-                on: {
-                  'on-ok': () => {
-                    t.destroyExcute(params.row.id, params.index)
-                  }
-                }
-              }, [
-                h('Button', {
-                  style: {
-                    margin: '0 5px'
-                  },
-                  props: {
-                    type: 'error',
-                    size: 'small',
-                    placement: 'top'
-                  }
-                }, '删除'),
-              ])
-            ])
-          },
-        },
+          slot: 'action',
+        }
       ]
     }
   },
@@ -184,6 +129,53 @@ export default {
     t.getAllPermissionExcute()
   },
   methods: {
+    getTableDataExcute() {
+      let t = this
+      t.tableLoading = true
+      getTableData(t.searchForm).then(res => {
+        const response_data = res.data
+        t.dataList = response_data
+        t.tableLoading = false
+      }, function(error) {
+        t.tableLoading = false
+      })
+    },
+    tableButtonEdit(row, index) {
+      this.editModal.show = true
+      this.editModal.id = row.id
+    },
+    tableButtonDestroyOk(row, index) {
+      this.destroyExcute(row.id, index)
+    },
+    tableButtonGiveUserPermission(row, index) {
+      let t = this
+      t.getRolePermissionsExcute(row.id)
+      t.permissionModal.show = true
+      t.permissionModal.id = row.id
+    },
+    onSortChange: function(data) {
+      const order = data.column.key + ',' + data.order
+      this.searchForm.order_by = order
+      this.getTableDataExcute()
+    },
+    destroyExcute(id, key) {
+      let t = this
+      destroy(id).then(res => {
+        t.dataList.splice(key, 1)
+        t.$Notice.success({
+          title: res.message
+        })
+      })
+    },
+    addBtn() {
+      this.addModal.show = true
+    },
+    addModalHide() {
+      this.addModal.show = false
+    },
+    editModalHide() {
+      this.editModal.show = false
+    },
     renderFormat(item) {
       return item.label + '「' + item.description + '」'
     },
@@ -197,22 +189,6 @@ export default {
       getAllPermission().then(res => {
         t.permissionModal.allPermissions = res.data
       }, function(error) {})
-    },
-    getTableDataExcute() {
-      let t = this
-      t.tableLoading = true
-      getTableData(t.searchForm).then(res => {
-        const response_data = res.data
-        t.dataList = response_data
-        t.tableLoading = false
-      }, function(error) {
-        t.tableLoading = false
-      })
-    },
-    onSortChange: function(data) {
-      const order = data.column.key + ',' + data.order
-      this.searchForm.order_by = order
-      this.getTableDataExcute()
     },
     handleTransferChange(newTargetKeys) {
       this.permissionModal.hasPermissions = newTargetKeys
@@ -232,24 +208,6 @@ export default {
         t.permissionModal.show = false
       })
     },
-    destroyExcute(id, key) {
-      let t = this
-      destroy(id).then(res => {
-        t.dataList.splice(key, 1)
-        t.$Notice.success({
-          title: res.message
-        })
-      })
-    },
-    addBtn() {
-      this.addModal.show = true
-    },
-    addModalHide() {
-      this.addModal.show = false
-    },
-    editModalHide() {
-      this.editModal.show = false
-    }
   }
 }
 </script>

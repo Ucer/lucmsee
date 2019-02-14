@@ -1,7 +1,7 @@
 <template>
 <div>
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
-    <p slot="header">修改</p>
+    <p slot="header">{{ $t('edit') }}</p>
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
       <FormItem label="角色名称" prop="name">
         <Input v-model="formData.name" placeholder="请输入"></Input>
@@ -11,8 +11,8 @@
       </FormItem>
     </Form>
     <div slot="footer">
-      <Button type="text" @click="cancel">取消</Button>
-      <Button type="primary" @click="editExcute" :loading='saveLoading'>保存 </Button>
+      <Button type="text" @click="cancel">{{ $t('cancel') }}</Button>
+      <Button type="primary" @click="editExcute" :loading='saveLoading'>{{ $t('save') }} </Button>
     </div>
     <div class="demo-spin-container" v-if='spinLoading === true'>
       <Spin fix>

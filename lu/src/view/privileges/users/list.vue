@@ -5,11 +5,11 @@
     <Col :xs="7" :lg="11">
     <Button type="success" icon="plus" @click="addBtn()">添加</Button>
     </Col>
-    <Col :xs="3" :lg="3" >
+    <Col :xs="3" :lg="3">
     <Select v-model="searchForm.enable" placeholder="请选择状态">
-        <Option value="" key="">全部</Option>
-        <Option v-for="(item,key) in tableStatus.enable" :value="key" :key="key">{{ item }}</Option>
-      </Select>
+      <Option value="" key="">全部</Option>
+      <Option v-for="(item,key) in tableStatus.enable" :value="key" :key="key">{{ item }}</Option>
+    </Select>
     </Col>
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.is_admin" placeholder="管理员">
@@ -20,7 +20,7 @@
     <Col :xs="6" :lg="3" class="hidden-mobile">
     <Input icon="search" placeholder="请输入邮箱搜索..." v-model="searchForm.email" />
     </Col>
-    <Col :xs="3" :lg="3" >
+    <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">Search</Button>
     </Col>
   </Row>
@@ -320,6 +320,15 @@ export default {
       this.searchForm.order_by = order
       this.getTableDataExcute(this.feeds.current_page)
     },
+    destroyExcute(id, key) {
+      let t = this
+      destroy(id).then(res => {
+        t.feeds.data.splice(key, 1)
+        t.$Notice.success({
+          title: res.message
+        })
+      })
+    },
     switchEnableExcute(index) {
       let t = this
       let new_status = 'T'
@@ -332,6 +341,15 @@ export default {
           title: res.message
         })
       })
+    },
+    addBtn() {
+      this.addModal.show = true
+    },
+    addModalHide() {
+      this.addModal.show = false
+    },
+    editModalHide() {
+      this.editModal.show = false
     },
     getAllRoleExcute() {
       let t = this
@@ -365,24 +383,6 @@ export default {
       t.roleModal.show = false
       t.roleModal.saveLoading = false
     },
-    destroyExcute(id, key) {
-      let t = this
-      destroy(id).then(res => {
-        t.feeds.data.splice(key, 1)
-        t.$Notice.success({
-          title: res.message
-        })
-      })
-    },
-    addBtn() {
-      this.addModal.show = true
-    },
-    addModalHide() {
-      this.addModal.show = false
-    },
-    editModalHide() {
-      this.editModal.show = false
-    }
   },
 }
 </script>

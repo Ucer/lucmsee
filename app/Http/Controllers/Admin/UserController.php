@@ -18,7 +18,7 @@ class UserController extends AdminController
         $this->middleware('auth:api');
     }
 
-    public function usersList(Request $request, User $model)
+    public function list(Request $request, User $model)
     {
         $per_page = $request->get('per_page', 10);
         $search_data = json_decode($request->get('search_data'), true);

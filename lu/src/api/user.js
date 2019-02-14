@@ -21,3 +21,13 @@ export const logout = (token) => {
 export const getUnreadCount = () => {
   return axios.request({url: 'message/count', method: 'get'})
 }
+
+export const getTabledata = (searchdata) => {
+  return axios.request({
+    url: '/api/admin/users',
+    params: {
+      search_data: JSON.stringify(searchdata)
+    },
+    method: 'get'
+  })
+};

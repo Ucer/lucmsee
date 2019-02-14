@@ -4,6 +4,15 @@ export default {
   privileges: '权限',
   permissionList: '权限列表',
   roleList: '角色列表',
+  userList:'用户列表',
+  edit:'修改',
+  add:'添加',
+  search:'搜索',
+  destroy:'删除',
+  permission:'权限',
+  cancel:'取消',
+  save:'保存',
+  all:'全部',
 
 
   components: '组件',

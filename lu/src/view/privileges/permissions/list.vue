@@ -2,13 +2,13 @@
 <div id="privileges-users-list">
   <Row :gutter="24">
     <Col :xs="8" :lg="16">
-    <Button type="success" icon="plus" @click="addBtn()">添加</Button>
+    <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="12" :lg="4" class="hidden-mobile">
     <Input icon="search" placeholder="请输入权限名称..." v-model="searchForm.name" />
     </Col>
     <Col :xs="3" :lg="2" class="hidden-mobile">
-    <Button type="primary" icon="ios-search" @click="getTableDataExcute()">Search</Button>
+    <Button type="primary" icon="ios-search" @click="getTableDataExcute()">{{ $t('search') }}</Button>
     </Col>
   </Row>
   <br>
@@ -19,7 +19,14 @@
         <div>加载中...</div>
       </Spin>
     </div>
-    <Table border :columns="columns" :data="dataList" @on-sort-change='onSortChange'></Table>
+
+    <Table border :columns="columns" :data="dataList" @on-sort-change='onSortChange'>
+      <template slot-scope="{ row, index }" slot="action">
+        <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
+        <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error'  size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
+      </template>
+    </Table>
+
   </Row>
 
   <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute' @on-add-modal-hide="addModalHide"></add-component>
@@ -84,49 +91,8 @@ export default {
       }, {
         title: '操作',
         minWidth: 200,
-        render: (h, params) => {
-          let t = this
-          return h('div', [
-            h('Button', {
-              props: {
-                type: 'success',
-                size: 'small'
-              },
-              on: {
-                click: () => {
-                  this.editModal.show = true
-                  this.editModal.id = params.row.id
-                }
-              }
-
-            }, '修改'),
-            h('Poptip', {
-              props: {
-                confirm: true,
-                title: '您确定要删除「' + params.row.name + '」权限？',
-                transfer: true
-              },
-              on: {
-                'on-ok': () => {
-                  t.destroyExcute(params.row.id, params.index)
-                }
-              }
-            }, [
-              h('Button', {
-                style: {
-                  margin: '0 5px'
-                },
-                props: {
-                  type: 'error',
-                  size: 'small',
-                  placement: 'top'
-                }
-              }, '删除'),
-            ])
-
-          ])
-        }
-      }, ]
+        slot: 'action'
+      }]
     }
   },
   mounted() {
@@ -143,6 +109,13 @@ export default {
       }, function(error) {
         t.tableLoading = false
       })
+    },
+    tableButtonEdit(row, index) {
+      this.editModal.show = true
+      this.editModal.id = row.id
+    },
+    tableButtonDestroyOk(row, index) {
+      this.destroyExcute(row.id, index)
     },
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order

@@ -75,14 +75,14 @@ export default [{
         component: () =>
           import ('@/view/privileges/roles/list.vue')
       },
-      // {
-      //   path: '/administrator-list',
-      //   name: 'administrator-list',
-      //   meta: {
-      //     title: '用户列表'
-      //   },
-      //   component: () => import ('@/view/privileges/users/list.vue')
-      // }
+      {
+        path: '/dashboard/userList',
+        name: 'userList',
+        meta: {
+          title: '用户列表'
+        },
+        component: () => import ('@/view/privileges/users/list.vue')
+      }
     ]
   },
   {
