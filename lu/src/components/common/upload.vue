@@ -46,7 +46,7 @@ export default {
         },
         format: ['jpg', 'jpeg', 'png', 'gif'],
         max_size: 800, // 800KB
-        upload_url: window.uploadUrl.uploadTmp,
+        upload_url: window.uploadUrl.imageUploadToLocaleUrl + '/tmp',
         file_name: 'file',
         multiple: false,
         file_num: 0,

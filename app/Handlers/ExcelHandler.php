@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Traits;
+namespace App\Handlers;
 
 use App\Models\AdvertisementPosition;
 use Excel;
 use DB;
 
-trait ExcelTrait
+class ExcelHandler
 {
     public function excelAdvertisementPosition($data)
     {

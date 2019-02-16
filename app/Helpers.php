@@ -5,7 +5,7 @@ function flash($status = 'success', $msg = '操作成功', $key = 'toastrMsg')
     session()->flash($key, ['status' => $status, 'message' => $msg]);
 }
 
-function admin_log_record($user_id, $type, $table_name, $description,$content_message = '', $content_data = '')
+function admin_log_record($user_id, $type, $table_name, $description, $content_message = '', $content_data = '')
 {
     return (new \App\Models\Log())->storeLog([
         'user_id' => $user_id,
@@ -59,9 +59,30 @@ function get_client_ip()
  * @param $column
  * @return null
  */
-function isset_and_not_empty($arr, $column)
+function isset_and_not_empty($arr, $column, $data_type = 'string')
 {
-    return (isset($arr[$column]) && $arr[$column]) ? $arr[$column] : '';
+    if ((isset($arr[$column]) && $arr[$column])) {
+        return $arr[$column];
+    } else {
+        switch ($data_type) {
+            case 'string':
+                $empty = '';
+                break;
+            case 'boolean':
+                $empty = false;
+                break;
+            case 'array':
+                $empty = [];
+                break;
+            case 'number':
+                $empty = 0;
+                break;
+            default:
+                $empty = '';
+                break;
+        }
+        return $empty;
+    }
 }
 
 /**
@@ -210,8 +231,9 @@ function http_get_request($url, string $params)
     return $result;
 }
 
-function pr($str) {
-    if(is_array($str) || is_object($str)) {
+function pr($str)
+{
+    if (is_array($str) || is_object($str)) {
         echo '<pre>';
         print_r($str);
         echo '</pre>';

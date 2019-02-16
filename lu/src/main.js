@@ -25,10 +25,12 @@ import 'v-org-tree/dist/v-org-tree.css'
 
 require('./assets/vendor/fancybox/jquery.fancybox');
 
+const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
+
 window.uploadUrl = {
   imageUploadToFileSystemUrl: config.domainForFileSystem + '/api/image_upload/' + config.platName,
   fileUploadToFileSystemUrl: config.domainForFileSystem + '/api/file_upload/' + config.platName,
-  // imageUploadToLocaleUrl: appUrl + 'api/image_upload'
+  imageUploadToLocaleUrl: baseUrl + 'api/common_upload'
 }
 
 Vue.use(iView, {
