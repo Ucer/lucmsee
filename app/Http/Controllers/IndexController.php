@@ -10,12 +10,10 @@ class IndexController extends WebController
     {
     }
 
-    /*
     public function index()
     {
         return view('welcome');
     }
-    */
 
     public function dashboard()
     {

@@ -13,9 +13,8 @@ Route::namespace('Api')->group(function () {
     Route::get('common_get_system_config/{search_data}', 'CommonController@getSystemConfig')->name('common.get_system_config');
 
 
-
     /**       ==========================          文件上传           ====================   */
-    Route::post('common_upload/{category}', 'Api\UploadController@commonUpload')->name('uploads.common_upload');
+    Route::post('uploads/common_upload/{category}', 'UploadsController@commonUpload')->name('uploads.common_upload');
 });
 
 

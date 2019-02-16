@@ -30,7 +30,7 @@ const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : co
 window.uploadUrl = {
   imageUploadToFileSystemUrl: config.domainForFileSystem + '/api/image_upload/' + config.platName,
   fileUploadToFileSystemUrl: config.domainForFileSystem + '/api/file_upload/' + config.platName,
-  imageUploadToLocaleUrl: baseUrl + 'api/common_upload'
+  imageUploadToLocaleUrl: baseUrl + '/api/uploads/common_upload'
 }
 
 Vue.use(iView, {

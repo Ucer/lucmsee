@@ -7,7 +7,7 @@ use App\Handlers\FileuploadHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class UploadController extends ApiController
+class UploadsController extends ApiController
 {
 
     public function __construct()
@@ -19,6 +19,7 @@ class UploadController extends ApiController
     public function commonUpload($category, Request $request, FileuploadHandler $fileuploadHandler)
     {
         $file = $request->file('file');
+        dd($file);
 
         $rest_upload_image = $fileuploadHandler->uploadImage($file, Auth::id(), $request->post('max_width'), $category);
         if ($rest_upload_image['status'] === true) {
