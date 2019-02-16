@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\Config;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use DB;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, ScopeTrait, ExcuteTrait, HasRoles, BaseResponseTrait;
+    use Notifiable, HasApiTokens, ScopeTrait, ExcuteTrait, HasRoles, BaseResponseTrait,SoftDeletes;
 
     protected $fillable = [
         'nickname', 'real_name', 'password', 'avatar', 'description'

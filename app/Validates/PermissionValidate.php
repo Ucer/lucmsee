@@ -5,6 +5,7 @@ namespace App\Validates;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use DB;
+use Auth;
 
 class  PermissionValidate extends Validate
 {
@@ -71,6 +72,8 @@ class  PermissionValidate extends Validate
 
     public function destroyValidate($model)
     {
+        $authUser = Auth::user();
+        if(!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
         $is_role_has_this_permission = DB::table('role_has_permissions')
             ->where('permission_id', $model->id)
             ->count();

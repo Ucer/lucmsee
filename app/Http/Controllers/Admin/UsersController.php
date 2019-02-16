@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
 
-class UserController extends AdminController
+class UsersController extends AdminController
 {
     public function __construct()
     {
@@ -25,7 +25,7 @@ class UserController extends AdminController
 
         $email = isset_and_not_empty($search_data, 'email');
         if ($email) {
-            $model = $model->columnLike('email', $email);
+            $model = $model->columnLikeSearch('email', '%'.$email);
         }
 
         $enable = isset_and_not_empty($search_data, 'enable');
@@ -79,7 +79,10 @@ class UserController extends AdminController
             $request_data['avatar'] = $request_data['avatar']['url'];
         }
         $res = $model->storeAction($request_data);
-        if ($res['status'] === true) return $this->message($res['message']);
+        if ($res['status'] === true) {
+            admin_log_record(Auth::id(), 'insert', 'users', '添加用户', $request_data);
+            return $this->message($res['message']);
+        }
         return $this->failed($res['message']);
 
     }
@@ -100,7 +103,7 @@ class UserController extends AdminController
         $res = $model->updateAction($request_data);
 
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'U', 'users', '更新用户', $request_data);
+            admin_log_record(Auth::id(), 'update', 'users', '修改用户', $request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -145,7 +148,10 @@ class UserController extends AdminController
 
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $rest_destroy = $model->destroyAction();
-        if ($rest_destroy['status'] === true) return $this->message($rest_destroy['message']);
+        if ($rest_destroy['status'] === true) {
+            admin_log_record(Auth::id(), 'destroy', 'users', '删除用户', $model->toArray());
+            return $this->message($rest_destroy['message']);
+        }
         return $this->failed($rest_destroy['message'], 500);
     }
 }

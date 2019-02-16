@@ -21,7 +21,7 @@
     <Input icon="search" placeholder="请输入邮箱搜索..." v-model="searchForm.email" />
     </Col>
     <Col :xs="3" :lg="3">
-    <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">Search</Button>
+    <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
     </Col>
   </Row>
   <br>
@@ -36,13 +36,26 @@
     <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
 
       <template slot-scope="{ row, index }" slot="avatar">
-        <img :src="row.avatar" class="fancybox" :href="row.avatar" tatle="头像" alt="" style="width:40px;height:40px">
+        <div class="text-center">
+          <img :src="row.avatar" v-if="row.avatar" class="fancybox" :href="row.avatar" tatle="头像" alt="头像" style="width:40px;height:40px">
+          <span v-else>--</span>
+        </div>
       </template>
-      <!-- <template slot-scope="{ row, index }" slot="action">
+
+      <template slot-scope="{ row, index }" slot="is_admin">
+        <Tag v-if="row.is_admin === 'T'" :color="'green'">可登录</Tag>
+        <Tag v-else :color="'red'">不可登录</Tag>
+      </template>
+
+      <template slot-scope="{ row, index }" slot="enable">
+        <iSwitch :slot="'open'" type='primary' :value="row.enable === 'T'" @on-change="switchChange(row,index)"></iSwitch>
+      </template>
+
+      <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserPermission(row,index)">{{ $t('permission') }}</Button>
+        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('permission') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
-      </template> -->
+      </template>
     </Table>
     <div style="margin: 10px;overflow: hidden">
       <div style="float: right;">
@@ -61,12 +74,11 @@
     </div>
   </Modal>
 
-  <!-- <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component> -->
+  <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
   <!-- <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component> -->
 
 </div>
 </template>
-
 
 <script>
 import AddComponent from './components/add'
@@ -74,11 +86,14 @@ import EditComponent from './components/edit'
 
 import {
   getTableData,
-  getAllRole,
   getUserRoles,
   giveUserRole,
   destroy
 } from '@/api/user'
+
+import {
+  getAllRole
+} from '@/api/role'
 
 import {
   getTableStatus,
@@ -138,27 +153,8 @@ export default {
         {
           title: '头像',
           key: '',
-          minWidth: 150,
-          slot:'avatar'
-          // render: (h, params) => {
-          //   let t = this;
-          //   if (params.row.avatar) {
-          //     return h('div', [
-          //       h('img', {
-          //         attrs: {
-          //           src: params.row.avatar,
-          //           class: 'fancybox',
-          //           href: params.row.avatar,
-          //           title: '图片'
-          //         },
-          //         style: {
-          //           width: '40px',
-          //           height: '40px'
-          //         },
-          //       }),
-          //     ]);
-          //   }
-          // }
+          width: 80,
+          slot: 'avatar'
         },
         {
           title: '邮箱',
@@ -168,39 +164,13 @@ export default {
         {
           title: '后台权限',
           minWidth: 150,
-          render: (h, params) => {
-
-            const row = params.row
-            const color = row.is_admin === 'T' ? 'green' : 'red'
-            const text = row.is_admin === 'T' ? '可登录' : '不可登录'
-
-            return h('div', [
-              h('Tag', {
-                props: {
-                  color: color
-                }
-              }, text)
-            ])
-          }
+          slot: 'is_admin',
         },
         {
           title: '启用状态',
           key: 'enable',
           minWidth: 150,
-          render: (h, params) => {
-            return h('i-switch', {
-              props: {
-                slot: 'open',
-                type: 'primary',
-                value: params.row.enable === 'T', //控制开关的打开或关闭状态，官网文档属性是value
-              },
-              on: {
-                'on-change': (value) => {
-                  this.switchEnableExcute(params.index)
-                }
-              }
-            })
-          }
+          slot: 'enable'
         },
         {
           title: '创建时间',
@@ -217,75 +187,7 @@ export default {
           title: '操作',
           key: '',
           minWidth: 200,
-          render: (h, params) => {
-            let t = this
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'success',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.editModal.show = true
-                    this.editModal.id = params.row.id
-                    // let argu = {
-                    //   user_id: params.row.id
-                    // };
-                    // this.$router.push({
-                    //   name: 'edit-user',
-                    //   params: argu
-                    // });
-                  }
-                }
-
-              }, '修改'),
-              h('Button', {
-                props: {
-                  type: 'info',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    t.getUserRolesExcute(params.row.id);
-                    t.roleModal.show = true
-                    t.roleModal.id = params.row.id
-                  }
-                }
-
-              }, '角色'),
-
-              h('Poptip', {
-                props: {
-                  confirm: true,
-                  title: '您确定要删除「' + params.row.name + '」？',
-                  transfer: true
-                },
-                on: {
-                  'on-ok': () => {
-                    t.destroyExcute(params.row.id, params.index)
-                  }
-                }
-              }, [
-                h('Button', {
-                  style: {
-                    margin: '0 5px'
-                  },
-                  props: {
-                    type: 'error',
-                    size: 'small',
-                    placement: 'top'
-                  }
-                }, '删除'),
-              ])
-            ])
-          }
+          slot: 'action'
         }
       ],
 
@@ -294,8 +196,8 @@ export default {
   created() {
     let t = this
     t.getTableStatusExcute('users')
-    // t.getAllRoleExcute()
-    // t.getTableDataExcute(t.feeds.current_page)
+    t.getAllRoleExcute()
+    t.getTableDataExcute(t.feeds.current_page)
   },
   methods: {
     handleOnPageChange: function(to_page) {
@@ -331,16 +233,28 @@ export default {
       this.searchForm.order_by = order
       this.getTableDataExcute(this.feeds.current_page)
     },
-    destroyExcute(id, key) {
+    tableButtonEdit(row, index) {
+      this.editModal.show = true
+      this.editModal.id = row.id
+    },
+    tableButtonDestroyOk(row, index) {
       let t = this
-      destroy(id).then(res => {
-        t.feeds.data.splice(key, 1)
+      destroy(row.id).then(res => {
+        t.feeds.data.splice(index, 1)
         t.$Notice.success({
           title: res.message
         })
       })
     },
-    switchEnableExcute(index) {
+    tableButtonGiveUserRoles(row, index) {
+      let t = this
+      getUserRoles(row.id).then(res => {
+        this.roleModal.hasRoles = res.data
+      })
+      t.roleModal.show = true
+      t.roleModal.id = row.id
+    },
+    switchChange: function(row, index) {
       let t = this
       let new_status = 'T'
       if (t.feeds.data[index].enable === 'T') {
@@ -351,6 +265,8 @@ export default {
         t.$Notice.success({
           title: res.message
         })
+      }).catch((err) => {
+        t.getTableDataExcute(t.feeds.current_page)
       })
     },
     addBtn() {
@@ -370,11 +286,6 @@ export default {
     },
     handleTransferChange(newTargetKeys) {
       this.roleModal.hasRoles = newTargetKeys
-    },
-    getUserRolesExcute(id) {
-      getUserRoles(id).then(res => {
-        this.roleModal.hasRoles = res.data
-      })
     },
     renderFormat(item) {
       return item.label + '「' + item.description + '」'

@@ -18,7 +18,7 @@ Route::namespace('Api')->group(function () {
 Route::namespace('Admin')->group(function () {
 
     /**       ==========================          自带 Api           ====================   */
-    Route::get('admin/users/current_user', 'UserController@currentUser')->name('users.current_user');
+    Route::get('admin/users/current_user', 'UsersController@currentUser')->name('users.current_user');
     Route::get('admin/statistics', 'StatisticsController@base')->name('statistics.base');
 
 
@@ -30,7 +30,7 @@ Route::namespace('Admin')->group(function () {
     Route::delete('admin/permissions/{permission}', 'PermissionsController@destroy')->name('permissions.destroy');
 
     Route::get('admin/roles', 'RolesController@roleList')->name('roles.list');
-    Route::get('admin/all_roles', 'RolesController@allRoles')->name('roles.all');
+    Route::get('admin/roles/all_roles', 'RolesController@allRoles')->name('roles.all');
     Route::post('admin/roles', 'RolesController@store')->name('roles.store');
     Route::patch('admin/roles/{role}', 'RolesController@update')->name('roles.update');
     Route::get('admin/roles/{role}', 'RolesController@show')->name('roles.show');
@@ -42,5 +42,7 @@ Route::namespace('Admin')->group(function () {
     Route::post('admin/users', 'UsersController@store')->name('users.store');
     Route::patch('admin/users/{user}', 'UsersController@update')->name('users.update');
     Route::delete('admin/users/{user}', 'UsersController@destroy')->name('users.destroy');
+    Route::get('admin/users/{user}/roles', 'UsersController@getUserRoles')->name('users.get_user_roles');
+    Route::post('admin/users/give/{user}/roles', 'UsersController@giveUserRoles')->name('users.give_user_roles');
 
 });

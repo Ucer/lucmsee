@@ -23,15 +23,6 @@
       <li v-for="(item,key) in formatFileList"><img :data-original="item.url" :src="item.url" alt=""></li>
     </ul>
   </div>
-
-  <!-- <Collapse v-if="formatFileList.length > 0">
-          <Panel name="1">
-            预览
-            <p slot="content">
-              <img class="fancybox" :src="item.url" :alt="item.name" v-for="(item,key) in formatFileList" />
-            </p>
-          </Panel>
-        </Collapse> -->
 </div>
 </template>
 <script>

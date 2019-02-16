@@ -9,19 +9,8 @@ export const getTableData = (searchdata) => {
     method: 'get'
   })
 };
-export const getAllPermission = () => {
-  return axios.request({
-    url: '/api/admin/all_permissions',
-    method: 'get'
-  })
-};
-
 export const add = (formData) => {
-  return axios.request({
-    url: '/api/admin/roles',
-    data: formData,
-    method: 'post'
-  })
+  return axios.request({url: '/api/admin/roles', data: formData, method: 'post'})
 };
 export const edit = (formData, id) => {
   return axios.request({
@@ -29,6 +18,22 @@ export const edit = (formData, id) => {
     data: formData,
     method: 'patch'
   })
+};
+export const getInfoById = (id) => {
+  return axios.request({
+    url: '/api/admin/roles/' + id,
+    method: 'get'
+  })
+};
+export const destroy = (id) => {
+  return axios.request({
+    url: '/api/admin/roles/' + id,
+    method: 'delete'
+  })
+};
+
+export const getAllPermission = () => {
+  return axios.request({url: '/api/admin/all_permissions', method: 'get'})
 };
 export const getRolePermissions = (roleId) => {
   return axios.request({
@@ -45,16 +50,7 @@ export const giveRolePermission = (roleId, permissions) => {
     method: 'post'
   })
 };
-export const destroy = (id) => {
-  return axios.request({
-    url: '/api/admin/roles/' + id,
-    method: 'delete'
-  })
-};
 
-export const getInfoById = (id) => {
-  return axios.request({
-    url: '/api/admin/roles/' + id,
-    method: 'get'
-  })
+export const getAllRole = () => {
+  return axios.request({url: '/api/admin/roles/all_roles', method: 'get'})
 };

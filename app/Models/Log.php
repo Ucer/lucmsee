@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Log extends Model
 {
+    use SoftDeletes;
+
     protected $casts = [
         'content' => 'array',
     ];

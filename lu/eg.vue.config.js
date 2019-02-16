@@ -19,7 +19,7 @@ const luOutPath = '../'
 
 module.exports = {
 
-  baseUrl: BASE_URL,
+  publicPath: BASE_URL,
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   // 如果你不需要使用eslint，把lintOnSave设为false即可

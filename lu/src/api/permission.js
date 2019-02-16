@@ -10,11 +10,7 @@ export const getTableData = (searchData) => {
   })
 };
 export const add = (formData) => {
-  return axios.request({
-    url: '/api/admin/permissions',
-    data: formData,
-    method: 'post'
-  })
+  return axios.request({url: '/api/admin/permissions', data: formData, method: 'post'})
 };
 export const edit = (formData, id) => {
   return axios.request({
@@ -23,15 +19,15 @@ export const edit = (formData, id) => {
     method: 'patch'
   })
 };
-export const destroy = (id) => {
-  return axios.request({
-    url: '/api/admin/permissions/' + id,
-    method: 'delete'
-  })
-};
 export const getInfoById = (id) => {
   return axios.request({
     url: '/api/admin/permissions/' + id,
     method: 'get'
+  })
+};
+export const destroy = (id) => {
+  return axios.request({
+    url: '/api/admin/permissions/' + id,
+    method: 'delete'
   })
 };

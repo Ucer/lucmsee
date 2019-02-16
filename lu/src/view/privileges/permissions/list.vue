@@ -23,7 +23,7 @@
     <Table border :columns="columns" :data="dataList" @on-sort-change='onSortChange'>
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error'  size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
+        <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
 
@@ -115,21 +115,18 @@ export default {
       this.editModal.id = row.id
     },
     tableButtonDestroyOk(row, index) {
-      this.destroyExcute(row.id, index)
+      let t = this
+      destroy(row.id).then(res => {
+        t.feeds.data.splice(index, 1)
+        t.$Notice.success({
+          title: res.message
+        })
+      })
     },
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order
       this.searchForm.order_by = order
       this.getTableDataExcute()
-    },
-    destroyExcute(id, key) {
-      let t = this
-      destroy(id).then(res => {
-        t.dataList.splice(key, 1)
-        t.$Notice.success({
-          title: res.message
-        })
-      })
     },
     addBtn() {
       this.addModal.show = true

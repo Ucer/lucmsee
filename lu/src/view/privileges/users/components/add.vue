@@ -1,7 +1,7 @@
 <template>
 <div>
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
-    <p slot="header">添加</p>
+    <p slot="header">{{ $t('add') }}</p>
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
       <FormItem label="头像：">
         <upload v-model="formData.avatar" :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
@@ -26,8 +26,8 @@
       </FormItem>
     </Form>
     <div slot="footer">
-      <Button type="text" @click="cancel">取消</Button>
-      <Button type="primary" @click="addExcute" :loading='saveLoading'>保存 </Button>
+      <Button type="text" @click="cancel">{{ $t('cancel') }}</Button>
+      <Button type="primary" @click="addExcute" :loading='saveLoading'>{{ $t('save') }} </Button>
     </div>
   </Modal>
 </div>

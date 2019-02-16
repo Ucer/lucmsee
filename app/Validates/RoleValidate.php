@@ -5,6 +5,7 @@ namespace App\Validates;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use DB;
+use Auth;
 
 class  RoleValidate extends Validate
 {
@@ -29,7 +30,6 @@ class  RoleValidate extends Validate
             $this->message = $rest_validate;
             return $this->baseFailed($this->message);
         }
-
     }
 
     public function updateValidate($request_data, $table_id = 0)
@@ -71,6 +71,9 @@ class  RoleValidate extends Validate
 
     public function destroyValidate($model)
     {
+        $authUser = Auth::user();
+        if(!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
+
         $is_user_has_this_role = DB::table('model_has_roles')
             ->where('model_type', 'App\Models\User')
             ->where('role_id', $model->id)

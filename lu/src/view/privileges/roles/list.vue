@@ -145,7 +145,13 @@ export default {
       this.editModal.id = row.id
     },
     tableButtonDestroyOk(row, index) {
-      this.destroyExcute(row.id, index)
+      let t = this
+      destroy(row.id).then(res => {
+        t.feeds.data.splice(index, 1)
+        t.$Notice.success({
+          title: res.message
+        })
+      })
     },
     tableButtonGiveUserPermission(row, index) {
       let t = this
@@ -157,15 +163,6 @@ export default {
       const order = data.column.key + ',' + data.order
       this.searchForm.order_by = order
       this.getTableDataExcute()
-    },
-    destroyExcute(id, key) {
-      let t = this
-      destroy(id).then(res => {
-        t.dataList.splice(key, 1)
-        t.$Notice.success({
-          title: res.message
-        })
-      })
     },
     addBtn() {
       this.addModal.show = true
