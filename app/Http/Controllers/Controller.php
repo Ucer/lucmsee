@@ -13,5 +13,7 @@ class Controller extends BaseController
 
     public function __construct()
     {
+        // 指定允许其他域名访问
+        header('Access-Control-Allow-Origin:*');
     }
 }
