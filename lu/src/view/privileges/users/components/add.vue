@@ -88,6 +88,7 @@ export default {
         file_name: 'file',
         multiple: false,
         file_num: 1,
+        data:{a:1,b:2},
         default_list: []
       },
       rules: {

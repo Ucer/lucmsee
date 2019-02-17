@@ -20,7 +20,7 @@ class RolesController extends AdminController
         $search_data = json_decode($request->get('search_data'), true);
         $name = isset_and_not_empty($search_data, 'name');
         if ($name) {
-            $model = $model->columnLike('name', $name);
+            $model = $model->columnLikeSearch('name', '%'.$name);
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
