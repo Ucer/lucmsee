@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Guard;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
@@ -16,7 +15,7 @@ use DB;
 class Role extends Model implements RoleContract
 {
     use HasPermissions;
-    use RefreshesPermissionCache,SoftDeletes;
+    use RefreshesPermissionCache;
 
     protected $fillable = ['name', 'guard_name', 'description'];
 

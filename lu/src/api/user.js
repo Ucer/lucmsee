@@ -11,7 +11,7 @@ export const login = ({
     password,
     captcha,
     captcha_key
-  }
+  };
   return axios.request({
     url: 'api/login',
     data,
@@ -87,4 +87,13 @@ export const giveUserRole = (userId, roles) => {
     },
     method: 'post'
   })
+};
+export const updatePassword = (userId, roles) => {
+    return axios.request({
+        url: '/api/admin/users/give/' + userId + '/roles',
+        data: {
+            role: roles
+        },
+        method: 'post'
+    })
 };

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Guard;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Traits\HasRoles;
@@ -18,7 +17,7 @@ use DB;
 class Permission extends Model implements PermissionContract
 {
     use HasRoles;
-    use RefreshesPermissionCache,SoftDeletes;
+    use RefreshesPermissionCache;
 
     protected $fillable = ['name', 'guard_name', 'description'];
 
