@@ -14,6 +14,7 @@ class UploadsController extends ApiController
     {
         parent::__construct();
         $this->middleware('auth:api');
+
     }
 
     public function commonUpload($category, Request $request, FileUploadHandler $fileuploadHandler)
