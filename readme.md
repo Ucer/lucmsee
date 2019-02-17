@@ -5,4 +5,4 @@
 
 ## 生成环境
 
-- 禁用跨域
+- 禁用跨域 (移除Kernel.php中的middleware并且去除 controller 中的header头)
