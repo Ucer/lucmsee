@@ -20,7 +20,7 @@ class RolesController extends AdminController
         $search_data = json_decode($request->get('search_data'), true);
         $name = isset_and_not_empty($search_data, 'name');
         if ($name) {
-            $model = $model->columnLikeSearch('name', '%'.$name);
+            $model = $model->columnLikeSearch('name', '%' . $name);
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
@@ -36,6 +36,7 @@ class RolesController extends AdminController
     {
         return $this->success($model);
     }
+
     public function store(Request $request, Role $model, RoleValidate $validate)
     {
         $request_data = $request->only('name', 'description');
@@ -50,12 +51,25 @@ class RolesController extends AdminController
     public function update(Request $request, Role $model, RoleValidate $validate)
     {
         $request_data = $request->only('name', 'description');
-        $rest_validate = $validate->updateValidate($request_data,$model->id);
+        $rest_validate = $validate->updateValidate($request_data, $model->id);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
         $res = $model->updateAction($request_data);
         if ($res['status'] === true) return $this->message($res['message']);
         return $this->failed($res['message']);
+    }
+
+    public function destroy(Role $model, RoleValidate $validate)
+    {
+        if (!$model) return $this->failed('找不到角色', 404);
+        $rest_destroy_validate = $validate->destroyValidate($model);
+        if ($rest_destroy_validate['status'] === true) {
+            $rest_destroy = $model->destroyAction();
+            if ($rest_destroy['status'] === true) return $this->message($rest_destroy['message']);
+            return $this->failed($rest_destroy['message'], 500);
+        } else {
+            return $this->failed($rest_destroy_validate['message']);
+        }
     }
 
     public function getRolePermissions(Role $model)
@@ -88,18 +102,5 @@ class RolesController extends AdminController
             ];
         });
         return $this->success($return);
-    }
-
-    public function destroy(Role $model, RoleValidate $validate)
-    {
-        if (!$model) return $this->failed('找不到角色', 404);
-        $rest_destroy_validate = $validate->destroyValidate($model);
-        if ($rest_destroy_validate['status'] === true) {
-            $rest_destroy = $model->destroyAction();
-            if ($rest_destroy['status'] === true) return $this->message($rest_destroy['message']);
-            return $this->failed($rest_destroy['message'], 500);
-        } else {
-            return $this->failed($rest_destroy_validate['message']);
-        }
     }
 }

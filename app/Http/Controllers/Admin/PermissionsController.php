@@ -40,21 +40,6 @@ class PermissionsController extends AdminController
         return $this->success($model);
     }
 
-
-    public function allPermissions(Permission $model)
-    {
-        $permissions = $model->get();
-        $return = [];
-        $permissions->each(function ($per) use (&$return) {
-            $return[] = [
-                'key' => strval($per->id),
-                'label' => $per->name,
-                'description' => $per->description
-            ];
-        });
-        return $this->success($return);
-    }
-
     public function store(Request $request, Permission $model, PermissionValidate $validate)
     {
         $request_data = $request->only('name', 'description');
@@ -69,7 +54,7 @@ class PermissionsController extends AdminController
     public function update(Request $request, Permission $model, PermissionValidate $validate)
     {
         $request_data = $request->only('name', 'description');
-        $rest_validate = $validate->updateValidate($request_data,$model->id);
+        $rest_validate = $validate->updateValidate($request_data, $model->id);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
         $res = $model->updateAction($request_data);
@@ -89,4 +74,19 @@ class PermissionsController extends AdminController
             return $this->failed($rest_destroy_validate['message']);
         }
     }
+
+    public function allPermissions(Permission $model)
+    {
+        $permissions = $model->get();
+        $return = [];
+        $permissions->each(function ($per) use (&$return) {
+            $return[] = [
+                'key' => strval($per->id),
+                'label' => $per->name,
+                'description' => $per->description
+            ];
+        });
+        return $this->success($return);
+    }
+
 }

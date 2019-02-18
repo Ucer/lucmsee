@@ -99,24 +99,28 @@ export default {
           minWidth: 150,
         },
         {
-          title: '后台权限',
-          minWidth: 150,
-          slot: 'is_admin',
+          title: '状态码',
+          key: 'status_code',
+          minWidth: 100,
         },
         {
-          title: '启用状态',
-          key: 'enable',
+          title: '状态码说明',
+          key: 'status_description',
           minWidth: 150,
-          slot: 'enable'
+        },{
+          title: '备注',
+          key: 'remark',
+          minWidth: 150,
         },
         {
           title: '创建时间',
           key: 'created_at',
+          sortable: 'customer',
           minWidth: 150,
         },
         {
-          title: '最近登录时间',
-          key: 'last_login_at',
+          title: '修改时间',
+          key: 'updated_at',
           sortable: 'customer',
           minWidth: 150,
         },
@@ -132,25 +136,9 @@ export default {
   },
   created() {
     let t = this
-    t.getTableStatusExcute('users')
-    t.getAllRoleExcute()
     t.getTableDataExcute(t.feeds.current_page)
   },
   methods: {
-    handleOnPageChange: function(to_page) {
-      this.getTableDataExcute(to_page)
-    },
-    onPageSizeChange: function(per_page) {
-      this.feeds.per_page = per_page
-      this.getTableDataExcute(this.feeds.current_page)
-    },
-    getTableStatusExcute(params) {
-      let t = this
-      getTableStatus(params).then(res => {
-        t.tableStatus.enable = res.data.enable
-        t.tableStatus.is_admin = res.data.is_admin
-      })
-    },
     getTableDataExcute(to_page) {
       let t = this
       t.tableLoading = true
@@ -183,29 +171,6 @@ export default {
         })
       })
     },
-    tableButtonGiveUserRoles(row, index) {
-      let t = this
-      getUserRoles(row.id).then(res => {
-        this.roleModal.hasRoles = res.data
-      })
-      t.roleModal.show = true
-      t.roleModal.id = row.id
-    },
-    switchChange: function(row, index) {
-      let t = this
-      let new_status = 'T'
-      if (t.feeds.data[index].enable === 'T') {
-        new_status = 'F'
-      }
-      switchEnable(t.feeds.data[index].id, 'users', new_status).then(res => {
-        t.feeds.data[index].enable = new_status
-        t.$Notice.success({
-          title: res.message
-        })
-      }).catch((err) => {
-        t.getTableDataExcute(t.feeds.current_page)
-      })
-    },
     addBtn() {
       this.addModal.show = true
     },
@@ -214,28 +179,6 @@ export default {
     },
     editModalHide() {
       this.editModal.show = false
-    },
-    getAllRoleExcute() {
-      let t = this
-      getAllRole().then(res => {
-        t.roleModal.allRoles = res.data
-      })
-    },
-    handleTransferChange(newTargetKeys) {
-      this.roleModal.hasRoles = newTargetKeys
-    },
-    renderFormat(item) {
-      return item.label + '「' + item.description + '」'
-    },
-    giveUserRoleExcute() {
-      let t = this
-      giveUserRole(t.roleModal.id, t.roleModal.hasRoles).then((res) => {
-        t.$Notice.success({
-          title: '操作成功',
-          desc: res.message
-        })
-        t.roleModal.show = false
-      })
     },
     cancelRoleModal() {
       let t = this

@@ -25,7 +25,7 @@ class UsersController extends AdminController
 
         $email = isset_and_not_empty($search_data, 'email');
         if ($email) {
-            $model = $model->columnLikeSearch('email', '%'.$email);
+            $model = $model->columnLikeSearch('email', '%' . $email);
         }
 
         $enable = isset_and_not_empty($search_data, 'enable');
@@ -53,19 +53,6 @@ class UsersController extends AdminController
         return new UserResource($model);
     }
 
-    public function currentUser()
-    {
-        $authUser = Auth::user();
-        $return = $authUser->toArray();
-        $return['roles'] = [];
-        foreach ($authUser->roles as $role) {
-            $return['roles'][] = $role['name'];
-        }
-//        $return['unread_message'] = AdminMessage::where('status', 'U')->count();
-        $return['unread_message'] = 0;
-
-        return $this->success($return);
-    }
 
     public function store(Request $request, User $model, UserValidate $validate)
     {
@@ -109,6 +96,35 @@ class UsersController extends AdminController
         return $this->failed($res['message']);
     }
 
+    public function destroy(User $model, UserValidate $validate)
+    {
+        if (!$model) return $this->failed('找不到用户', 404);
+
+        $rest_validate = $validate->destroyValidate($model);
+
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $rest_destroy = $model->destroyAction();
+        if ($rest_destroy['status'] === true) {
+            admin_log_record(Auth::id(), 'destroy', 'users', '删除用户', $model->toArray());
+            return $this->message($rest_destroy['message']);
+        }
+        return $this->failed($rest_destroy['message'], 500);
+    }
+
+    public function currentUser()
+    {
+        $authUser = Auth::user();
+        $return = $authUser->toArray();
+        $return['roles'] = [];
+        foreach ($authUser->roles as $role) {
+            $return['roles'][] = $role['name'];
+        }
+//        $return['unread_message'] = AdminMessage::where('status', 'U')->count();
+        $return['unread_message'] = 0;
+
+        return $this->success($return);
+    }
+
     public function updatePassword(Request $request, UserValidate $validate)
     {
         $request_data = $request->all();
@@ -140,18 +156,4 @@ class UsersController extends AdminController
         return $this->message('角色分配成功');
     }
 
-    public function destroy(User $model, UserValidate $validate)
-    {
-        if (!$model) return $this->failed('找不到用户', 404);
-
-        $rest_validate = $validate->destroyValidate($model);
-
-        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
-        $rest_destroy = $model->destroyAction();
-        if ($rest_destroy['status'] === true) {
-            admin_log_record(Auth::id(), 'destroy', 'users', '删除用户', $model->toArray());
-            return $this->message($rest_destroy['message']);
-        }
-        return $this->failed($rest_destroy['message'], 500);
-    }
 }

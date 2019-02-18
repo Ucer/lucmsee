@@ -10,6 +10,12 @@ class StatusMap extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'table_name', 'column', 'status_code', 'status_description'
+        'table_name', 'table_name_cn', 'column', 'status_code', 'status_description', 'remark'
     ];
+
+    public function handleCascadeSourceDataForStatusMap()
+    {
+        $table_name = $this->pluck('table_name');
+        dd($table_name);
+    }
 }
