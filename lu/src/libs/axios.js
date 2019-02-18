@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import {Notice} from 'iview'
 import {getTokenFromCookies} from '@/libs/util'
+import config from '@/config'
 
 const addErrorLog = errorInfo => {
   const {statusText, status, responseData, request: {
@@ -22,12 +23,14 @@ class HttpRequest {
   constructor(baseUrl = baseURL) {
     this.baseUrl = baseUrl
     this.queue = {}
+    this.configIndex = config
   }
   getInsideConfig() {
     window.access_token = getTokenFromCookies()
+
     let requestBaseUrl = process.env.NODE_ENV === 'development'
-      ? config.baseUrl.proxy
-      : config.baseUrl.pro
+      ? this.configIndex.baseUrl.proxy
+      : this.baseURL
 
     const config = {
       baseURL: requestBaseUrl,
