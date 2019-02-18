@@ -21,6 +21,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrustProxies::class,
 
         /** Third package */
+//        \Barryvdh\Cors\HandleCors::class,
     ];
 
     /**
@@ -42,6 +43,8 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            /** Third package */
+            \Barryvdh\Cors\HandleCors::class,
         ],
     ];
 
@@ -64,7 +67,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         /** Third package */
-        'cros' => \Barryvdh\Cors\HandleCors::class,
     ];
 
     /**

@@ -5,4 +5,8 @@
 
 ## 生成环境
 
-- 禁用跨域 (移除Kernel.php中的middleware并且去除 controller 中的header头)
+- 禁用跨域 (移除Kernel.php中的middleware)
+
+## 问题
+
+- 跨域过程中，如果存在语法错误等导致  options通过不了，在控制台会显示跨域失败信息
