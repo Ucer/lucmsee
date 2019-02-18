@@ -47,6 +47,43 @@ export default [{
       component: () =>
         import ('@/view/single-page/home')
     }]
+  },{
+    path: '/dashboard/system-config',
+    name: 'system_config',
+    component: Main,
+    meta: {
+      icon: 'ios-cog',
+      title: '系统管理',
+      access: ['Founder'],
+      showAlways: true
+    },
+    children: [{
+        path: '/dashboard/system-config',
+        name: 'system_config',
+        meta: {
+          title: '系统配置'
+        },
+        component: () =>
+          import ('@/view/privileges/permissions/list.vue')
+      },
+      {
+        path: '/dashboard/roleList',
+        name: 'roleList',
+        meta: {
+          title: '角色列表',
+        },
+        component: () =>
+          import ('@/view/privileges/roles/list.vue')
+      },
+      {
+        path: '/dashboard/userList',
+        name: 'userList',
+        meta: {
+          title: '用户列表'
+        },
+        component: () => import ('@/view/privileges/users/list.vue')
+      }
+    ]
   }, {
     path: '/dashboard/privileges',
     name: 'privileges',

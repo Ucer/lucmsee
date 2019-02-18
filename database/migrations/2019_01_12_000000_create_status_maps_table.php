@@ -16,6 +16,7 @@ class CreateStatusMapsTable extends Migration
         Schema::create('status_maps', function (Blueprint $table) {
             $table->increments('id');
             $table->string('table_name')->default('')->comment('表名称');
+            $table->string('table_name_cn')->default('')->comment('表中文名称');
             $table->string('column')->default('')->comment('字段名称');
             $table->string('status_code')->default('')->comment('状态码');
             $table->string('status_description')->default('')->comment('状态码说明');
