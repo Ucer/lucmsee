@@ -43,12 +43,14 @@ class TablesController extends AdminController
     public function store(Request $request, Table $model, TableValidate $validate)
     {
         $request_data = $request->all();
+
         $rest_validate = $validate->storeValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $new_request_data = $rest_validate['data'];
 
-        $res = $model->storeAction($request_data);
+        $res = $model->storeAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'insert', 'tables', '添加数据表', $request_data);
+            admin_log_record(Auth::id(), 'insert', 'tables', '添加数据表', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -60,12 +62,12 @@ class TablesController extends AdminController
         $request_data = $request->all();
 
         $rest_validate = $validate->updateValidate($request_data,$model);
-
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
-        $res = $model->updateAction($request_data);
+        $new_request_data = $rest_validate['data'];
 
+        $res = $model->updateAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'update', 'tables', '修改数据表,如果表名有改动，同时修改status_maps表中的表名', $request_data);
+            admin_log_record(Auth::id(), 'update', 'tables', '修改数据表,如果表名有改动，同时修改status_maps表中的表名', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);

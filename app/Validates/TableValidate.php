@@ -20,7 +20,7 @@ class  TableValidate extends Validate
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
-            return $this->baseSucceed($this->data, $this->message);
+            return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
             return $this->baseFailed($this->message);
@@ -46,7 +46,7 @@ class  TableValidate extends Validate
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
-            return $this->baseSucceed($this->data, $this->message);
+            return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
             return $this->baseFailed($this->message);

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\StatusMap;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('table', function ($value) {
             return Table::findOrFail($value);
+        });
+        Route::bind('status_map', function ($value) {
+            return StatusMap::findOrFail($value);
         });
     }
 

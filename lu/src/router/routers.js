@@ -48,8 +48,8 @@ export default [{
         import ('@/view/single-page/home')
     }]
   },{
-    path: '/dashboard/systemConfig',
-    name: 'systemConfig',
+    path: '/dashboard/systemManage',
+    name: 'systemManage',
     component: Main,
     meta: {
       icon: 'ios-cog',
@@ -68,7 +68,7 @@ export default [{
       },
       {
         path: '/dashboard/tables',
-        name: 'tables',
+        name: 'tableManage',
         meta: {
           title: '数据表管理',
         },
@@ -85,8 +85,8 @@ export default [{
       }
     ]
   }, {
-    path: '/dashboard/privileges',
-    name: 'privileges',
+    path: '/dashboard/privilegeManage',
+    name: 'privilegeManage',
     component: Main,
     meta: {
       icon: 'ios-lock',

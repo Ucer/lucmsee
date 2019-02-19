@@ -1,4 +1,14 @@
 
+<style>
+.ivu-table .table-column-style-table-name-cn {
+  background-color: #b1896f;
+  color: #fff;
+}
+.ivu-table .table-column-style-table-name {
+  background-color: #2e5197;
+  color: #fff;
+}
+</style>
 <template>
 <div>
   <Row :gutter="24">
@@ -6,7 +16,7 @@
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="6" :lg="3" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入表名搜索..." v-model="searchForm.table_name" />
+    <Input icon="search" placeholder="请输入字段名搜索..." v-model="searchForm.table_name" ></Input>
     </Col>
     <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
@@ -22,11 +32,8 @@
       </Spin>
     </div>
     <Table size='small' :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
-      <template slot-scope="{ row, index }" slot="table_name">
-        {{ row.table_name }}({{ row.table_name_cn }})
-      </template>
-
       <template slot-scope="{ row, index }" slot="action">
+        <Button type="primary" size="small" style="margin-right: 5px" @click="tableButtonShowInfo(row,index)">{{ $t('show_info') }}</Button>
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
         <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('permission') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
@@ -39,6 +46,8 @@
     </div> -->
   </Row>
 
+
+  <show-info v-if='showInfoModal.show' :info='showInfoModal.info' @show-modal-close="showModalClose"></show-info>
   <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
   <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component>
 
@@ -49,6 +58,8 @@
 import AddComponent from './components/add'
 import EditComponent from './components/edit'
 
+import ShowInfo from './components/show-info'
+
 import {
   getTableData,
   destroy,
@@ -57,13 +68,15 @@ import {
 export default {
   components: {
     AddComponent,
-    EditComponent
+    EditComponent,
+    ShowInfo
   },
   data() {
     return {
       searchForm: {
         order_by: 'created_at,desc',
-        table_name: ''
+        table_name: '',
+        column: ''
       },
       tableLoading: false,
       feeds: {
@@ -79,7 +92,10 @@ export default {
         show: false,
         id: 0
       },
-      sourceDdata: [],
+      showInfoModal: {
+        show: false,
+        info: ''
+      },
       columns: [{
           title: 'ID',
           key: 'id',
@@ -90,21 +106,17 @@ export default {
           title: '表名',
           key: 'table_name',
           minWidth: 100,
+          className: 'table-column-style-table-name',
         },
         {
           title: '表中文名',
           key: 'table_name_cn',
+          className: 'table-column-style-table-name-cn',
           minWidth: 150,
         },
         {
           title: '备注',
           key: 'remark',
-          minWidth: 150,
-        },
-        {
-          title: '创建时间',
-          key: 'created_at',
-          sortable: 'customer',
           minWidth: 150,
         },
         {
@@ -159,6 +171,10 @@ export default {
         })
       })
     },
+    tableButtonShowInfo(row, index) {
+      this.showInfoModal.show = true
+      this.showInfoModal.info = row
+    },
     addBtn() {
       this.addModal.show = true
     },
@@ -173,6 +189,9 @@ export default {
       t.roleModal.show = false
       t.roleModal.saveLoading = false
     },
+    showModalClose() {
+      this.showInfoModal.show = false
+    }
   },
 }
 </script>

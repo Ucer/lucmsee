@@ -47,7 +47,7 @@ class Table extends Model
             $this->delete();
             StatusMap::where('table_name',$this->table_name)->delete();
             DB::commit();
-            return $this->baseSucceed([], '角色删除成功');
+            return $this->baseSucceed([], '表记录删除成功');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->baseFailed('内部错误');

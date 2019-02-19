@@ -27,18 +27,18 @@ class StatusMapsController extends AdminController
 
         $table_name = isset_and_not_empty($search_data, 'table_name');
         if ($table_name) {
-            $model = $model->columnLikeSearch('table_name', '%'.$table_name);
+            $model = $model->columnEqualSearch('table_name',$table_name);
         }
 
         $column = isset_and_not_empty($search_data, 'column');
         if ($column) {
-            $model = $model->columnEqualSearch('column',$column);
+            $model = $model->columnLikeSearch('column','%'.$column);
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
         if ($order_by) {
             $order_by = explode(',', $order_by);
-            $model = $model->orderBy($order_by[0], $order_by[1]);
+            $model = $model->orderBy($order_by[0], $order_by[1])->orderBy('id','desc');
         }
 
         return $this->success($model->get());
@@ -56,9 +56,10 @@ class StatusMapsController extends AdminController
         $rest_validate = $validate->storeValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
-        $res = $model->storeAction($request_data);
+        $new_request_data = $rest_validate['data'];
+        $res = $model->storeAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'insert', 'status_map', '添加数据字典', $request_data);
+            admin_log_record(Auth::id(), 'insert', 'status_map', '添加数据字典', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -70,37 +71,29 @@ class StatusMapsController extends AdminController
         $request_data = $request->all();
 
         $rest_validate = $validate->updateValidate($request_data);
-
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
-        $res = $model->updateAction($request_data);
+        $new_request_data = $rest_validate['data'];
 
+        $res = $model->updateAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'update', 'status_maps', '修改数据字典', $request_data);
+            admin_log_record(Auth::id(), 'update', 'status_maps', '修改数据字典', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
     }
 
-    public function destroy(User $model, StatusMapValidate $validate)
+    public function destroy(StatusMap $model, StatusMapValidate $validate)
     {
-//        if (!$model) return $this->failed('找不到用户', 404);
-//
-//        $rest_validate = $validate->destroyValidate($model);
-//
-//        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
-//        $rest_destroy = $model->destroyAction();
-//        if ($rest_destroy['status'] === true) {
-//            admin_log_record(Auth::id(), 'destroy', 'users', '删除用户', $model->toArray());
-//            return $this->message($rest_destroy['message']);
-//        }
-//        return $this->failed($rest_destroy['message'], 500);
+
+        $rest_validate = $validate->destroyValidate($model);
+
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $rest_destroy = $model->destroyAction();
+        if ($rest_destroy['status'] === true) {
+            admin_log_record(Auth::id(), 'destroy', 'status_map', '删除数据字典', $model->toArray());
+            return $this->message($rest_destroy['message']);
+        }
+        return $this->failed($rest_destroy['message'], 500);
     }
 
-
-    public function getCascadeSourceDataForStatusMap(StatusMap $model,Request $request)
-    {
-        $list = $model->handleCascadeSourceDataForStatusMap();
-        return $this->success($list);
-
-    }
 }

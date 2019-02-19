@@ -43,10 +43,12 @@ class PermissionsController extends AdminController
     public function store(Request $request, Permission $model, PermissionValidate $validate)
     {
         $request_data = $request->only('name', 'description');
+
         $rest_validate = $validate->storeValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $new_request_data = $rest_validate['data'];
 
-        $res = $model->storeAction($request_data);
+        $res = $model->storeAction($new_request_data);
         if ($res['status'] === true) return $this->message($res['message']);
         return $this->failed($res['message']);
     }
@@ -54,10 +56,12 @@ class PermissionsController extends AdminController
     public function update(Request $request, Permission $model, PermissionValidate $validate)
     {
         $request_data = $request->only('name', 'description');
+
         $rest_validate = $validate->updateValidate($request_data, $model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $new_request_data = $rest_validate['data'];
 
-        $res = $model->updateAction($request_data);
+        $res = $model->updateAction($new_request_data);
         if ($res['status'] === true) return $this->message($res['message']);
         return $this->failed($res['message']);
     }

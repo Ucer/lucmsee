@@ -1,7 +1,10 @@
 export default {
   login: '登录',
   home: '首页',
-  privileges: '权限',
+  systemManage:'系统管理',
+  systemConfig:'系统配置',
+  tableManage:'表管理',
+  privilegeManage: '权限管理',
   permissionList: '权限列表',
   roleList: '角色列表',
   userList:'用户列表',
@@ -14,6 +17,7 @@ export default {
   save:'保存',
   all:'全部',
   table_loading:'加载中...',
+  show_info:'详细',
 
 
   components: '组件',

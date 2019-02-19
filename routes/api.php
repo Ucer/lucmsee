@@ -57,9 +57,9 @@ Route::namespace('Admin')->group(function () {
     Route::patch('admin/tables/{table}', 'TablesController@update')->name('tables.update');
     Route::delete('admin/tables/{table}', 'TablesController@destroy')->name('tables.destroy');
 
-//    Route::get('admin/status_maps/get_cascade_source_data_for_status_map', 'StatusMapsController@getCascadeSourceDataForStatusMap')->name('status_maps.get_cascade_source_data_for_status_map');
-//    Route::get('admin/status_maps', 'StatusMapsController@list')->name('status_maps.list');
-//    Route::post('admin/status_maps', 'StatusMapsController@store')->name('status_maps.store');
-//    Route::patch('admin/status_maps/{}', 'StatusMapsController@update')->name('status_maps.update');
-//    Route::delete('admin/status_maps/{user}', 'StatusMapsController@destroy')->name('status_maps.destroy');
+    Route::get('admin/status_maps', 'StatusMapsController@list')->name('status_maps.list');
+    Route::post('admin/status_maps', 'StatusMapsController@store')->name('status_maps.store');
+    Route::get('admin/status_maps/{status_map}', 'StatusMapsController@show')->name('status_maps.show');
+    Route::patch('admin/status_maps/{status_map}', 'StatusMapsController@update')->name('status_maps.update');
+    Route::delete('admin/status_maps/{status_map}', 'StatusMapsController@destroy')->name('status_maps.destroy');
 });

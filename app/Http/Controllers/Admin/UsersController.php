@@ -57,17 +57,14 @@ class UsersController extends AdminController
     public function store(Request $request, User $model, UserValidate $validate)
     {
         $request_data = $request->all();
+
         $rest_validate = $validate->storeValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $new_request_data = $rest_validate['data'];
 
-        if (!isset($request_data['avatar'])) {
-            $request_data['avatar'] = '';
-        } else {
-            $request_data['avatar'] = $request_data['avatar']['url'];
-        }
-        $res = $model->storeAction($request_data);
+        $res = $model->storeAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'insert', 'users', '添加用户', $request_data);
+            admin_log_record(Auth::id(), 'insert', 'users', '添加用户', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -78,19 +75,13 @@ class UsersController extends AdminController
     {
         $request_data = $request->only('id', 'name', 'avatar', 'is_admin');
 
-        if (!isset($request_data['avatar'])) {
-            $request_data['avatar'] = '';
-        } else {
-            $request_data['avatar'] = $request_data['avatar']['url'];
-        }
-
         $rest_validate = $validate->updateValidate($request_data);
-
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
-        $res = $model->updateAction($request_data);
+        $new_request_data = $rest_validate['data'];
 
+        $res = $model->updateAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'update', 'users', '修改用户', $request_data);
+            admin_log_record(Auth::id(), 'update', 'users', '修改用户', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -131,9 +122,10 @@ class UsersController extends AdminController
 
         $rest_validate = $validate->updatePasswordValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $new_request_data = $rest_validate['data'];
 
         $user = Auth::user();
-        $user->password = bcrypt($request_data['password']);
+        $user->password = bcrypt($new_request_data['password']);
         $user->save();
         return $this->message('密码修改成功');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Validates;
 
+use App\Models\Table;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 
@@ -14,14 +15,17 @@ class  StatusMapValidate extends Validate
     public function storeValidate($request_data)
     {
         $rules = [
-            'table_name' => 'required|between:2,255|alpha_dash',
+            'table_name' => 'required',
             'column' => 'required|between:1,255|alpha_dash',
-            'status_code' => 'required,alpha_dash',
-            'status_description' => 'required,between:1,255'
+            'status_code' => 'required|between:1,255,alpha_dash',
+            'status_description' => 'required|between:1,255'
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
-            return $this->baseSucceed($this->data, $this->message);
+            $res_isHasTableName = $this->isHasTableName($request_data['table_name']);
+            if(!$res_isHasTableName) return $this->baseFailed('表不存在，请刷新后重试');
+            $request_data['remark'] = isset_and_not_empty($request_data,'remark');
+            return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
             return $this->baseFailed($this->message);
@@ -32,14 +36,18 @@ class  StatusMapValidate extends Validate
     public function updateValidate($request_data,$model='')
     {
         $rules = [
-            'table_name' => 'required|between:2,255|alpha_dash',
+            'table_name' => 'required',
             'column' => 'required|between:1,255|alpha_dash',
-            'status_code' => 'required,between:1,255,alpha_dash',
-            'status_description' => 'required,between:1,255'
+            'status_code' => 'required|between:1,255,alpha_dash',
+            'status_description' => 'required|between:1,255'
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
-            return $this->baseSucceed($this->data, $this->message);
+            $res_isHasTableName = $this->isHasTableName($request_data['table_name']);
+            if(!$res_isHasTableName) return $this->baseFailed('表不存在，请刷新后重试');
+            unset($request_data['table_name']);
+            $request_data['remark'] = isset_and_not_empty($request_data,'remark');
+            return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
             return $this->baseFailed($this->message);
@@ -58,8 +66,6 @@ class  StatusMapValidate extends Validate
     {
         $message = [
             'table_name.required' => '表名不能为空',
-            'table_name.between' => '表名只能在:min-:max个字符范围',
-            'table_name.alpha_dash' => '表名只能是字母、数字，以及破折号 ( - ) 和下划线 ( _ )',
             'column.required' => '字段名不能为空',
             'column.between' => '字段名只能在:min-:max个字符范围',
             'column.alpha_dash' => '字段名只能是字母、数字，以及破折号 ( - ) 和下划线 ( _ )',
@@ -74,5 +80,9 @@ class  StatusMapValidate extends Validate
             return $validator->errors()->first();
         }
         return true;
+    }
+
+    protected function isHasTableName($table_name) {
+       return Table::where('table_name',$table_name)->first();
     }
 }

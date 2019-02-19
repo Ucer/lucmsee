@@ -20,7 +20,12 @@ class  UserValidate extends Validate
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
-            return $this->baseSucceed($this->data, $this->message);
+            if (!isset($request_data['avatar'])) {
+                $request_data['avatar'] = '';
+            } else {
+                $request_data['avatar'] = $request_data['avatar']['url'];
+            }
+            return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
             return $this->baseFailed($this->message);
@@ -35,7 +40,12 @@ class  UserValidate extends Validate
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
-            return $this->baseSucceed($this->data, $this->message);
+            if (!isset($request_data['avatar'])) {
+                $request_data['avatar'] = '';
+            } else {
+                $request_data['avatar'] = $request_data['avatar']['url'];
+            }
+            return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
             return $this->baseFailed($this->message);
@@ -50,7 +60,7 @@ class  UserValidate extends Validate
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
-            return $this->baseSucceed($this->data, $this->message);
+            return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
             return $this->baseFailed($this->message);
