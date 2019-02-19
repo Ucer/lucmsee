@@ -4,8 +4,9 @@ namespace App\Validates;
 
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use Illuminate\Validation\Rule;
 
-class  StatusMapValidate extends Validate
+class  TableValidate extends Validate
 {
     protected $message = '操作成功';
     protected $data = [];
@@ -14,10 +15,8 @@ class  StatusMapValidate extends Validate
     public function storeValidate($request_data)
     {
         $rules = [
-            'table_name' => 'required|between:2,255|alpha_dash',
-            'column' => 'required|between:1,255|alpha_dash',
-            'status_code' => 'required,alpha_dash',
-            'status_description' => 'required,between:1,255'
+            'table_name' => 'required|between:2,255|alpha_dash|unique:tables',
+            'table_name_cn' => 'required|between:2,255|unique:tables',
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
@@ -29,13 +28,21 @@ class  StatusMapValidate extends Validate
 
     }
 
-    public function updateValidate($request_data,$model='')
+    public function updateValidate($request_data, $model='')
     {
         $rules = [
-            'table_name' => 'required|between:2,255|alpha_dash',
-            'column' => 'required|between:1,255|alpha_dash',
-            'status_code' => 'required,between:1,255,alpha_dash',
-            'status_description' => 'required,between:1,255'
+            'table_name' =>
+                [
+                    'required',
+                    'between:2,255',
+                    'alpha_dash',
+                    Rule::unique('tables')->ignore($model->id),
+                ],
+            'table_name_cn' => [
+                'required',
+                'between:2,255',
+                Rule::unique('tables')->ignore($model->id),
+            ],
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
@@ -50,7 +57,7 @@ class  StatusMapValidate extends Validate
     public function destroyValidate($model)
     {
         $authUser = Auth::user();
-        if(!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
+        if (!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
         return $this->baseSucceed();
     }
 
@@ -60,15 +67,12 @@ class  StatusMapValidate extends Validate
             'table_name.required' => '表名不能为空',
             'table_name.between' => '表名只能在:min-:max个字符范围',
             'table_name.alpha_dash' => '表名只能是字母、数字，以及破折号 ( - ) 和下划线 ( _ )',
-            'column.required' => '字段名不能为空',
-            'column.between' => '字段名只能在:min-:max个字符范围',
-            'column.alpha_dash' => '字段名只能是字母、数字，以及破折号 ( - ) 和下划线 ( _ )',
-            'status_code.required' => '状态码不能为空',
-            'status_code.between' => '状态码只能在:min-:max个字符范围',
-            'status_code.alpha_dash' => '状态码只能是字母、数字，以及破折号 ( - ) 和下划线 ( _ )',
-            'status_description.required' => '状态码说明不能为空',
-            'status_description.between' => '状态码说明只能在:min-:max个字符范围',
+            'table_name.unique' => '表名已经存在了',
+            'table_name_cn.required' => '表中文名不能为空',
+            'table_name_cn.between' => '表中文只能在:min-:max个字符范围',
+            'table_name_cn.unique' => '表中文名已经存在了',
         ];
+
         $validator = Validator::make($request_data, $rules, $message);
         if ($validator->fails()) {
             return $validator->errors()->first();

@@ -28,7 +28,7 @@ class  UserValidate extends Validate
 
     }
 
-    public function updateValidate($request_data)
+    public function updateValidate($request_data,$model='')
     {
         $rules = [
             'name' => 'required|between:3,50',

@@ -2,17 +2,11 @@
 <template>
 <div>
   <Row :gutter="24">
-    <Col :xs="2" :lg="2">
+    <Col :xs="7" :lg="11">
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
-    <Col :xs="8" :lg="4" class="hidden-mobile">
-    <Cascader :data="sourceDdata" filterable change-on-select @on-change="getCascadeSourceDataForStatusMapExcute"></Cascader>
-    </Col>
-    <Col :xs="3" :lg="3">
-    <Select v-model="searchForm.table_name" filterable placeholder="请选择表">
-      <Option value="" key="">全部</Option>
-      <Option v-for="(item,key) in tableStatus.table_name" :value="key" :key="key">{{ item }}</Option>
-    </Select>
+    <Col :xs="6" :lg="3" class="hidden-mobile">
+    <Input icon="search" placeholder="请输入表名搜索..." v-model="searchForm.table_name" />
     </Col>
     <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
@@ -27,7 +21,7 @@
         <div>{{ $t('table_loading') }}</div>
       </Spin>
     </div>
-    <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
+    <Table size='small' :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
       <template slot-scope="{ row, index }" slot="table_name">
         {{ row.table_name }}({{ row.table_name_cn }})
       </template>
@@ -46,7 +40,7 @@
   </Row>
 
   <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
-  <!-- <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component> -->
+  <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component>
 
 </div>
 </template>
@@ -58,8 +52,7 @@ import EditComponent from './components/edit'
 import {
   getTableData,
   destroy,
-  getCascadeSourceDataForStatusMap
-} from '@/api/status_map'
+} from '@/api/table'
 
 export default {
   components: {
@@ -70,7 +63,7 @@ export default {
     return {
       searchForm: {
         order_by: 'created_at,desc',
-        table_column: ''
+        table_name: ''
       },
       tableLoading: false,
       feeds: {
@@ -95,24 +88,15 @@ export default {
         },
         {
           title: '表名',
-          slot: 'table_name',
+          key: 'table_name',
           minWidth: 100,
         },
         {
-          title: '字段名',
-          key: 'column',
+          title: '表中文名',
+          key: 'table_name_cn',
           minWidth: 150,
         },
         {
-          title: '状态码',
-          key: 'status_code',
-          minWidth: 100,
-        },
-        {
-          title: '状态码说明',
-          key: 'status_description',
-          minWidth: 150,
-        }, {
           title: '备注',
           key: 'remark',
           minWidth: 150,
@@ -142,7 +126,6 @@ export default {
   created() {
     let t = this
     t.getTableDataExcute(t.feeds.current_page)
-    t.getCascadeSourceDataForStatusMapExcute()
   },
   methods: {
     getTableDataExcute(to_page) {
@@ -151,9 +134,8 @@ export default {
       t.feeds.current_page = to_page
       getTableData(to_page, t.feeds.per_page, t.searchForm).then(res => {
         t.feeds.data = res.data
-        t.feeds.total = res.meta.total
+        t.feeds.total = 0
         t.tableLoading = false
-        t.globalFancybox()
       }, function(error) {
         t.tableLoading = false
       })
@@ -190,17 +172,6 @@ export default {
       let t = this
       t.roleModal.show = false
       t.roleModal.saveLoading = false
-    },
-    cascaderChange: function(value, selectedData) {
-      this.searchForm.table_column = value
-    },
-    getCascadeSourceDataForStatusMapExcute() {
-      let t = this
-      getCascadeSourceDataForStatusMap().then(res => {
-        const response_data = res.data
-        t.spinLoading = false
-        t.sourceDdata = response_data
-      })
     },
   },
 }

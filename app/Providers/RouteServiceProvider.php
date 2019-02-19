@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\Table;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -36,6 +37,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('user', function ($value) {
             return User::findOrFail($value);
+        });
+        Route::bind('table', function ($value) {
+            return Table::findOrFail($value);
         });
     }
 

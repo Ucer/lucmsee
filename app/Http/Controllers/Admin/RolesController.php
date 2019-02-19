@@ -51,7 +51,7 @@ class RolesController extends AdminController
     public function update(Request $request, Role $model, RoleValidate $validate)
     {
         $request_data = $request->only('name', 'description');
-        $rest_validate = $validate->updateValidate($request_data, $model->id);
+        $rest_validate = $validate->updateValidate($request_data, $model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
         $res = $model->updateAction($request_data);

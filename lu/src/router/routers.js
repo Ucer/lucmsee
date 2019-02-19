@@ -48,8 +48,8 @@ export default [{
         import ('@/view/single-page/home')
     }]
   },{
-    path: '/dashboard/system-config',
-    name: 'system_config',
+    path: '/dashboard/systemConfig',
+    name: 'systemConfig',
     component: Main,
     meta: {
       icon: 'ios-cog',
@@ -58,8 +58,8 @@ export default [{
       showAlways: true
     },
     children: [{
-        path: '/dashboard/system-config',
-        name: 'system_config',
+        path: '/dashboard/systemConfig',
+        name: 'systemConfig',
         meta: {
           title: '系统配置'
         },
@@ -67,13 +67,13 @@ export default [{
           import ('@/view/privileges/permissions/list.vue')
       },
       {
-        path: '/dashboard/roleList',
-        name: 'roleList',
+        path: '/dashboard/tables',
+        name: 'tables',
         meta: {
-          title: '角色列表',
+          title: '数据表管理',
         },
         component: () =>
-          import ('@/view/privileges/roles/list.vue')
+          import ('@/view/system-configs/tables/list.vue')
       },
       {
         path: '/dashboard/userList',

@@ -32,14 +32,14 @@ class  RoleValidate extends Validate
         }
     }
 
-    public function updateValidate($request_data, $table_id = 0)
+    public function updateValidate($request_data, $model = '')
     {
         $rules = [
             'name' => [
                 'required',
                 'between:3,50',
                 'regex: /^\w+$/',
-                Rule::unique('roles')->ignore($table_id),
+                Rule::unique('roles')->ignore($model->id),
             ],
             'description' => 'required'
         ];

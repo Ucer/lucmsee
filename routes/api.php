@@ -50,8 +50,16 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/users/{user}/roles', 'UsersController@getUserRoles')->name('users.get_user_roles');
     Route::post('admin/users/give/{user}/roles', 'UsersController@giveUserRoles')->name('users.give_user_roles');
 
-    Route::get('admin/status_maps', 'StatusMapsController@list')->name('status_maps.list');
-    Route::post('admin/status_maps', 'StatusMapsController@store')->name('status_maps.store');
-    Route::patch('admin/status_maps/{user}', 'StatusMapsController@update')->name('status_maps.update');
-    Route::delete('admin/status_maps/{user}', 'StatusMapsController@destroy')->name('status_maps.destroy');
+
+    Route::get('admin/tables', 'TablesController@list')->name('tables.list');
+    Route::post('admin/tables', 'TablesController@store')->name('tables.store');
+    Route::get('admin/tables/{table}', 'TablesController@show')->name('tables.show');
+    Route::patch('admin/tables/{table}', 'TablesController@update')->name('tables.update');
+    Route::delete('admin/tables/{table}', 'TablesController@destroy')->name('tables.destroy');
+
+//    Route::get('admin/status_maps/get_cascade_source_data_for_status_map', 'StatusMapsController@getCascadeSourceDataForStatusMap')->name('status_maps.get_cascade_source_data_for_status_map');
+//    Route::get('admin/status_maps', 'StatusMapsController@list')->name('status_maps.list');
+//    Route::post('admin/status_maps', 'StatusMapsController@store')->name('status_maps.store');
+//    Route::patch('admin/status_maps/{}', 'StatusMapsController@update')->name('status_maps.update');
+//    Route::delete('admin/status_maps/{user}', 'StatusMapsController@destroy')->name('status_maps.destroy');
 });

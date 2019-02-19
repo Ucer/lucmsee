@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\CommonCollection;
-use App\Http\Resources\UserResource;
-use App\Models\AdminMessage;
-use App\Models\StatusMap;
-use App\Validates\StatusMapValidate;
-use App\Validates\UserValidate;
-use App\Models\User;
+use App\Models\Table;
+use App\Validates\TableValidate;
 use Illuminate\Http\Request;
 use Auth;
 
-class StatusMapsController extends AdminController
+class TablesController extends AdminController
 {
     public function __construct()
     {
@@ -20,19 +15,14 @@ class StatusMapsController extends AdminController
         $this->middleware('auth:api');
     }
 
-    public function list(Request $request, StatusMap $model)
+    public function list(Request $request, Table $model)
     {
         $per_page = $request->get('per_page', 10);
         $search_data = json_decode($request->get('search_data'), true);
 
         $table_name = isset_and_not_empty($search_data, 'table_name');
         if ($table_name) {
-            $model = $model->columnLikeSearch('table_name', '%'.$table_name);
-        }
-
-        $column = isset_and_not_empty($search_data, 'column');
-        if ($column) {
-            $model = $model->columnEqualSearch('column',$column);
+            $model = $model->where('table_name','like', '%'.$table_name)->orWhere('table_name_cn','like','%'.$table_name.'%');
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
@@ -45,12 +35,12 @@ class StatusMapsController extends AdminController
     }
 
 
-    public function show(StatusMap $model)
+    public function show(Table $model)
     {
         return $this->success($model);
     }
 
-    public function store(Request $request, StatusMap $model, StatusMapValidate $validate)
+    public function store(Request $request, Table $model, TableValidate $validate)
     {
         $request_data = $request->all();
         $rest_validate = $validate->storeValidate($request_data);
@@ -58,30 +48,30 @@ class StatusMapsController extends AdminController
 
         $res = $model->storeAction($request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'insert', 'status_map', '添加数据字典', $request_data);
+            admin_log_record(Auth::id(), 'insert', 'tables', '添加数据表', $request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
 
     }
 
-    public function update(StatusMap $model, Request $request, StatusMapValidate $validate)
+    public function update(Table $model, Request $request, TableValidate $validate)
     {
         $request_data = $request->all();
 
-        $rest_validate = $validate->updateValidate($request_data);
+        $rest_validate = $validate->updateValidate($request_data,$model);
 
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $res = $model->updateAction($request_data);
 
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'update', 'status_maps', '修改数据字典', $request_data);
+            admin_log_record(Auth::id(), 'update', 'tables', '修改数据表,如果表名有改动，同时修改status_maps表中的表名', $request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
     }
 
-    public function destroy(User $model, StatusMapValidate $validate)
+    public function destroy(Table $model, TableValidate $validate)
     {
 //        if (!$model) return $this->failed('找不到用户', 404);
 //
@@ -97,10 +87,4 @@ class StatusMapsController extends AdminController
     }
 
 
-    public function getCascadeSourceDataForStatusMap(StatusMap $model,Request $request)
-    {
-        $list = $model->handleCascadeSourceDataForStatusMap();
-        return $this->success($list);
-
-    }
 }
