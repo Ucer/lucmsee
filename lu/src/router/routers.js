@@ -18,15 +18,15 @@ import parentView from '@/components/parent-view'
  * }
  */
 
-export default [{
+export default[
+  {
     path: '/dashboard/login',
     name: 'login',
     meta: {
       title: '登录',
       hideInMenu: true
     },
-    component: () =>
-      import ('@/view/login/login.vue')
+    component: () => import ('@/view/login/login.vue')
   }, {
     path: '/dashboard',
     name: '_home',
@@ -36,19 +36,20 @@ export default [{
       hideInMenu: true,
       notCache: true
     },
-    children: [{
-      path: '/dashboard/home',
-      name: 'home',
-      meta: {
-        hideInMenu: true,
-        title: '首页',
-        // notCache: true,
-        icon: 'md-home'
-      },
-      component: () =>
-        import ('@/view/single-page/home')
-    }]
-  },{
+    children: [
+      {
+        path: '/dashboard/home',
+        name: 'home',
+        meta: {
+          hideInMenu: true,
+          title: '首页',
+          // notCache: true,
+          icon: 'md-home'
+        },
+        component: () => import ('@/view/single-page/home')
+      }
+    ]
+  }, {
     path: '/dashboard/systemManage',
     name: 'systemManage',
     component: Main,
@@ -58,32 +59,30 @@ export default [{
       access: ['Founder'],
       showAlways: true
     },
-    children: [{
-        path: '/dashboard/systemConfig',
-        name: 'systemConfig',
-        meta: {
-          title: '系统配置'
-        },
-        component: () =>
-          import ('@/view/privileges/permissions/list.vue')
-      },
+    children: [
       {
         path: '/dashboard/tables',
         name: 'tableManage',
         meta: {
-          title: '数据表管理',
+          title: '数据表管理'
         },
-        component: () =>
-          import ('@/view/system-configs/tables/list.vue')
+        component: () => import ('@/view/system-configs/tables/list.vue')
       },
-      {
-        path: '/dashboard/userList',
-        name: 'userList',
-        meta: {
-          title: '用户列表'
-        },
-        component: () => import ('@/view/privileges/users/list.vue')
-      }
+      //  {
+      //   path: '/dashboard/userList',
+      //   name: 'userList',
+      //   meta: {
+      //     title: '用户列表'
+      //   },
+      //   component: () => import ('@/view/privileges/users/list.vue')
+      // }, {
+      //   path: '/dashboard/systemConfig',
+      //   name: 'systemConfig',
+      //   meta: {
+      //     title: '系统配置'
+      //   },
+      //   component: () => import ('@/view/privileges/permissions/list.vue')
+      // }
     ]
   }, {
     path: '/dashboard/privilegeManage',
@@ -95,25 +94,22 @@ export default [{
       access: ['Founder'],
       showAlways: true
     },
-    children: [{
+    children: [
+      {
         path: '/dashboard/permissionList',
         name: 'permissionList',
         meta: {
           title: '权限列表'
         },
-        component: () =>
-          import ('@/view/privileges/permissions/list.vue')
-      },
-      {
+        component: () => import ('@/view/privileges/permissions/list.vue')
+      }, {
         path: '/dashboard/roleList',
         name: 'roleList',
         meta: {
-          title: '角色列表',
+          title: '角色列表'
         },
-        component: () =>
-          import ('@/view/privileges/roles/list.vue')
-      },
-      {
+        component: () => import ('@/view/privileges/roles/list.vue')
+      }, {
         path: '/dashboard/userList',
         name: 'userList',
         meta: {
@@ -122,32 +118,26 @@ export default [{
         component: () => import ('@/view/privileges/users/list.vue')
       }
     ]
-  },
-  {
+  }, {
     path: '/401',
     name: 'error_401',
     meta: {
       hideInMenu: true
     },
-    component: () =>
-      import ('@/view/error-page/401.vue')
-  },
-  {
+    component: () => import ('@/view/error-page/401.vue')
+  }, {
     path: '/500',
     name: 'error_500',
     meta: {
       hideInMenu: true
     },
-    component: () =>
-      import ('@/view/error-page/500.vue')
-  },
-  {
+    component: () => import ('@/view/error-page/500.vue')
+  }, {
     path: '*',
     name: 'error_404',
     meta: {
       hideInMenu: true
     },
-    component: () =>
-      import ('@/view/error-page/404.vue')
+    component: () => import ('@/view/error-page/404.vue')
   }
 ]

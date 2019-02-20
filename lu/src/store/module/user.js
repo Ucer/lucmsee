@@ -3,33 +3,19 @@ import {setTokenToCookies, getTokenFromCookies} from '@/libs/util'
 
 export default {
   state: {
-    userId: '',
+    user_id: '',
     email: '',
-    name: '无',
-    avatorImgPath: '',
+    nickname: '',
+    real_name: '',
+    avator: '',
     access: '',
     accessToken: getTokenFromCookies(),
     accessTokenType:'',
-    unReadMessage: 0
+    unread_message: 0
   },
   mutations: {
-    setUserId(state, value) {
-      state.userId = value
-    },
-    setUnReadMessage(state, value) {
-      state.unReadMessage = value
-    },
-    setName(state, value) {
-      state.name = value
-    },
-    setEmail(state, value) {
-      state.email = value
-    },
-    setAvator(state, value) {
-      state.avatorImgPath = value
-    },
-    setAccess(state, value) {
-      state.access = value
+    setAnyState(state,array) {
+      state[array[0]] = array[1]
     },
     setAccessToken(state, data) {
       let token = ''
@@ -73,12 +59,12 @@ export default {
       return new Promise((resolve, reject) => {
         getUserInfo().then(res => {
           const data = res.data
-          commit('setEmail', data.email)
-          commit('setAvator', data.avatar)
-          commit('setName', data.name)
-          commit('setUserId', data.user_id)
-          commit('setAccess', data.roles)
-          commit('setUnReadMessage', data.unread_message)
+          commit('setAnyState',['avator',data.avatar])
+          commit('setAnyState',['email',data.email])
+          commit('setAnyState',['user_id',data.user_id])
+          commit('setAnyState',['access',data.roles])
+          commit('setAnyState',['nickname',data.nickname])
+          commit('setAnyState',['unread_message',data.unread_message])
           resolve(data)
         }).catch(err => {
           reject(err)
