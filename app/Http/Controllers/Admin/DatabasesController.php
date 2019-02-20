@@ -26,18 +26,6 @@ class DatabasesController extends AdminController
             $data_table_list = collect(DB::select('SHOW TABLE STATUS'));
         }
 
-//        $order_by = isset_and_not_empty($search_data, 'order_by');
-//        if ($order_by) {
-//            $order_by = explode(',', $order_by);
-//            if($order_by[1] == 'desc') {
-//                $data_table_list = $data_table_list->sortByDesc('Index_length');
-//            } else {
-//                $data_table_list = $data_table_list->sortBy('Index_length');
-//            }
-//            $data_table_list = collect($data_table_list->values()->all());
-//        }
-
-
         $total = 0;
         $data_table_list->each(function($item,$key) use(&$total) {
             $data_length  = (int) $item->Data_length;
@@ -48,8 +36,6 @@ class DatabasesController extends AdminController
             $item->Total_length = format_bytes($plus);
             $total += $plus;
         });
-
-//        $sorted = $data_table_list->sortBy('Index_length');
 
         $list = [
             'data' => $data_table_list,
