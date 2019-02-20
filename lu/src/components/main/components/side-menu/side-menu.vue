@@ -1,3 +1,10 @@
+<style>
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item:hover {
+    color: #ac5a5a;
+    background: #42070700 !important;
+}
+</style>
 <template>
   <div class="side-menu-wrapper">
     <slot></slot>

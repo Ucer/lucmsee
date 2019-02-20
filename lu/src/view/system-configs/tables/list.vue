@@ -1,14 +1,3 @@
-
-<style>
-.ivu-table .table-column-style-table-name-cn {
-  background-color: #b1896f;
-  color: #fff;
-}
-.ivu-table .table-column-style-table-name {
-  background-color: #2e5197;
-  color: #fff;
-}
-</style>
 <template>
 <div>
   <Row :gutter="24">
@@ -16,7 +5,7 @@
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="6" :lg="3" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入字段名搜索..." v-model="searchForm.table_name" ></Input>
+    <Input icon="search" placeholder="请输入字段名搜索..." v-model="searchForm.table_name"></Input>
     </Col>
     <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
@@ -35,7 +24,6 @@
       <template slot-scope="{ row, index }" slot="action">
         <Button type="primary" size="small" style="margin-right: 5px" @click="tableButtonShowInfo(row,index)">{{ $t('show_info') }}</Button>
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('permission') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
@@ -115,6 +103,11 @@ export default {
           minWidth: 150,
         },
         {
+          title: '操作',
+          key: '',
+          minWidth: 200,
+          slot: 'action'
+        }, {
           title: '备注',
           key: 'remark',
           minWidth: 150,
@@ -124,12 +117,6 @@ export default {
           key: 'updated_at',
           sortable: 'customer',
           minWidth: 150,
-        },
-        {
-          title: '操作',
-          key: '',
-          minWidth: 200,
-          slot: 'action'
         }
       ],
 

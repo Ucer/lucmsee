@@ -37,8 +37,9 @@
             @on-close="handleClose(item)"
             @click.native="handleClick(item)"
             :closable="item.name !== $config.homeName"
-            :color="isCurrentTag(item) ? 'primary' : 'default'"
+            :color="isCurrentTag(item) ? 'success' : 'default'"
             @contextmenu.prevent.native="contextMenu(item, $event)"
+            v-if="!item.meta.hideInTag"
           >{{ showTitleInside(item) }}</Tag>
         </transition-group>
       </div>
