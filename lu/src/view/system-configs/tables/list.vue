@@ -171,11 +171,6 @@ export default {
     editModalHide() {
       this.editModal.show = false
     },
-    cancelRoleModal() {
-      let t = this
-      t.roleModal.show = false
-      t.roleModal.saveLoading = false
-    },
     showModalClose() {
       this.showInfoModal.show = false
     }

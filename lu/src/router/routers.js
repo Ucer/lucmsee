@@ -61,6 +61,13 @@ export default[
     },
     children: [
       {
+        path: '/dashboard/databases',
+        name: 'databaseManage',
+        meta: {
+          title: '数据库监控'
+        },
+        component: () => import ('@/view/system-configs/databases/list.vue')
+      }, {
         path: '/dashboard/tables',
         name: 'tableManage',
         meta: {

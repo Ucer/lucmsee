@@ -1,18 +1,16 @@
-
 <template>
 <div>
   <Row :gutter="24">
-    <Col :xs="2" :lg="2">
+    <Col :xs="7" :lg="2">
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
-    <Col :xs="8" :lg="4" class="hidden-mobile">
-    <Cascader :data="sourceDdata" filterable change-on-select @on-change="getCascadeSourceDataForStatusMapExcute"></Cascader>
+    <Col :xs="4" :lg="2" class="hidden-mobile">
+    <Poptip confirm placement="bottom" title="确认要操作?" @on-ok="bakUpTableExcute(selectIds,false)" ok-text="确认" cancel-text="点错了">
+      <Button>备份</Button>
+    </Poptip>
     </Col>
-    <Col :xs="3" :lg="3">
-    <Select v-model="searchForm.table_name" filterable placeholder="请选择表">
-      <Option value="" key="">全部</Option>
-      <Option v-for="(item,key) in tableStatus.table_name" :value="key" :key="key">{{ item }}</Option>
-    </Select>
+    <Col :xs="6" :lg="3" class="hidden-mobile">
+    <Input icon="search" placeholder="请输入表名搜索..." v-model="searchForm.table_name"></Input>
     </Col>
     <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
@@ -27,25 +25,23 @@
         <div>{{ $t('table_loading') }}</div>
       </Spin>
     </div>
-    <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
-      <template slot-scope="{ row, index }" slot="table_name">
-        {{ row.table_name }}({{ row.table_name_cn }})
-      </template>
-
+    <Table height="600" size='small' :columns="columns" :data="feeds.data" @on-sort-change='onSortChange' @on-selection-change='onSelectionChange'>
       <template slot-scope="{ row, index }" slot="action">
+        <Button type="primary" size="small" style="margin-right: 5px" @click="tableButtonShowInfo(row,index)">{{ $t('show_info') }}</Button>
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('permission') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
-    <!-- <div style="margin: 10px;overflow: hidden">
+    <div style="margin: 10px;overflow: hidden">
       <div style="float: right;">
-        <Page :total="feeds.total" :current="feeds.current_page" :page-size="feeds.per_page" class="paging" show-elevator show-total show-sizer @on-change="handleOnPageChange" @on-page-size-change='onPageSizeChange'></Page>
+        {{ all_tables_num }} 张表，{{ all_tables_length}}
       </div>
-    </div> -->
+    </div>
   </Row>
 
-  <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
+
+  <!-- <show-info v-if='showInfoModal.show' :info='showInfoModal.info' @show-modal-close="showModalClose"></show-info> -->
+  <!-- <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component> -->
   <!-- <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component> -->
 
 </div>
@@ -55,11 +51,11 @@
 import AddComponent from './components/add'
 import EditComponent from './components/edit'
 
+
 import {
   getTableData,
-  destroy,
-  getCascadeSourceDataForStatusMap
-} from '@/api/status_map'
+  bakUpTable
+} from '@/api/database'
 
 export default {
   components: {
@@ -70,7 +66,8 @@ export default {
     return {
       searchForm: {
         order_by: 'created_at,desc',
-        table_column: ''
+        table_name: '',
+        column: ''
       },
       tableLoading: false,
       feeds: {
@@ -86,55 +83,64 @@ export default {
         show: false,
         id: 0
       },
-      sourceDdata: [],
+      showInfoModal: {
+        show: false,
+        info: ''
+      },
+      all_tables_num: 0,
+      all_tables_length: 0,
+      selectIds: '',
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
+          type: 'selection',
+          width: 60,
+          align: 'center'
         },
         {
           title: '表名',
-          slot: 'table_name',
+          key: 'Name',
           minWidth: 100,
         },
         {
-          title: '字段名',
-          key: 'column',
-          minWidth: 150,
-        },
-        {
-          title: '状态码',
-          key: 'status_code',
-          minWidth: 100,
-        },
-        {
-          title: '状态码说明',
-          key: 'status_description',
-          minWidth: 150,
+          title: '存储引擎',
+          key: 'Engine',
+          minWidth: 60,
         }, {
-          title: '备注',
-          key: 'remark',
-          minWidth: 150,
+          title: '行数',
+          key: 'Rows',
+          minWidth: 60,
+          sortable: true
+        }, {
+          title: '数据',
+          key: 'Data_length',
+          minWidth: 60,
+          sortable: true
+        }, {
+          title: '索引',
+          key: 'Index_length',
+          minWidth: 60,
+          sortable: true
+        }, {
+          title: '全部',
+          key: 'Total_length',
+          minWidth: 60,
+          sortable: true
         },
         {
           title: '创建时间',
-          key: 'created_at',
-          sortable: 'customer',
+          key: 'Create_time',
+          sortable: true,
           minWidth: 150,
-        },
-        {
+        }, {
           title: '修改时间',
-          key: 'updated_at',
-          sortable: 'customer',
+          key: 'Ureate_time',
+          sortable: true,
           minWidth: 150,
-        },
-        {
+        }, {
           title: '操作',
           key: '',
           minWidth: 200,
           slot: 'action'
-        }
+        },
       ],
 
     }
@@ -142,7 +148,6 @@ export default {
   created() {
     let t = this
     t.getTableDataExcute(t.feeds.current_page)
-    t.getCascadeSourceDataForStatusMapExcute()
   },
   methods: {
     getTableDataExcute(to_page) {
@@ -150,10 +155,11 @@ export default {
       t.tableLoading = true
       t.feeds.current_page = to_page
       getTableData(to_page, t.feeds.per_page, t.searchForm).then(res => {
-        t.feeds.data = res.data
-        t.feeds.total = res.meta.total
+        t.feeds.data = res.data.data
+        t.all_tables_num = res.data.all_tables_num
+        t.all_tables_length = res.data.all_tables_length
+        t.feeds.total = 0
         t.tableLoading = false
-        t.globalFancybox()
       }, function(error) {
         t.tableLoading = false
       })
@@ -162,7 +168,7 @@ export default {
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order
       this.searchForm.order_by = order
-      this.getTableDataExcute(this.feeds.current_page)
+      // this.getTableDataExcute(this.feeds.current_page)
     },
     tableButtonEdit(row, index) {
       this.editModal.show = true
@@ -176,6 +182,16 @@ export default {
           title: res.message
         })
       })
+    },
+    tableButtonShowInfo(row, index) {
+      this.showInfoModal.show = true
+      this.showInfoModal.info = row
+    },
+    onSelectionChange: function(selection) {
+      this.selectIds = ''
+      for (let index in selection) {
+        this.selectIds += ',' + selection[index].Name
+      }
     },
     addBtn() {
       this.addModal.show = true
@@ -191,15 +207,20 @@ export default {
       t.roleModal.show = false
       t.roleModal.saveLoading = false
     },
-    cascaderChange: function(value, selectedData) {
-      this.searchForm.table_column = value
+    showModalClose() {
+      this.showInfoModal.show = false
     },
-    getCascadeSourceDataForStatusMapExcute() {
+    bakUpTableExcute(selectes, isOpAll) {
+      if (isOpAll === false && !selectes) {
+        this.$Notice.error({
+          title: '出错了',
+          desc: '请先选择要操作的项'
+        })
+        return false
+      }
       let t = this
-      getCascadeSourceDataForStatusMap().then(res => {
-        const response_data = res.data
-        t.spinLoading = false
-        t.sourceDdata = response_data
+      bakUpTable(selectes, isOpAll).then(res => {
+        t.getTableDataExcute(t.feeds.current_page)
       })
     },
   },
