@@ -1,7 +1,10 @@
 <template>
 <div>
   <Row :gutter="24">
-    <Col :xs="4" :lg="2" class="hidden-mobile">
+    <Alert class="text-center"><span style="font-weight:blod">共计：{{ bak_data_rows }} 条备份日志</span>，  <Button to='/dashboard/table_bak_record' type="success" >立即查看</Button></Alert>
+  </Row>
+  <Row :gutter="24">
+    <Col :xs="4" :lg="4" class="hidden-mobile">
     <Poptip confirm placement="right" title="确认要操作?" @on-ok="bakUpTableExcute(selectIds,false)" ok-text="确认" cancel-text="点错了">
       <Button type="success" :loading="loadingBakBtn">
         <span v-if="!loadingBakBtn">备份</span>
@@ -48,15 +51,10 @@
       </div>
     </div>
   </Row>
-
-  <!-- <show-info v-if='showInfoModal.show' :info='showInfoModal.info' @show-modal-close="showModalClose"></show-info> -->
-
 </div>
 </template>
 
 <script>
-import AddComponent from './components/add'
-import EditComponent from './components/edit'
 
 
 import {
@@ -67,10 +65,6 @@ import {
 } from '@/api/database'
 
 export default {
-  components: {
-    AddComponent,
-    EditComponent
-  },
   data() {
     return {
       searchForm: {
@@ -85,23 +79,13 @@ export default {
         current_page: 1,
         per_page: 10
       },
-      addModal: {
-        show: false
-      },
-      editModal: {
-        show: false,
-        id: 0
-      },
-      showInfoModal: {
-        show: false,
-        info: ''
-      },
       all_tables_num: 0,
       all_tables_length: 0,
       selectIds: '',
       loadingBakBtn: false,
       loadingOptimizeBtn: false,
       loadingRepairBtn: false,
+      bak_data_rows:0,
       columns: [{
           type: 'selection',
           width: 60,
@@ -144,7 +128,7 @@ export default {
           minWidth: 150,
         }, {
           title: '修改时间',
-          key: 'Ureate_time',
+          key: 'Update_time',
           sortable: true,
           minWidth: 150,
         }
@@ -165,6 +149,7 @@ export default {
         t.feeds.data = res.data.data
         t.all_tables_num = res.data.all_tables_num
         t.all_tables_length = res.data.all_tables_length
+        t.bak_data_rows = res.data.bak_data_rows
         t.feeds.total = 0
         t.tableLoading = false
       }, function(error) {
@@ -199,23 +184,6 @@ export default {
       for (let index in selection) {
         this.selectIds += ',' + selection[index].Name
       }
-    },
-    addBtn() {
-      this.addModal.show = true
-    },
-    addModalHide() {
-      this.addModal.show = false
-    },
-    editModalHide() {
-      this.editModal.show = false
-    },
-    cancelRoleModal() {
-      let t = this
-      t.roleModal.show = false
-      t.roleModal.saveLoading = false
-    },
-    showModalClose() {
-      this.showInfoModal.show = false
     },
     bakUpTableExcute(selectes, isOpAll) {
       if (isOpAll === false && !selectes) {

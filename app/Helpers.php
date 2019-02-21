@@ -272,7 +272,7 @@ function get_rand_str($len = 6, $has_number = false, $time = false)
     }
     $str = '';
     for ($i = 0; $i < $len; $i++) {
-        $str .= $chars[rand(0, strlen($chars))];
+        $str .= $chars[rand(0, strlen($chars)-1)];
     }
     if ($time) {
         $str .= date('YmdHis', time());

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Handlers\DatabaseHandler;
+use App\Http\Resources\CommonCollection;
+use App\Http\Resources\TableBakRecordCollection;
+use App\Models\TableBakRecord;
 use App\Validates\DatabaseValidate;
 use Illuminate\Http\Request;
 use Auth;
@@ -42,7 +45,8 @@ class DatabasesController extends AdminController
         $list = [
             'data' => $data_table_list,
             'all_tables_num' => count($data_table_list),
-            'all_tables_length' => format_bytes($total)
+            'all_tables_length' => format_bytes($total),
+            'bak_data_rows' => TableBakRecord::count()
         ];
 
         return $this->success($list);
@@ -96,27 +100,18 @@ class DatabasesController extends AdminController
         return $this->message("共计{$num}张表,修复成功");
     }
     /*数据库备份列表*/
-    public function bakList()
+    public function tableBakRecords(Request $request,TableBakRecord $model)
     {
-        $all_file = glob('./uploads/sql_data/*.sql');
-        $final = [];
-        $size = 0;
-        if(count($all_file) > 0){
-            foreach($all_file as $v){
-                if(is_file($v)){
-                    $size += filesize($v);
-                }
-                $final[] = [
-                    'name'=>basename($v),
-                    'size'=>filesize($v),
-                    'time'=>filemtime($v),
-                    'pre'=>substr(explode('.',basename($v))[0],0,-2),
-                    'number'=>str_replace('_','',substr(basename($v),-6,2))
-                ];
-            }
+        $per_page = $request->get('per_page', 10);
+        $search_data = json_decode($request->get('search_data'), true);
+
+        $order_by = isset_and_not_empty($search_data, 'order_by');
+        if ($order_by) {
+            $order_by = explode(',', $order_by);
+            $model = $model->orderBy($order_by[0], $order_by[1]);
         }
-        krsort($final);
-        return view('data/bak_list',['lists'=>$final,'total'=>formatBytes($size),'num'=>count($final)]);
+        $list = $model->paginate($per_page);
+        return new TableBakRecordCollection($list);
     }
 
     /*下载*/
