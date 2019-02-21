@@ -220,7 +220,11 @@ export default {
       }
       let t = this
       bakUpTable(selectes, isOpAll).then(res => {
-        t.getTableDataExcute(t.feeds.current_page)
+        this.$Notice.success({
+          title: '操作成功',
+          desc: res.message,
+          duration: 0
+        })
       })
     },
   },

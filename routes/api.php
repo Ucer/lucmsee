@@ -64,6 +64,6 @@ Route::namespace('Admin')->group(function () {
     Route::delete('admin/status_maps/{status_map}', 'StatusMapsController@destroy')->name('status_maps.destroy');
 
 
-    Route::post('admin/databases/bak_up_table', 'DatabasesController@bakUpTable')->name('databases.bak_up_table');
+    Route::post('admin/databases/bak_table', 'DatabasesController@bakTable')->name('databases.bak_table');
     Route::get('admin/databases', 'DatabasesController@list')->name('databases.list');
 });

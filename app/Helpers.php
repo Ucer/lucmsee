@@ -245,13 +245,42 @@ function pr($str)
 
 /**
  * 格式化字节大小
- * @param  number $size      字节数
+ * @param  number $size 字节数
  * @param  string $delimiter 数字和单位分隔符
  * @return string            格式化后的带单位的大小
  */
-function format_bytes( $size,$delimiter = ''){
-    if(!$size) return 0;
-    $units = ['B','KB','MB','GB','TB','PB'];
-    for($i = 0;$size >= 1024 && $i < 5 ;$i++) $size /=1024;
-    return round($size,2) . $delimiter . $units[$i];
+function format_bytes($size, $delimiter = '')
+{
+    if (!$size) return 0;
+    $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    for ($i = 0; $size >= 1024 && $i < 5; $i++) $size /= 1024;
+    return round($size, 2) . $delimiter . $units[$i];
+}
+
+/**
+ * 获取随机字符串
+ * @param int $len 长度
+ * @param int $has_number 是否包含数字
+ * @param int $time 是否加入当前时间戳
+ * @return string
+ */
+function get_rand_str($len = 6, $has_number = false, $time = false)
+{
+    $chars = 'abcdefghijklmnopqrstwxyzABCDEFGHIJKLMNOPQRSTWXYZ';
+    if ($has_number) {
+        $chars .= '123456789';
+    }
+    $str = '';
+    for ($i = 0; $i < $len; $i++) {
+        $str .= $chars[rand(0, strlen($chars))];
+    }
+    if ($time) {
+        $str .= date('YmdHis', time());
+    }
+    return $str;
+}
+
+function obj_to_array($obj)
+{
+    return json_decode(json_encode($obj),true);
 }

@@ -30,7 +30,7 @@ export const getInfoById = (id) => {
 
 export const bakUpTable = (selectes, isOpAll) => {
   return axios.request({
-    url: '/api/admin/databases/bak_up_table',
+    url: '/api/admin/databases/bak_table',
     data: {
       is_op_all: isOpAll,
       selectes: selectes
