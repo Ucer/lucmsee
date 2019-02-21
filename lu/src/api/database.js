@@ -38,3 +38,23 @@ export const bakUpTable = (selectes, isOpAll) => {
     method: 'post'
   })
 };
+export const optimizeTable = (selectes, isOpAll) => {
+  return axios.request({
+    url: '/api/admin/databases/optimize_table',
+    data: {
+      is_op_all: isOpAll,
+      selectes: selectes
+    },
+    method: 'post'
+  })
+};
+export const repairTable = (selectes, isOpAll) => {
+  return axios.request({
+    url: '/api/admin/databases/repair_table',
+    data: {
+      is_op_all: isOpAll,
+      selectes: selectes
+    },
+    method: 'post'
+  })
+};

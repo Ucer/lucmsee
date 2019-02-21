@@ -65,5 +65,7 @@ Route::namespace('Admin')->group(function () {
 
 
     Route::post('admin/databases/bak_table', 'DatabasesController@bakTable')->name('databases.bak_table');
+    Route::post('admin/databases/optimize_table', 'DatabasesController@optimizeTable')->name('databases.optimize_table');
+    Route::post('admin/databases/repair_table', 'DatabasesController@repairTable')->name('databases.repair_table');
     Route::get('admin/databases', 'DatabasesController@list')->name('databases.list');
 });

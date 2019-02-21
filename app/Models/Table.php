@@ -29,10 +29,10 @@ class Table extends Model
     {
         DB::beginTransaction();
         try {
-            $this->fill($input)->save();
             if($this->table_name != $input['table_name']) {
                 StatusMap::where('table_name',$this->table_name)->update(['table_name' => $input['table_name']]);
             }
+            $this->fill($input)->save();
             DB::commit();
             return $this->baseSucceed([], '操作成功');
         } catch (\Exception $e) {

@@ -66,32 +66,34 @@ class DatabasesController extends AdminController
         return $this->failed($res['message']);
     }
     /*数据库表优化*/
-    public function optimize()
+    public function optimizeTable(Request $request)
     {
-        $num = 1;
-        if(request()->isPost()){
-            $table = input('param.tables/a');
-            $num = count($table);
-            $table = implode(',',$table);
+        $tables = $request->selectes;
+        if(empty($tables)) {
+            $this->failed('请选择要备份的数据表');
         }
-        if(!Db::query("OPTIMIZE TABLE {$table} ")){
-            $this->error('操作失败请重试');
+        $selects = array_filter(explode(',',$tables));
+        $num  = count($selects);
+        $selects = implode(',',$selects);
+        if(!DB::query("OPTIMIZE TABLE {$selects} ")){
+            $this->failed('操作失败请重试');
         }
-        $this->success("共计{$num}张表,优化成功");
+        return $this->message("共计{$num}张表,优化成功");
     }
     /*数据库修复*/
-    public function repair()
+    public function repairTable(Request $request)
     {
-        $num = 1;
-        if(request()->isPost()){
-            $table = input('param.tables/a');
-            $num = count($table);
-            $table = implode(',',$table);
+        $tables = $request->selectes;
+        if(empty($tables)) {
+            $this->failed('请选择要备份的数据表');
         }
-        if(!Db::query("REPAIR TABLE {$table} ")){
-            $this->error('操作失败请重试');
+        $selects = array_filter(explode(',',$tables));
+        $num  = count($selects);
+        $selects = implode(',',$selects);
+        if(!DB::query("REPAIR TABLE {$selects} ")){
+            $this->failed('操作失败请重试');
         }
-        $this->success("共计{$num}张表,修复成功");
+        return $this->message("共计{$num}张表,修复成功");
     }
     /*数据库备份列表*/
     public function bakList()

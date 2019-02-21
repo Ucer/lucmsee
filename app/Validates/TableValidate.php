@@ -20,6 +20,7 @@ class  TableValidate extends Validate
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
+            $request_data['remark'] = isset_and_not_empty($request_data,'remark');
             return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
@@ -46,6 +47,7 @@ class  TableValidate extends Validate
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
+            $request_data['remark'] = isset_and_not_empty($request_data,'remark');
             return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;

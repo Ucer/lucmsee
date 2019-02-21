@@ -50,7 +50,7 @@ class TablesController extends AdminController
 
         $res = $model->storeAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'insert', 'tables', '添加数据表', $new_request_data);
+            admin_log_record(Auth::id(), 'insert', 'tables', '添加数据字典表', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -67,7 +67,7 @@ class TablesController extends AdminController
 
         $res = $model->updateAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'update', 'tables', '修改数据表,如果表名有改动，同时修改status_maps表中的表名', $new_request_data);
+            admin_log_record(Auth::id(), 'update', 'tables', '修改数据字典表,如果表名有改动，同时修改status_maps表中的表名', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -75,17 +75,16 @@ class TablesController extends AdminController
 
     public function destroy(Table $model, TableValidate $validate)
     {
-//        if (!$model) return $this->failed('找不到用户', 404);
-//
-//        $rest_validate = $validate->destroyValidate($model);
-//
-//        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
-//        $rest_destroy = $model->destroyAction();
-//        if ($rest_destroy['status'] === true) {
-//            admin_log_record(Auth::id(), 'destroy', 'users', '删除用户', $model->toArray());
-//            return $this->message($rest_destroy['message']);
-//        }
-//        return $this->failed($rest_destroy['message'], 500);
+
+        $rest_validate = $validate->destroyValidate($model);
+
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $rest_destroy = $model->destroyAction();
+        if ($rest_destroy['status'] === true) {
+            admin_log_record(Auth::id(), 'destroy', 'tables', '删除数据字典表，同时删除status_maps表相关记录', $model->toArray());
+            return $this->message($rest_destroy['message']);
+        }
+        return $this->failed($rest_destroy['message'], 500);
     }
 
 

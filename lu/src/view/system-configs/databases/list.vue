@@ -1,13 +1,25 @@
 <template>
 <div>
   <Row :gutter="24">
-    <Col :xs="7" :lg="2">
-    <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
+    <Col :xs="4" :lg="2" class="hidden-mobile">
+    <Poptip confirm placement="right" title="确认要操作?" @on-ok="bakUpTableExcute(selectIds,false)" ok-text="确认" cancel-text="点错了">
+      <Button type="success" :loading="loadingBakBtn">
+        <span v-if="!loadingBakBtn">备份</span>
+        <span v-else>备份进行中...</span>
+      </Button>
+    </Poptip>
     </Col>
     <Col :xs="4" :lg="2" class="hidden-mobile">
-    <Poptip confirm placement="bottom" title="确认要操作?" @on-ok="bakUpTableExcute(selectIds,false)" ok-text="确认" cancel-text="点错了">
-      <Button>备份</Button>
-    </Poptip>
+    <Button type="info" :loading="loadingOptimizeBtn" @click="optimizeTableExcute(selectIds,false)">
+        <span v-if="!loadingOptimizeBtn">优化</span>
+        <span v-else>优化中...</span>
+      </Button>
+    </Col>
+    <Col :xs="4" :lg="2" class="hidden-mobile">
+    <Button type="primary" :loading="loadingRepairBtn"  @click="repairTableExcute(selectIds,false)">
+        <span v-if="!loadingRepairBtn">修复</span>
+        <span v-else>修复中...</span>
+      </Button>
     </Col>
     <Col :xs="6" :lg="3" class="hidden-mobile">
     <Input icon="search" placeholder="请输入表名搜索..." v-model="searchForm.table_name"></Input>
@@ -27,9 +39,7 @@
     </div>
     <Table height="600" size='small' :columns="columns" :data="feeds.data" @on-sort-change='onSortChange' @on-selection-change='onSelectionChange'>
       <template slot-scope="{ row, index }" slot="action">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="tableButtonShowInfo(row,index)">{{ $t('show_info') }}</Button>
-        <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
+        <!-- <Button type="primary" size="small" style="margin-right: 5px" @click="tableButtonShowInfo(row,index)">优化</Button> -->
       </template>
     </Table>
     <div style="margin: 10px;overflow: hidden">
@@ -40,7 +50,7 @@
   </Row>
 
   <!-- <show-info v-if='showInfoModal.show' :info='showInfoModal.info' @show-modal-close="showModalClose"></show-info> -->
-  
+
 </div>
 </template>
 
@@ -51,7 +61,9 @@ import EditComponent from './components/edit'
 
 import {
   getTableData,
-  bakUpTable
+  bakUpTable,
+  optimizeTable,
+  repairTable,
 } from '@/api/database'
 
 export default {
@@ -87,6 +99,9 @@ export default {
       all_tables_num: 0,
       all_tables_length: 0,
       selectIds: '',
+      loadingBakBtn: false,
+      loadingOptimizeBtn: false,
+      loadingRepairBtn: false,
       columns: [{
           type: 'selection',
           width: 60,
@@ -132,12 +147,7 @@ export default {
           key: 'Ureate_time',
           sortable: true,
           minWidth: 150,
-        }, {
-          title: '操作',
-          key: '',
-          minWidth: 200,
-          slot: 'action'
-        },
+        }
       ],
 
     }
@@ -215,6 +225,7 @@ export default {
         })
         return false
       }
+      this.loadingBakBtn = true
       let t = this
       bakUpTable(selectes, isOpAll).then(res => {
         this.$Notice.success({
@@ -222,6 +233,51 @@ export default {
           desc: res.message,
           duration: 0
         })
+        this.loadingBakBtn = false
+      }).catch((err) => {
+        this.loadingBakBtn = false
+      })
+    },
+    optimizeTableExcute(selectes, isOpAll) {
+      if (isOpAll === false && !selectes) {
+        this.$Notice.error({
+          title: '出错了',
+          desc: '请先选择要操作的项'
+        })
+        return false
+      }
+      this.loadingOptimizeBtn = true
+      let t = this
+      optimizeTable(selectes, isOpAll).then(res => {
+        this.$Notice.success({
+          title: '操作成功',
+          desc: res.message,
+          duration: 0
+        })
+        this.loadingOptimizeBtn = false
+      }).catch((err) => {
+        this.loadingOptimizeBtn = false
+      })
+    },
+    repairTableExcute(selectes, isOpAll) {
+      if (isOpAll === false && !selectes) {
+        this.$Notice.error({
+          title: '出错了',
+          desc: '请先选择要操作的项'
+        })
+        return false
+      }
+      this.loadingRepairBtn = true
+      let t = this
+      repairTable(selectes, isOpAll).then(res => {
+        this.$Notice.success({
+          title: '操作成功',
+          desc: res.message,
+          duration: 0
+        })
+        this.loadingRepairBtn = false
+      }).catch((err) => {
+        this.loadingRepairBtn = false
       })
     },
   },
