@@ -3,8 +3,10 @@
 namespace App\Handlers;
 
 use App\Http\Controllers\Api\Traits\BaseResponseTrait;
+use App\Models\TableBakRecord;
 use File;
 use DB;
+use Auth;
 use Illuminate\Support\Facades\Config;
 
 
@@ -34,7 +36,7 @@ class DatabaseHandler
         }
         $start_time = time();//开始时间
 
-        $full_filename = $this->data_table_bak_dir . '/' . env('DB_DATABASE', '') .'='. date('Y-m-d=H:i:s=', $start_time) . get_rand_str(3);
+        $full_filename = $this->data_table_bak_dir . '/' . env('DB_DATABASE', '') . '=' . date('Y-m-d=H:i:s=', $start_time) . get_rand_str(3);
         $pre = "/* -----------------------------------------------------------*/\n";
 
         //取得表结构信息
@@ -61,16 +63,16 @@ class DatabaseHandler
             foreach ($one_table_data_list as $kk => $one_row_for_table) {
                 $tn = 0;//表中的第几条数据
                 $tem_sql = '';//将每一张表的每条数据拼接起来
-                if (!isset($one_row_for_table['created_at']) ||!$one_row_for_table['created_at']) {
+                if (!isset($one_row_for_table['created_at']) || !$one_row_for_table['created_at']) {
                     unset($one_row_for_table['created_at']);
                 }
-                if (!isset($one_row_for_table['updated_at']) ||!$one_row_for_table['updated_at']) {
+                if (!isset($one_row_for_table['updated_at']) || !$one_row_for_table['updated_at']) {
                     unset($one_row_for_table['updated_at']);
                 }
                 if (!isset($one_row_for_table['deleted_at']) || !$one_row_for_table['deleted_at']) {
                     unset($one_row_for_table['deleted_at']);
                 }
-                $table_columns = implode(',',array_keys($one_row_for_table));
+                $table_columns = implode(',', array_keys($one_row_for_table));
                 foreach (array_values($one_row_for_table) as $value) {
                     $tem_sql .= $tn == 0 ? "" : ",";
                     $tem_sql .= $table_name == '' ? "''" : "'{$value}'";
@@ -114,7 +116,7 @@ class DatabaseHandler
             } else {//如果不是第一个文件
                 $sql_no = "/* Description:备份的数据表[数据]：" . implode(",", $backed_table) . '*/' . $sql_no;
             }
-            $file = $full_filename . "_" . $file_n . ".sql";
+            $file = $full_filename . "=" . $file_n . ".sql";
             if ($file_n == 1) {
                 $outstr = $pre . $sql_no . $sqlTable . $outstr;
             } else {
@@ -126,7 +128,23 @@ class DatabaseHandler
             $file_n++;
         }
         $usetime = time() - $start_time;
-        return $this->baseSucceed(['file_num' => $file_n-1,'use_time' => $usetime],"备份操作成功，本次备份共生成了" . ($file_n - 1) . "个SQL文件。耗时：{$usetime} 秒");
+
+        $insert_tableBakRecord = [
+            'user_id' => Auth::id(),
+            'bak_tables_name' => implode(',', $tables),
+            'file_num' => $file_n-1
+        ];
+
+        $filesize = 0;
+        for ($i = 1; $i < $file_n; $i++) {
+            $filename = $full_filename . '=' . $i . '.sql';
+            $filesize += filesize($filename);
+            $insert_tableBakRecord['files'][] = $filename;
+        }
+        $insert_tableBakRecord['file_size'] = $filesize;
+        (new TableBakRecord())->fill($insert_tableBakRecord)->save();
+
+        return $this->baseSucceed(['file_num' => $file_n - 1, 'use_time' => $usetime, 'base_file_name' => $full_filename], "备份操作成功，本次备份共生成了" . ($file_n - 1) . "个SQL文件。耗时：{$usetime} 秒");
 
     }
 
