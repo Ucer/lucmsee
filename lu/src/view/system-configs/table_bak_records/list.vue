@@ -3,8 +3,8 @@
   <Row :gutter="24">
     <Col :xs="2" :lg="2" class="hidden-mobile">
     <Button to="/dashboard/databases" type="primary">
-          <Icon type="ios-arrow-back" /> 回到数据表页面
-      </Button>
+      <Icon type="ios-arrow-back" /> 回到数据表页面
+    </Button>
     </Col>
     <Col :xs="4" :lg="4" class="hidden-mobile">
     <Poptip confirm placement="right" title="确认要执行删除操作?" @on-ok="bakUpTableExcute(selectIds,false)" ok-text="确认" cancel-text="点错了">
@@ -29,9 +29,11 @@
     </div>
     <Table height="600" size='small' :columns="columns" :data="feeds.data" @on-sort-change='onSortChange' @on-selection-change='onSelectionChange'>
       <template slot-scope="{ row, index }" slot="bak_tables_name">
-        <Poptip  trigger="hover" title="备份的表" slot="bakTablesNameFormat">
-            <Button>{{ row.first_table_name }}</Button>
-            <slot name="bakTablesNameFormat">abc</slot>
+        <Poptip trigger="hover" title="备份的表">
+          <Button>{{ row.first_table_name }}</Button>
+          <div  slot="content">
+            sdfsdf
+          </div>
         </Poptip>
       </template>
       <template slot-scope="{ row, index }" slot="action">
