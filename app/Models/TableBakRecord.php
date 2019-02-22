@@ -17,11 +17,17 @@ class TableBakRecord extends Model
     ];
 
 
-    public function destroyAction()
+    public function destroyAction($ids)
     {
         try {
-            $this->delete();
-            return $this->baseSucceed([], '表记录删除成功');
+            foreach ($ids as $id) {
+                $model = $this->findOrFail($id);
+                $model->delete();
+                foreach ($model->files as $file) {
+                    unlink($file);
+                }
+            }
+            return $this->baseSucceed([], '备份数据删除成功');
         } catch (\Exception $e) {
             return $this->baseFailed('内部错误');
         }

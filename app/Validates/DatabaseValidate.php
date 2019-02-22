@@ -18,6 +18,20 @@ class  DatabaseValidate extends Validate
         return $this->baseSucceed();
     }
 
+    public function tableBakSqlFileDownloadValidate()
+    {
+        $authUser = Auth::user();
+        if(!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
+        return $this->baseSucceed();
+    }
+
+    public function destroyManyTableBakRecordValidate()
+    {
+        $authUser = Auth::user();
+        if(!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
+        return $this->baseSucceed();
+    }
+
     protected function validate($request_data, $rules)
     {
         $message = [

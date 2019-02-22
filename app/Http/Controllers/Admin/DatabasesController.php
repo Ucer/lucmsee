@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Handlers\DatabaseHandler;
-use App\Http\Resources\CommonCollection;
 use App\Http\Resources\TableBakRecordCollection;
 use App\Models\TableBakRecord;
 use App\Validates\DatabaseValidate;
@@ -26,15 +25,15 @@ class DatabasesController extends AdminController
 
         $table_name = isset_and_not_empty($search_data, 'table_name');
         if ($table_name) {
-            $data_table_list = collect(DB::select("SHOW TABLE STATUS LIKE '".$table_name."%'"));
+            $data_table_list = collect(DB::select("SHOW TABLE STATUS LIKE '" . $table_name . "%'"));
         } else {
             $data_table_list = collect(DB::select('SHOW TABLE STATUS'));
         }
 
         $total = 0;
-        $data_table_list->each(function($item,$key) use(&$total) {
-            $data_length  = (int) $item->Data_length;
-            $index_length  = (int) $item->Index_length;
+        $data_table_list->each(function ($item, $key) use (&$total) {
+            $data_length = (int)$item->Data_length;
+            $index_length = (int)$item->Index_length;
             $item->Data_length = format_bytes($data_length);
             $item->Index_length = format_bytes($index_length);
             $plus = $data_length + $index_length;
@@ -53,54 +52,56 @@ class DatabasesController extends AdminController
     }
 
 
-
     /*数据库表备份*/
-    public function bakTable(Request $request,DatabaseValidate $validate)
+    public function bakTable(Request $request, DatabaseValidate $validate)
     {
         set_time_limit(0);//防止超时
         $tables = $request->selectes;
-        if(empty($tables)) {
+        if (empty($tables)) {
             $this->failed('请选择要备份的数据表');
         }
-        $selects = array_filter(explode(',',$tables));
+        $selects = array_filter(explode(',', $tables));
         $rest_validate = $validate->bakTableValidate($selects);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $res = (new DatabaseHandler())->dataTableBak($selects);
         if ($res['status'] === true) return $this->message($res['message']);
         return $this->failed($res['message']);
     }
+
     /*数据库表优化*/
     public function optimizeTable(Request $request)
     {
         $tables = $request->selectes;
-        if(empty($tables)) {
+        if (empty($tables)) {
             $this->failed('请选择要备份的数据表');
         }
-        $selects = array_filter(explode(',',$tables));
-        $num  = count($selects);
-        $selects = implode(',',$selects);
-        if(!DB::query("OPTIMIZE TABLE {$selects} ")){
+        $selects = array_filter(explode(',', $tables));
+        $num = count($selects);
+        $selects = implode(',', $selects);
+        if (!DB::query("OPTIMIZE TABLE {$selects} ")) {
             $this->failed('操作失败请重试');
         }
         return $this->message("共计{$num}张表,优化成功");
     }
+
     /*数据库修复*/
     public function repairTable(Request $request)
     {
         $tables = $request->selectes;
-        if(empty($tables)) {
+        if (empty($tables)) {
             $this->failed('请选择要备份的数据表');
         }
-        $selects = array_filter(explode(',',$tables));
-        $num  = count($selects);
-        $selects = implode(',',$selects);
-        if(!DB::query("REPAIR TABLE {$selects} ")){
+        $selects = array_filter(explode(',', $tables));
+        $num = count($selects);
+        $selects = implode(',', $selects);
+        if (!DB::query("REPAIR TABLE {$selects} ")) {
             $this->failed('操作失败请重试');
         }
         return $this->message("共计{$num}张表,修复成功");
     }
+
     /*数据库备份列表*/
-    public function tableBakRecords(Request $request,TableBakRecord $model)
+    public function tableBakRecords(Request $request, TableBakRecord $model)
     {
         $per_page = $request->get('per_page', 10);
         $search_data = json_decode($request->get('search_data'), true);
@@ -115,27 +116,40 @@ class DatabasesController extends AdminController
     }
 
     /*下载*/
-    public function downFile()
+    public function tableBakSqlFileDownload($table_bak_record_id, TableBakRecord $model, DatabaseValidate $validate)
     {
-        $file = './uploads/sql_data/'.input('param.file');
-        if(!file_exists($file)){
-            $this->error("该文件不存在，可能是已经被删除");
+        $rest_validate = $validate->tableBakSqlFileDownloadValidate();
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+
+        $model = $model->findOrFail($table_bak_record_id);
+        foreach ($model->files as $key => $file) {
+            if (!file_exists($file)) return $this->failed($file . '文件缺失');
+            $filename = basename($file);
+            header("Content-type: application/octet-stream");
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header("Content-Length: " . filesize($file));
+            readfile($file);
+            if ($key > 0) sleep(3);
         }
-        $filename = basename($file);
-        header("Content-type: application/octet-stream");
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header("Content-Length: " . filesize($file));
-        readfile($file);
     }
+
     /*删除备份*/
-    public function delSqlFile()
+    public function destroyManyTableBakRecord(Request $request, TableBakRecord $model, DatabaseValidate $validate)
     {
-        $sql_file = glob('./uploads/sql_data/'.input('param.ids').'_*.sql');
-//        dd($sql_file);
-        foreach($sql_file as $k=>$v){
-            unlink($v);
+        $rest_validate = $validate->destroyManyTableBakRecordValidate();
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+
+        $ids = $request->selectes;
+        if (empty($ids)) {
+            return $this->failed('请选择要备份的数据表');
         }
-        $this->success("删除成功,共删除".count($sql_file)."个文件");
+        $ids = array_filter(explode(',', $ids));
+        $res = $model->destroyAction($ids);
+        if ($res['status'] === true) {
+            return $this->message($res['message']);
+        } else {
+            return $this->failed($res['message']);
+        }
     }
 
 }

@@ -7,16 +7,12 @@
     </Button>
     </Col>
     <Col :xs="4" :lg="4" class="hidden-mobile">
-    <Poptip confirm placement="right" title="确认要执行删除操作?" @on-ok="bakUpTableExcute(selectIds,false)" ok-text="确认" cancel-text="点错了">
-      <Button type="warning" :loading="loadingBakBtn">
-        <span v-if="!loadingBakBtn">{{ $t('destroy') }}</span>
-        <span v-else>备份进行中...</span>
+    <Poptip confirm placement="right" title="确认要执行删除操作?" @on-ok="destroyManyTableBakRecordExcute(selectIds,false)" ok-text="确认" cancel-text="点错了">
+      <Button type="warning">
+        {{ $t('destroy') }}
       </Button>
     </Poptip>
     </Col>
-    <!-- <Col :xs="3" :lg="3">
-    <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
-    </Col> -->
   </Row>
   <br>
 
@@ -29,15 +25,21 @@
     </div>
     <Table height="600" size='small' :columns="columns" :data="feeds.data" @on-sort-change='onSortChange' @on-selection-change='onSelectionChange'>
       <template slot-scope="{ row, index }" slot="bak_tables_name">
-        <Poptip trigger="hover" title="备份的表">
-          <Button>{{ row.first_table_name }}</Button>
-          <div  slot="content">
-            sdfsdf
+        <Poptip word-wrap width="600" placement="bottom" trigger="hover" title="备份的表" slot="content">
+          <Button>{{ row.first_table_name }}..</Button>
+          <div slot="content">
+            <span v-for="item,key in row.bak_tables_name">
+              <Tag type="border" color="success" v-if="key%2 ==0">{{ item }}</Tag>
+              <Tag type="border" color="error" v-else>{{ item }}</Tag>
+            </span>
           </div>
         </Poptip>
       </template>
       <template slot-scope="{ row, index }" slot="action">
-        <!-- <Button type="primary" size="small" style="margin-right: 5px" @click="tableButtonShowInfo(row,index)">优化</Button> -->
+        <Button type="primary" size="small" style="margin-right: 5px" @click="tableBakSqlFileDownloadExcute(row,index)" :loading="loadingDownloadBtn === row.id">
+          <span v-if="loadingDownloadBtn === row.id">下载中...</span>
+          <span v-else>{{ $t('download') }}</span>
+        </Button>
       </template>
     </Table>
 
@@ -55,9 +57,13 @@
 <script>
 import {
   getTableData,
-  destroy,
+  destroyManyTableBakRecord,
+  tableBakSqlFileDownload
 } from '@/api/table_bak_record'
 
+import {
+  getNowDateTimeWeek
+} from '@/libs/tools.js'
 export default {
   data() {
     return {
@@ -73,12 +79,8 @@ export default {
         current_page: 1,
         per_page: 10
       },
-      all_tables_num: 0,
-      all_tables_length: 0,
       selectIds: '',
-      loadingBakBtn: false,
-      loadingOptimizeBtn: false,
-      loadingRepairBtn: false,
+      loadingDownloadBtn: 0,
       bak_data_rows: 0,
       columns: [{
           type: 'selection',
@@ -121,6 +123,12 @@ export default {
           key: 'updated_at',
           sortable: 'customer',
           minWidth: 150,
+        },
+        {
+          title: '操作',
+          key: '',
+          minWidth: 200,
+          slot: 'action'
         }
       ],
 
@@ -156,23 +164,19 @@ export default {
       this.searchForm.order_by = order
       this.getTableDataExcute(this.feeds.current_page)
     },
-    tableButtonEdit(row, index) {
-      this.editModal.show = true
-      this.editModal.id = row.id
-    },
-    tableButtonDestroyOk(row, index) {
-      let t = this
-      destroy(row.id).then(res => {
-        t.feeds.data.splice(index, 1)
-        t.$Notice.success({
-          title: res.message
-        })
-      })
-    },
+    // tableButtonDestroyOk(row, index) {
+    //   let t = this
+    //   destroy(row.id).then(res => {
+    //     t.feeds.data.splice(index, 1)
+    //     t.$Notice.success({
+    //       title: res.message
+    //     })
+    //   })
+    // },
     onSelectionChange: function(selection) {
       this.selectIds = ''
       for (let index in selection) {
-        this.selectIds += ',' + selection[index].Name
+        this.selectIds += ',' + selection[index].id
       }
     },
     destroyManyTableBakRecordExcute(selectes, isOpAll) {
@@ -183,17 +187,36 @@ export default {
         })
         return false
       }
-      this.loadingBakBtn = true
       let t = this
       destroyManyTableBakRecord(selectes, isOpAll).then(res => {
-        this.$Notice.success({
-          title: '操作成功',
-          desc: res.message,
-          duration: 0
+        t.$Notice.success({
+          title: res.message
         })
-        this.loadingBakBtn = false
-      }).catch((err) => {
-        this.loadingBakBtn = false
+        t.getTableDataExcute(t.feeds.current_page)
+      })
+    },
+    tableBakSqlFileDownloadExcute(row, index) {
+      let t = this
+      t.loadingDownloadBtn = row.id
+      tableBakSqlFileDownload(row.id).then(res => {
+        const content = res
+        const blob = new Blob([content])
+        let now_data_time_week = getNowDateTimeWeek('-', '');
+        const fileName = now_data_time_week[0] + '' + now_data_time_week[1] + '.sql'
+        if ('download' in document.createElement('a')) { // 非IE下载
+          const elink = document.createElement('a')
+          elink.download = fileName
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          URL.revokeObjectURL(elink.href) // 释放URL 对象
+          document.body.removeChild(elink)
+        } else { // IE10+下载
+          navigator.msSaveBlob(blob, fileName)
+        }
+
+        t.loadingDownloadBtn = 0
       })
     },
   },

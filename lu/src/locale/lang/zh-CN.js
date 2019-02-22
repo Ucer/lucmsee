@@ -20,6 +20,7 @@ export default {
   all:'全部',
   table_loading:'加载中...',
   show_info:'详细',
+  download:'下载',
 
 
   components: '组件',

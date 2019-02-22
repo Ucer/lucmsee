@@ -68,5 +68,7 @@ Route::namespace('Admin')->group(function () {
     Route::post('admin/databases/optimize_table', 'DatabasesController@optimizeTable')->name('databases.optimize_table');
     Route::post('admin/databases/repair_table', 'DatabasesController@repairTable')->name('databases.repair_table');
     Route::get('admin/databases/table_bak_records', 'DatabasesController@tableBakRecords')->name('databases.table_bak_records');
+    Route::get('admin/databases/{table_bak_record_id}/table_bak_sql_file_download', 'DatabasesController@tableBakSqlFileDownload')->name('databases.table_bak_sql_file_download');
     Route::get('admin/databases', 'DatabasesController@list')->name('databases.list');
+    Route::delete('admin/databases/destroy_many_table_bak_record', 'DatabasesController@destroyManyTableBakRecord')->name('databases.destroy_many_table_bak_record');
 });

@@ -11,7 +11,10 @@ class TableBakRecordCollection extends ResourceCollection
 
         $collection = $this->collection;
         $collection->each(function ($info) {
-            $info->first_table_name = (explode(',',$info->bak_tables_name))[0];
+            $bak_tables_name = (explode(',',$info->bak_tables_name));
+            $info->first_table_name = $bak_tables_name[0];
+            $info->bak_tables_name = $bak_tables_name;
+            $info->file_size = format_bytes($info->file_size);
         });
         return [
             'data' => $collection
