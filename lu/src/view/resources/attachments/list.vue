@@ -3,7 +3,11 @@
 <div>
   <Row :gutter="24">
     <Col :xs="7" :lg="11">
-    <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
+    <ButtonGroup shape="circle">
+      <Button @click="uploadBtnGroup('Image')">上传图片</Button>
+      <Button>文件</Button>
+      <Button>视频</Button>
+    </ButtonGroup>
     </Col>
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.enable" placeholder="请选择文件类型">
@@ -63,6 +67,7 @@
       </div>
     </div>
   </Row>
+  <upload-image-component v-if='uploadImageModal.show' @on-upload-image-modal-hide="uploadImageModalHide"></upload-image-component>
 
 </div>
 </template>
@@ -78,8 +83,11 @@ import {
   getTableStatus
 } from '@/api/common'
 
+import uploadImageComponent from './components/upload-image'
 export default {
-  components: {},
+  components: {
+    uploadImageComponent
+  },
   data() {
     return {
       searchForm: {
@@ -94,6 +102,9 @@ export default {
         total: 0,
         current_page: 1,
         per_page: 10
+      },
+      uploadImageModal: {
+        show: false
       },
       columns: [{
           title: 'ID',
@@ -189,11 +200,11 @@ export default {
         })
       })
     },
-    upLoadBtn() {
-      this.addModal.show = true
+    uploadBtnGroup(type) {
+      this['upload'+type+'Modal'].show = true
     },
-    addModalHide() {
-      this.addModal.show = false
+    uploadImageModalHide() {
+      this.uploadImageModal.show = false
     }
   }
 }

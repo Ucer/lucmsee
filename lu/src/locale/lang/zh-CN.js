@@ -24,6 +24,7 @@ export default {
   all:'全部',
   table_loading:'加载中...',
   show_info:'详细',
+  upload:'上传',
   download:'下载',
 
 
