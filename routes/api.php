@@ -71,4 +71,9 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/databases/{table_bak_record_id}/table_bak_sql_file_download', 'DatabasesController@tableBakSqlFileDownload')->name('databases.table_bak_sql_file_download');
     Route::get('admin/databases', 'DatabasesController@list')->name('databases.list');
     Route::delete('admin/databases/destroy_many_table_bak_record', 'DatabasesController@destroyManyTableBakRecord')->name('databases.destroy_many_table_bak_record');
+
+
+    Route::get('admin/attachments', 'AttachmentsController@list')->name('attachments.list');
+    Route::get('admin/attachments/{attachment}', 'AttachmentsController@show')->name('attachments.show');
+    Route::delete('admin/attachments/{attachment}', 'AttachmentsController@destroy')->name('attachments.destroy');
 });

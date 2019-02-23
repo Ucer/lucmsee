@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Attachment;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\StatusMap;
@@ -44,6 +45,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('status_map', function ($value) {
             return StatusMap::findOrFail($value);
+        });
+        Route::bind('attachment', function ($value) {
+            return Attachment::findOrFail($value);
         });
     }
 

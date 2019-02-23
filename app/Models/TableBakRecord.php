@@ -16,6 +16,10 @@ class TableBakRecord extends Model
         'bak_tables_name', 'user_id', 'file_num', 'files', 'file_size'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 
     public function destroyAction($ids)
     {

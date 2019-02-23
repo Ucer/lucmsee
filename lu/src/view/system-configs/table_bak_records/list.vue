@@ -99,7 +99,7 @@ export default {
           slot: 'bak_tables_name'
         },
         {
-          title: '操作用户',
+          title: '操作用户ID',
           key: 'user_id',
           minWidth: 100,
         },
@@ -109,9 +109,9 @@ export default {
           minWidth: 80,
           sortable: 'customer'
         }, {
-          title: '文件数量',
+          title: '备份产生文件数量',
           key: 'file_num',
-          minWidth: 20,
+          minWidth: 60,
         },
         {
           title: '创建时间',

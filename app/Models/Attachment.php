@@ -26,18 +26,18 @@ class Attachment extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    public function destroyAttachment()
+    public function destroyAction()
     {
         $base_dir = substr($this->link_path, strlen('storage/'), strlen($this->link_path)) . '/' . $this->storage_name;
-        $rest_delet_file = (new FileUploadHandler)->fileDelete($base_dir);
+        $rest_fileDelete = (new FileUploadHandler)->fileDelete($base_dir);
 
         DB::beginTransaction();
         try {
             $this->delete();
-            if ($rest_delet_file) {
+            if ($rest_fileDelete) {
                 $tip = '';
             } else {
-                $tip = '：附件找不到';
+                $tip = '：附件缺失';
             }
             DB::commit();
             return $this->baseSucceed([], '附件删除成功' . $tip);

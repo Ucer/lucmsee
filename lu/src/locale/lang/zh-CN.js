@@ -10,6 +10,10 @@ export default {
   permissionList: '权限列表',
   roleList: '角色列表',
   userList:'用户列表',
+  resourcesManage: '资源管理',
+  attachmentsManage: '系统附件',
+
+
   edit:'修改',
   add:'添加',
   search:'搜索',

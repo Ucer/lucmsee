@@ -26,7 +26,7 @@ export default[
       title: '登录',
       hideInMenu: true
     },
-    component: () => import('@/view/login/login.vue')
+    component: () => import ('@/view/login/login.vue')
   }, {
     path: '/dashboard',
     name: '_home',
@@ -46,7 +46,7 @@ export default[
           // notCache: true,
           icon: 'md-home'
         },
-        component: () => import('@/view/single-page/home')
+        component: () => import ('@/view/single-page/home')
       }
     ]
   }, {
@@ -66,7 +66,7 @@ export default[
         meta: {
           title: '数据库监控'
         },
-        component: () => import('@/view/system-configs/databases/list.vue')
+        component: () => import ('@/view/system-configs/databases/list.vue')
       }, {
         path: '/dashboard/table_bak_record',
         name: 'tableBakRecord',
@@ -75,30 +75,35 @@ export default[
           hideInMenu: true,
           hideInTag: true
         },
-        component: () => import('@/view/system-configs/table_bak_records/list.vue')
+        component: () => import ('@/view/system-configs/table_bak_records/list.vue')
       }, {
         path: '/dashboard/tables',
         name: 'statusMap',
         meta: {
           title: '数据字典'
         },
-        component: () => import('@/view/system-configs/status_maps/list.vue')
+        component: () => import ('@/view/system-configs/status_maps/list.vue')
       }
-      //  {
-      //   path: '/dashboard/userList',
-      //   name: 'userList',
-      //   meta: {
-      //     title: '用户列表'
-      //   },
-      //   component: () => import ('@/view/privileges/users/list.vue')
-      // }, {
-      //   path: '/dashboard/systemConfig',
-      //   name: 'systemConfig',
-      //   meta: {
-      //     title: '系统配置'
-      //   },
-      //   component: () => import ('@/view/privileges/permissions/list.vue')
-      // }
+    ]
+  }, {
+    path: '/dashboard/resources',
+    name: 'resourcesManage',
+    component: Main,
+    meta: {
+      icon: 'ios-link',
+      title: '资源管理',
+      access: ['Founder'],
+      showAlways: true
+    },
+    children: [
+      {
+        path: '/dashboard/attachments',
+        name: 'attachmentsManage',
+        meta: {
+          title: '系统附件'
+        },
+        component: () => import ('@/view/resources/attachments/list.vue')
+      }
     ]
   }, {
     path: '/dashboard/privilegeManage',
@@ -117,21 +122,21 @@ export default[
         meta: {
           title: '权限列表'
         },
-        component: () => import('@/view/privileges/permissions/list.vue')
+        component: () => import ('@/view/privileges/permissions/list.vue')
       }, {
         path: '/dashboard/roleList',
         name: 'roleList',
         meta: {
           title: '角色列表'
         },
-        component: () => import('@/view/privileges/roles/list.vue')
+        component: () => import ('@/view/privileges/roles/list.vue')
       }, {
         path: '/dashboard/userList',
         name: 'userList',
         meta: {
           title: '用户列表'
         },
-        component: () => import('@/view/privileges/users/list.vue')
+        component: () => import ('@/view/privileges/users/list.vue')
       }
     ]
   }, {
@@ -140,20 +145,20 @@ export default[
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/error-page/401.vue')
+    component: () => import ('@/view/error-page/401.vue')
   }, {
     path: '/500',
     name: 'error_500',
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/error-page/500.vue')
+    component: () => import ('@/view/error-page/500.vue')
   }, {
     path: '*',
     name: 'error_404',
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/error-page/404.vue')
+    component: () => import ('@/view/error-page/404.vue')
   }
 ]
