@@ -118,7 +118,7 @@ export default {
           slot: 'user_id'
         },
         {
-          title: '文件原名称',
+          title: '原文件名',
           key: 'original_name',
           minWidth: 80,
         },
