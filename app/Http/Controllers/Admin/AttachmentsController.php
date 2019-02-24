@@ -25,10 +25,14 @@ class AttachmentsController extends AdminController
         if ($file_type) {
             $attachment = $attachment->columnEqualSearch('file_type', $file_type);
         }
-//        $mime_type = isset_and_not_empty($search_data, 'mime_type');
-//        if ($mime_type) {
-//            $attachment = $attachment->columnLike('mime_type', $mime_type);
-//        }
+        $category = isset_and_not_empty($search_data, 'category');
+        if ($category) {
+            $attachment = $attachment->columnLikeSearch('category', $category);
+        }
+        $mime_type = isset_and_not_empty($search_data, 'mime_type');
+        if ($mime_type) {
+            $attachment = $attachment->columnLikeSearch('mime_type', $mime_type);
+        }
         $original_name = isset_and_not_empty($search_data, 'original_name');
         if ($original_name) {
             $attachment = $attachment->columnLikeSearch('original_name', '%' . $original_name);

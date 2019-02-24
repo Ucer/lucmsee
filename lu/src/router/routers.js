@@ -103,6 +103,14 @@ export default[
           title: '系统附件'
         },
         component: () => import ('@/view/resources/attachments/list.vue')
+      },
+      {
+        path: '/dashboard/images',
+        name: 'imageList',
+        meta: {
+          title: '图片列表'
+        },
+        component: () => import ('@/view/resources/images/list.vue')
       }
     ]
   }, {

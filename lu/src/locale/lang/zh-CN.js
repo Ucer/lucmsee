@@ -12,6 +12,7 @@ export default {
   userList:'用户列表',
   resourcesManage: '资源管理',
   attachmentsManage: '系统附件',
+  imageList: '图片列表',
 
 
   edit:'修改',
