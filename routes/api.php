@@ -74,6 +74,5 @@ Route::namespace('Admin')->group(function () {
 
 
     Route::get('admin/attachments', 'AttachmentsController@list')->name('attachments.list');
-    Route::get('admin/attachments/{attachment}', 'AttachmentsController@show')->name('attachments.show');
     Route::delete('admin/attachments/{attachment}', 'AttachmentsController@destroy')->name('attachments.destroy');
 });

@@ -22,7 +22,7 @@
     </Select>
     </Col>
     <Col :xs="6" :lg="3" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入文件名搜索..." v-model="searchForm.original_name" />
+    <Input icon="search" placeholder="请输入文件名搜索..." v-model="searchForm.original_name"></Input>
     </Col>
     <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
@@ -38,26 +38,27 @@
       </Spin>
     </div>
     <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
-
-      <template slot-scope="{ row, index }" slot="avatar">
-        <div class="text-center">
-          <img :src="row.avatar" v-if="row.avatar" class="fancybox" :href="row.avatar" tatle="头像" alt="头像" style="width:40px;height:40px">
-          <span v-else>--</span>
+      <template slot-scope="{ row, index }" slot="download">
+        <div  v-if='attachmentIsImage'>
+          <img style="max-height:60px;margin-top:5%" :src="getAttachmentUrl(row)"  :href="getAttachmentUrl(row)"  class="fancybox" :title="row.original_name" alt="头像" />
         </div>
+          <div v-else>
+            <a :href="getAttachmentUrl(row)" target="black_">下载附件</a>
+          </div>
       </template>
 
-      <template slot-scope="{ row, index }" slot="is_admin">
-        <Tag v-if="row.is_admin === 'T'" :color="'green'">可登录</Tag>
-        <Tag v-else :color="'red'">不可登录</Tag>
+      <template slot-scope="{ row, index }" slot="user_id">
+          {{ row.user_id }}
+      </template>
+      <template slot-scope="{ row, index }" slot="file_type_and_mine_type">
+          <span class="blod-font">({{ row.file_type }})</span>{{ row.mime_type}}
       </template>
 
-      <template slot-scope="{ row, index }" slot="enable">
-        <iSwitch :slot="'open'" type='primary' :value="row.enable === 'T'" @on-change="switchChange(row,index)"></iSwitch>
+      <template slot-scope="{ row, index }" slot="category">
+          {{ row.category }}
       </template>
 
       <template slot-scope="{ row, index }" slot="action">
-        <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('permission') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
@@ -114,8 +115,13 @@ export default {
         },
         {
           title: '上传者',
-          minWidth: 90,
+          minWidth: 80,
           slot: 'user_id'
+        },
+        {
+          title: '下载',
+          minWidth: 90,
+          slot: 'download'
         },
         {
           title: '原文件名',
@@ -130,22 +136,31 @@ export default {
         {
           title: '文件类型/mime_type',
           minWidth: 140,
+          key:'file_type',
+          sortable:'customer',
           slot: 'file_type_and_mine_type'
         },
         {
           title: '文件归类',
           minWidth: 80,
+          key:'category',
+          sortable:'customer',
           slot: 'category'
+        }, {
+          title: '大小',
+          key: 'size',
+          sortable:'customer',
+          minWidth: 80,
         },
         {
           title: '上传时间',
           key: 'created_at',
+          sortable:'customer',
           minWidth: 150,
         },
         {
           title: '操作',
-          key: '',
-          minWidth: 100,
+          minWidth: 50,
           slot: 'action'
         }
       ],
@@ -201,10 +216,17 @@ export default {
       })
     },
     uploadBtnGroup(type) {
-      this['upload'+type+'Modal'].show = true
+      this['upload' + type + 'Modal'].show = true
     },
     uploadImageModalHide() {
       this.uploadImageModal.show = false
+      this.getTableStatusExcute(this.feeds.current_page)
+    },
+    getAttachmentUrl(row) {
+      return row.domain + '/' + row.link_path + '/' + row.storage_name
+    },
+    attachmentIsImage(row) {
+      return (row.mime_type.indexOf('image') === -1) ? false : true
     }
   }
 }

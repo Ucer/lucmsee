@@ -21,6 +21,11 @@ class Attachment extends Model
         $this->attributes['ip'] = get_client_ip();
     }
 
+    protected function getSizeAttribute($value)
+    {
+        return format_bytes($value*1024);
+    }
+
     public function user()
     {
         return $this->belongsTo('App\Models\User');

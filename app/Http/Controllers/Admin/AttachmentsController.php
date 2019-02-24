@@ -51,7 +51,7 @@ class AttachmentsController extends AdminController
 
     public function destroy(Attachment $model, AttachmentValidate $validate)
     {
-        $rest_validate = $validate->destroyValidate();
+        $rest_validate = $validate->destroyValidate($model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
         if ($rest_validate['status'] === true) {

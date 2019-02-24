@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class StatusMapsTableSeeder extends Seeder
 {
@@ -26,7 +27,7 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'attachments', 'column' => 'file_type', 'status_code' => 'pic', 'status_description' => '图片', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'file_type', 'status_code' => 'video', 'status_description' => '视频', 'remark' => ''],
 
-            ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'tmp', 'status_description' => '临时附件', 'remark' => ''],
+            ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'lucmsee', 'status_description' => '系统附件', 'remark' => ''],
         ];
         \App\Models\StatusMap::insert($data);
     }

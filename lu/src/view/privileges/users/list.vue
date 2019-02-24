@@ -37,7 +37,7 @@
 
       <template slot-scope="{ row, index }" slot="avatar">
         <div class="text-center">
-          <img :src="row.avatar" v-if="row.avatar" class="fancybox" :href="row.avatar" tatle="头像" alt="头像" style="width:40px;height:40px">
+          <img :src="row.avatar" v-if="row.avatar" class="fancybox" :href="row.avatar" title="头像" alt="头像" style="width:40px;height:40px">
           <span v-else>--</span>
         </div>
       </template>
