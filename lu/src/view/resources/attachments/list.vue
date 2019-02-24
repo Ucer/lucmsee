@@ -5,8 +5,8 @@
     <Col :xs="7" :lg="11">
     <ButtonGroup shape="circle">
       <Button @click="uploadBtnGroup('Image')">上传图片</Button>
-      <Button>文件</Button>
-      <Button>视频</Button>
+      <Button @click="uploadBtnGroup('File')">文件</Button>
+      <Button @click="uploadBtnGroup('Video')">视频</Button>
     </ButtonGroup>
     </Col>
     <Col :xs="3" :lg="3">
@@ -39,7 +39,7 @@
     </div>
     <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
       <template slot-scope="{ row, index }" slot="download">
-        <div  v-if='attachmentIsImage'>
+        <div  v-if='attachmentIsImage(row)'>
           <img style="max-height:60px;margin-top:5%" :src="getAttachmentUrl(row)"  :href="getAttachmentUrl(row)"  class="fancybox" :title="row.original_name" alt="头像" />
         </div>
           <div v-else>
@@ -49,9 +49,6 @@
 
       <template slot-scope="{ row, index }" slot="user_id">
           {{ row.user_id }}
-      </template>
-      <template slot-scope="{ row, index }" slot="file_type_and_mine_type">
-          <span class="blod-font">({{ row.file_type }})</span>{{ row.mime_type}}
       </template>
 
       <template slot-scope="{ row, index }" slot="category">
@@ -69,6 +66,8 @@
     </div>
   </Row>
   <upload-image-component v-if='uploadImageModal.show' @on-upload-image-modal-hide="uploadImageModalHide"></upload-image-component>
+  <upload-file-component v-if='uploadFileModal.show' @on-upload-image-modal-hide="uploadFileModalHide"></upload-file-component>
+  <upload-video-component v-if='uploadVideoModal.show' @on-upload-image-modal-hide="uploadVideoModalHide"></upload-video-component>
 
 </div>
 </template>
@@ -85,9 +84,13 @@ import {
 } from '@/api/common'
 
 import uploadImageComponent from './components/upload-image'
+import uploadFileComponent from './components/upload-file'
+import uploadVideoComponent from './components/upload-video'
 export default {
   components: {
-    uploadImageComponent
+    uploadImageComponent,
+    uploadFileComponent,
+    uploadVideoComponent,
   },
   data() {
     return {
@@ -105,6 +108,12 @@ export default {
         per_page: 10
       },
       uploadImageModal: {
+        show: false
+      },
+      uploadFileModal: {
+        show: false
+      },
+      uploadVideoModal: {
         show: false
       },
       columns: [{
@@ -134,28 +143,27 @@ export default {
           key: 'storage_name'
         },
         {
-          title: '文件类型/mime_type',
-          minWidth: 140,
-          key:'file_type',
-          sortable:'customer',
-          slot: 'file_type_and_mine_type'
+          title: 'mimeType',
+          minWidth: 80,
+          key: 'mime_type',
+          sortable: 'customer',
         },
         {
           title: '文件归类',
           minWidth: 80,
-          key:'category',
-          sortable:'customer',
+          key: 'category',
+          sortable: 'customer',
           slot: 'category'
         }, {
           title: '大小',
           key: 'size',
-          sortable:'customer',
+          sortable: 'customer',
           minWidth: 80,
         },
         {
           title: '上传时间',
           key: 'created_at',
-          sortable:'customer',
+          sortable: 'customer',
           minWidth: 150,
         },
         {
@@ -172,6 +180,7 @@ export default {
     t.getTableStatusExcute('attachments')
     t.getTableDataExcute(t.feeds.current_page)
   },
+  computed: {},
   methods: {
     handleOnPageChange: function(to_page) {
       this.getTableDataExcute(to_page)
@@ -222,11 +231,20 @@ export default {
       this.uploadImageModal.show = false
       this.getTableStatusExcute(this.feeds.current_page)
     },
+    uploadFileModalHide() {
+      this.uploadFileModal.show = false
+      this.getTableStatusExcute(this.feeds.current_page)
+    },
+    uploadVideoModalHide() {
+      this.uploadVideoModal.show = false
+      this.getTableStatusExcute(this.feeds.current_page)
+    },
     getAttachmentUrl(row) {
       return row.domain + '/' + row.link_path + '/' + row.storage_name
     },
     attachmentIsImage(row) {
-      return (row.mime_type.indexOf('image') === -1) ? false : true
+      let min_type = row.mime_type
+      return (min_type.indexOf('image') === -1) ? false : true
     }
   }
 }

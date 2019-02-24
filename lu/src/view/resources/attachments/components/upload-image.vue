@@ -4,7 +4,7 @@
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
     <p slot="header">上传图片</p>
     <Form ref="formData" :model="formData"  label-position="left" :label-width="100">
-      <FormItem label="头像：">
+      <FormItem label="图片：">
         <upload v-model="formData.image" :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
       </FormItem>
     </Form>
@@ -39,8 +39,8 @@ export default {
         max_size: 500,
         upload_url: window.uploadUrl.imageUploadToLocaleUrl + '/lucmsee',
         file_name: 'file',
-        multiple: false,
-        file_num: 1,
+        multiple: true,
+        file_num: 10,
         data: {
           a: 1,
           b: 2

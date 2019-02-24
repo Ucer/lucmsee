@@ -23,8 +23,16 @@
       <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
         <user />
         <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px;" :lang="local" />
+        <Dropdown style="margin-right:10px"  @on-click="useTools">
+          <a href="javascript:void(0)">
+            工具栏
+            <Icon type="ios-arrow-down"></Icon>
+        </a>
+          <DropdownMenu slot="list">
+            <DropdownItem name='photo_editor'>图片裁剪</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
         <error-store v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader" :has-read="hasReadErrorPage" :count="errorCount"></error-store>
-        <!-- <fullscreen v-model="isFullscreen" style="margin-right: 10px;" /> -->
       </header-bar>
     </Header>
     <Content class="main-content-con">
@@ -167,6 +175,15 @@ export default {
     },
     handleClick(item) {
       this.turnToPage(item)
+    },
+    useTools(key) {
+      switch (key) {
+        case 'photo_editor':
+          window.open(window.baseUrl+'/'+key);
+          break;
+        default:
+
+      }
     }
   },
   watch: {

@@ -1,9 +1,9 @@
 <template>
 <div>
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
-    <p slot="header">上传视频</p>
+    <p slot="header">上传文件</p>
     <Form ref="formData" :model="formData" label-position="left" :label-width="100">
-      <FormItem label="视频">
+      <FormItem label="文件">
         <upload-file v-model="formData.video" :upload-config="fileuploadConfig" :is-preview-upload-list=true @on-upload-change='uploadfileChange'></upload-file>
       </FormItem>
     </Form>
@@ -34,13 +34,13 @@ export default {
         headers: {
           'Authorization': window.access_token
         },
-        format: ['mp4', 'avi'],
+        format: ['xlsx', 'doc', 'docx', 'txt', 'sql'],
         max_size: 1024 * 1000, // 800KB
-        upload_url: window.uploadUrl.imageUploadToLocaleUrl + '/video',
+        upload_url: window.uploadUrl.imageUploadToLocaleUrl + '/file',
         file_name: 'file',
         multiple: false,
         file_num: 1,
-        button_text: '上传视频',
+        button_text: '上传文件',
         default_list: []
 
       },
@@ -49,7 +49,7 @@ export default {
   methods: {
     cancel() {
       this.modalShow = false
-      this.$emit('on-upload-video-modal-hide')
+      this.$emit('on-upload-file-modal-hide')
     },
     uploadfileChange(fileList, formatFileList) {}
   }
