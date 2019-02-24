@@ -75,4 +75,12 @@ Route::namespace('Admin')->group(function () {
 
     Route::get('admin/attachments', 'AttachmentsController@list')->name('attachments.list');
     Route::delete('admin/attachments/{attachment}', 'AttachmentsController@destroy')->name('attachments.destroy');
+
+
+    Route::get('admin/system_configs/get_system_config_group', 'SystemConfigsController@getSystemConfigGroup')->name('system_configs.get_system_config_group');
+    Route::get('admin/system_configs', 'SystemConfigsController@list')->name('system_configs.list');
+    Route::post('admin/system_configs', 'SystemConfigsController@store')->name('system_configs.store');
+    Route::get('admin/system_configs/{system_config}', 'SystemConfigsController@show')->name('system_configs.show');
+    Route::patch('admin/system_configs/{system_config}', 'SystemConfigsController@update')->name('system_configs.update');
+    Route::delete('admin/system_configs/{system_config}', 'SystemConfigsController@destroy')->name('system_configs.destroy');
 });

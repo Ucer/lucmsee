@@ -7,18 +7,18 @@
     </Col>
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.enable" placeholder="请选择状态">
-      <Option value="" key="">全部</Option>
-      <Option v-for="(item,key) in tableStatus.enable" :value="key" :key="key">{{ item }}</Option>
-    </Select>
+        <Option value="" key="">全部</Option>
+        <Option v-for="(item,key) in tableStatus.enable" :value="key" :key="key">{{ item }}</Option>
+      </Select>
     </Col>
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.is_admin" placeholder="管理员">
-      <Option value="" key="">全部</Option>
-      <Option v-for="(item,key) in tableStatus.is_admin" :value="key" :key="key">{{ item }}</Option>
-    </Select>
+        <Option value="" key="">全部</Option>
+        <Option v-for="(item,key) in tableStatus.is_admin" :value="key" :key="key">{{ item }}</Option>
+      </Select>
     </Col>
     <Col :xs="6" :lg="3" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入邮箱搜索..." v-model="searchForm.email" />
+    <Input icon="search" placeholder="请输入邮箱搜索..." v-model="searchForm.email"></Input>
     </Col>
     <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>

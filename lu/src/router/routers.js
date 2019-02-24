@@ -83,6 +83,13 @@ export default[
           title: '数据字典'
         },
         component: () => import ('@/view/system-configs/status_maps/list.vue')
+      },{
+        path: '/dashboard/system_config',
+        name: 'systemConfig',
+        meta: {
+          title: '系统配置项'
+        },
+        component: () => import ('@/view/system-configs/configs/list.vue')
       }
     ]
   }, {
