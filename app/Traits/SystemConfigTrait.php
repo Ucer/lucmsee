@@ -6,15 +6,15 @@ use App\Models\SystemConfig;
 
 trait SystemConfigTrait
 {
-    public function getSystemConfigFunction(array $flag)
+    public function getSystemConfigFunction(array $flagList)
     {
-        $m_systemconfig = SystemConfig::whereIn('flag', $flag)->enableSearch('T')->select('id', 'flag', 'title', 'value')->get();
-        foreach ($flag as $v) {
-            $return[$v] = '';
+        $m_systemconfig = SystemConfig::whereIn('flag', $flagList)->enableSearch('T')->select('id', 'flag', 'title', 'value')->get();
+        foreach ($flagList as $flag) {
+            $return[$flag] = '';
         }
         if ($m_systemconfig) {
-            foreach ($m_systemconfig as $k => $v) {
-                $return[$v->flag] = $this->parseRule($v->flag, $v->value);
+            foreach ($m_systemconfig as $k => $item) {
+                $return[$item->flag] = $this->parseRule($item->flag, $item->value);
             }
         }
         return $return;

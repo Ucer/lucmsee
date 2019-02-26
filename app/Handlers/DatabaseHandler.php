@@ -4,6 +4,7 @@ namespace App\Handlers;
 
 use App\Http\Controllers\Api\Traits\BaseResponseTrait;
 use App\Models\TableBakRecord;
+use App\Traits\SystemConfigTrait;
 use File;
 use DB;
 use Auth;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Config;
 
 class DatabaseHandler
 {
-    use BaseResponseTrait;
+    use BaseResponseTrait,SystemConfigTrait;
 
     protected $data_table_bak_dir = '';
     protected $status = true;
@@ -30,6 +31,7 @@ class DatabaseHandler
      */
     public function dataTableBak($tables)
     {
+        $systemConfig = $this->getSystemConfigFunction(['max_bak_sql_file_size']);
         if (!file_exists($this->data_table_bak_dir)) {
             return $this->baseFailed('备份目录：' . $this->data_table_bak_dir . '不存在');
 //            mkdir($this->data_table_bak_dir);
@@ -88,7 +90,7 @@ class DatabaseHandler
                 } else {//如果不是第一个文件
                     $sql_no = "/* Description:备份的数据表[数据]：" . implode(",", $backed_table) . '*/' . $sql_no;
                 }
-                if (strlen($pre) + strlen($sql_no) + strlen($sqlTable) + strlen($outstr) + strlen($tem_sql) > (1024 * 1024 * 12)) {//如果超出了每个sql文件的限制
+                if (strlen($pre) + strlen($sql_no) + strlen($sqlTable) + strlen($outstr) + strlen($tem_sql) > (1024 * 1024 *$systemConfig['max_bak_sql_file_size'] )) {//如果超出了每个sql文件的限制
                     $file = $full_filename . "=" . $file_n . ".sql";
                     if ($file_n == 1) {
                         $outstr = $pre . $sql_no . $sqlTable . $outstr;
