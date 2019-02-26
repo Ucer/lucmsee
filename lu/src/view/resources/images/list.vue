@@ -57,8 +57,7 @@ import {
 } from '@/api/common'
 
 import {
-  getTableData,
-  deleteAttachment
+  getTableData
 } from '@/api/attachment'
 
 export default {
@@ -145,15 +144,6 @@ export default {
         this.getTableDataExcute(new_page)
         resolve();
       });
-    },
-    deleteAttachmentExcute(attachment, key) {
-      let t = this
-      deleteAttachment(attachment).then(res => {
-        t.feeds.data.splice(key, 1)
-        t.$Notice.success({
-          title: res.message
-        })
-      })
     },
     ViewImage() {
       this.$nextTick(() => {

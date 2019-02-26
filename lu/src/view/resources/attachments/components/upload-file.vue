@@ -40,6 +40,7 @@ export default {
         file_name: 'file',
         multiple: false,
         file_num: 1,
+        data: {},
         button_text: '上传文件',
         default_list: []
 

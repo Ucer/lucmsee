@@ -41,10 +41,7 @@ export default {
         file_name: 'file',
         multiple: true,
         file_num: 10,
-        data: {
-          a: 1,
-          b: 2
-        },
+        data: {},
         default_list: []
       },
     }

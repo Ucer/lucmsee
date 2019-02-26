@@ -20,6 +20,7 @@ export default {
   search:'搜索',
   destroy:'删除',
   permission:'权限',
+  role:'角色',
   cancel:'取消',
   save:'保存',
   all:'全部',

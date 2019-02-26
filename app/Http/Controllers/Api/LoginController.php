@@ -38,6 +38,7 @@ class LoginController extends ApiController
         if (!Hash::check($request->password, $user->password)) {
             return $this->failed('密码不正确');
         }
+        $user->last_login_at = date('Y-m-d H:i:s',time());
         $user->save();
         $return = $user->toArray();
 

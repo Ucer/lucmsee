@@ -38,7 +38,7 @@
       <template slot-scope="{ row, index }" slot="avatar">
         <div class="text-center">
           <img :src="row.avatar" v-if="row.avatar" class="fancybox" :href="row.avatar" title="头像" alt="头像" style="width:40px;height:40px">
-          <span v-else>--</span>
+          <Avatar v-else size="large" style="color: #f56a00;background-color: #fde3cf">{{ row.real_name.substr(0,1)}}</Avatar>
         </div>
       </template>
 
@@ -53,7 +53,7 @@
 
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('permission') }}</Button>
+        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('role') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
@@ -65,7 +65,7 @@
   </Row>
 
   <Modal v-model="roleModal.show" :closable='false' :mask-closable=false width="800">
-    <h3 slot="header" style="color:#2D8CF0">分配权限</h3>
+    <h3 slot="header" style="color:#2D8CF0">分配角色</h3>
     <Transfer v-if="roleModal.show" :data="roleModal.allRoles" :target-keys="roleModal.hasRoles" :render-format="renderFormat" :operations="['移除角色','添加角色']" :list-style="roleModal.listStyle" filterable @on-change="handleTransferChange">
     </Transfer>
     <div slot="footer">
@@ -74,7 +74,7 @@
     </div>
   </Modal>
 
-  <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
+  <add-component v-if='addModal.show' :tableStatus_is_admin="tableStatus.is_admin" @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
   <!-- <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component> -->
 
 </div>
@@ -146,8 +146,13 @@ export default {
           minWidth: 100,
         },
         {
+          title: '姓名',
+          key: 'real_name',
+          minWidth: 100,
+        },
+        {
           title: '昵称',
-          key: 'name',
+          key: 'nickname',
           minWidth: 100,
         },
         {
@@ -163,13 +168,13 @@ export default {
         },
         {
           title: '后台权限',
-          minWidth: 150,
+          minWidth: 80,
           slot: 'is_admin',
         },
         {
           title: '启用状态',
           key: 'enable',
-          minWidth: 150,
+          minWidth: 80,
           slot: 'enable'
         },
         {

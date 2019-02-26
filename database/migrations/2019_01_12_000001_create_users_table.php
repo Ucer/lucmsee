@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('description')->default('')->comment('一句话描述');
             $table->string('remark')->default('')->comment('备注');
             $table->string('remember_token')->default('');
+            $table->timestamp('last_login_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

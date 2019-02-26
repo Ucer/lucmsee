@@ -64,6 +64,7 @@ export default {
           commit('setAnyState',['user_id',data.user_id])
           commit('setAnyState',['access',data.roles])
           commit('setAnyState',['nickname',data.nickname])
+          commit('setAnyState',['real_name',data.real_name])
           commit('setAnyState',['unread_message',data.unread_message])
           resolve(data)
         }).catch(err => {

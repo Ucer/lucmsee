@@ -73,7 +73,7 @@ class UsersController extends AdminController
 
     public function update(User $model, Request $request, UserValidate $validate)
     {
-        $request_data = $request->only('id', 'name', 'avatar', 'is_admin');
+        $request_data = $request->all();
 
         $rest_validate = $validate->updateValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);

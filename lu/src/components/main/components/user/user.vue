@@ -2,7 +2,7 @@
 <div class="user-avator-dropdown">
   <Dropdown @on-click="handleClick">
     <Avatar v-if="userAvator" :src="userAvator" />
-    <Avatar size="large" v-else style="color: #f56a00;background-color: #fde3cf">{{ userNickName.substr(0,1)}}</Avatar>
+    <Avatar size="large" v-else style="color: #f56a00;background-color: #fde3cf">{{ userRealName.substr(0,1)}}</Avatar>
     <span>{{ userNickName }}</span>
     <Icon :size="18" type="md-arrow-dropdown"></Icon>
     <DropdownMenu slot="list">

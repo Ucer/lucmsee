@@ -85,6 +85,17 @@ function isset_and_not_empty($arr, $column, $data_type = 'string')
     }
 }
 
+function unset_if_no_value($arr, $columns = [])
+{
+    foreach ($columns as $column) {
+        if ((isset($arr[$column]) && $arr[$column])) {
+        } else {
+            unset($arr[$column]);
+        }
+    }
+    return $arr;
+}
+
 /**
  * 过滤用户输入数据
  * @param $str
@@ -272,7 +283,7 @@ function get_rand_str($len = 6, $has_number = false, $time = false)
     }
     $str = '';
     for ($i = 0; $i < $len; $i++) {
-        $str .= $chars[rand(0, strlen($chars)-1)];
+        $str .= $chars[rand(0, strlen($chars) - 1)];
     }
     if ($time) {
         $str .= date('YmdHis', time());
@@ -282,5 +293,5 @@ function get_rand_str($len = 6, $has_number = false, $time = false)
 
 function obj_to_array($obj)
 {
-    return json_decode(json_encode($obj),true);
+    return json_decode(json_encode($obj), true);
 }

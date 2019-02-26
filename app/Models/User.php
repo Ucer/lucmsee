@@ -15,10 +15,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, ScopeTrait, ExcuteTrait, HasRoles, BaseResponseTrait,SoftDeletes;
+    use Notifiable, HasApiTokens, ScopeTrait, ExcuteTrait, HasRoles, BaseResponseTrait, SoftDeletes;
 
     protected $fillable = [
-        'nickname', 'real_name', 'password', 'avatar', 'description'
+        'nickname', 'real_name', 'password', 'avatar', 'description', 'is_admin'
     ];
 
     protected $hidden = [
@@ -49,12 +49,17 @@ class User extends Authenticatable
     {
         try {
             $this->fill($input);
-            $this->email = $input['email'];
-            $this->password = bcrypt($input['password']);
+            if ($input['password']) {
+                $this->password = bcrypt($input['password']);
+            }
+            if ($input['email']) {
+                $this->email = $input['email'];
+            }
             $this->save();
 
             return $this->baseSucceed([], '操作成功');
         } catch (\Exception $e) {
+            throw $e;
             return $this->baseFailed('内部错误');
         }
     }

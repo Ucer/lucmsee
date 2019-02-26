@@ -6,8 +6,11 @@
       <FormItem label="头像：">
         <upload v-model="formData.avatar" :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
       </FormItem>
-      <FormItem label="昵称：" prop="name">
-        <Input v-model="formData.name"></Input>
+      <FormItem label="真实姓名：" prop="real_name">
+        <Input v-model="formData.real_name"></Input>
+      </FormItem>
+      <FormItem label="昵称：" prop="nickname">
+        <Input v-model="formData.nickname"></Input>
       </FormItem>
       <FormItem label="邮箱：">
         <Input v-model="formData.email"></Input>
@@ -20,8 +23,7 @@
       </FormItem>
       <FormItem label="可登录后台：">
         <RadioGroup v-model="formData.is_admin">
-          <Radio label="F">否</Radio>
-          <Radio label="T">是</Radio>
+          <Radio  v-for="(item,key) in tableStatus_is_admin" :label="key">{{ item }}</Radio>
         </RadioGroup>
       </FormItem>
     </Form>
@@ -40,6 +42,7 @@ import {
 import Upload from '_c/common/upload'
 
 export default {
+  props: ['tableStatus_is_admin'],
   components: {
     Upload
   },
@@ -68,7 +71,8 @@ export default {
       modalShow: true,
       saveLoading: false,
       formData: {
-        name: '',
+        nickname: '',
+        real_name: '',
         email: '',
         is_admin: 'F',
         password: '',
@@ -84,23 +88,23 @@ export default {
         },
         format: ['jpg', 'jpeg', 'png', 'gif'],
         max_size: 500,
-        upload_url: window.uploadUrl.imageUploadToLocaleUrl+'/avatar',
+        upload_url: window.uploadUrl.imageUploadToLocaleUrl + '/avatar',
         file_name: 'file',
         multiple: false,
         file_num: 1,
-        data:{a:1,b:2},
+        data: {},
         default_list: []
       },
       rules: {
-        name: [{
+        real_name: [{
             required: true,
-            message: '请填写昵称',
+            message: '请填写真实姓名',
             trigger: 'blur'
           },
           {
             type: 'string',
             min: 2,
-            message: '昵称至少要 2 个字符',
+            message: '真实姓名至少要 2 个字符',
             trigger: 'blur'
           }
         ],

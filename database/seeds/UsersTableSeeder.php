@@ -26,7 +26,7 @@ class UsersTableSeeder extends Seeder
         // 单独处理第一个用户的数据
         $user = \App\Models\User::find(1);
         $user->nickname = 'ucer';
-        $user->real_name = 'zhj';
+        $user->real_name = '张老大';
         $user->email = 'dev@lucms.com';
         $user->enable = 'T';
         $user->is_admin = 'T';
