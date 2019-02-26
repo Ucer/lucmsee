@@ -39,20 +39,20 @@
     </div>
     <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
       <template slot-scope="{ row, index }" slot="download">
-        <div  v-if='attachmentIsImage(row)'>
-          <img style="max-height:60px;margin-top:5%" :src="getAttachmentUrl(row)"  :href="getAttachmentUrl(row)"  class="fancybox" :title="row.original_name" alt="头像" />
+        <div v-if='attachmentIsImage(row)'>
+          <img style="max-height:60px;margin-top:5%" :src="getAttachmentUrl(row)" :href="getAttachmentUrl(row)" class="fancybox" :title="row.original_name" alt="头像" />
         </div>
-          <div v-else>
-            <a :href="getAttachmentUrl(row)" target="black_">下载附件</a>
-          </div>
+        <div v-else>
+          <a :href="getAttachmentUrl(row)" target="black_">下载附件</a>
+        </div>
       </template>
 
       <template slot-scope="{ row, index }" slot="user_id">
-          {{ row.user_id }}
+        {{ row.user_id }}
       </template>
 
       <template slot-scope="{ row, index }" slot="category">
-          {{ row.category }}
+        {{ row.category }}
       </template>
 
       <template slot-scope="{ row, index }" slot="action">
@@ -178,7 +178,6 @@ export default {
   created() {
     let t = this
     t.getTableStatusExcute('attachments')
-    t.getTableDataExcute(t.feeds.current_page)
   },
   computed: {},
   methods: {
@@ -194,6 +193,7 @@ export default {
       getTableStatus(params).then(res => {
         t.tableStatus.file_type = res.data.file_type
         t.tableStatus.category = res.data.category
+        t.getTableDataExcute(t.feeds.current_page)
       })
     },
     getTableDataExcute(to_page) {
