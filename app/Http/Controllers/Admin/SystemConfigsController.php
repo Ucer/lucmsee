@@ -7,6 +7,7 @@ use App\Traits\TableStatusTrait;
 use App\Validates\SystemConfigValidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Auth;
 
 class SystemConfigsController extends AdminController
 {
@@ -64,11 +65,10 @@ class SystemConfigsController extends AdminController
         $request_data = $request->all();
         $request_data['description'] = strval($request_data['description']);
         $rest_validate = $validate->storeValidate($request_data);
-
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $new_request_data = $rest_validate['data'];
 
-
-        $res = $model->storeAction($request_data);
+        $res = $model->storeAction($new_request_data);
         if ($res['status'] === true) return $this->message($res['message']);
         return $this->failed($res['message']);
     }
@@ -78,19 +78,26 @@ class SystemConfigsController extends AdminController
     {
         $request_data = $request->all();
         $request_data['description'] = strval($request_data['description']);
-        $rest_validate = $validate->updateValidate($request_data, $model->id);
-
+        $rest_validate = $validate->updateValidate($request_data, $model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $new_request_data = $rest_validate['data'];
 
-
-        $res = $model->storeAction($request_data);
+        $res = $model->storeAction($new_request_data);
         if ($res['status'] === true) return $this->message($res['message']);
         return $this->failed($res['message']);
     }
 
-    public function destroy(SystemConfig $model)
+    public function destroy(SystemConfig $model,SystemConfigValidate $validate)
     {
-        $model->delete();
+
+        $rest_validate = $validate->destroyValidate($model);
+
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $rest_destroy = $model->destroyAction();
+        if ($rest_destroy['status'] === true) {
+            admin_log_record(Auth::id(), 'destroy', 'system_configs', '删除系统配置项', $model->toArray());
+            return $this->message($rest_destroy['message']);
+        }
         return $this->message('数据删除成功');
     }
 }

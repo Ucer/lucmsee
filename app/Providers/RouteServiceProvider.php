@@ -6,6 +6,7 @@ use App\Models\Attachment;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\StatusMap;
+use App\Models\SystemConfig;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('attachment', function ($value) {
             return Attachment::findOrFail($value);
+        });
+        Route::bind('system_config', function ($value) {
+            return SystemConfig::findOrFail($value);
         });
     }
 

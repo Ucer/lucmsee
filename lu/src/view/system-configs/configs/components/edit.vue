@@ -3,10 +3,28 @@
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
     <p slot="header">{{ $t('edit') }}</p>
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
-      <FormItem label="角色名称" prop="name">
-        <Input v-model="formData.name" placeholder="请输入"></Input>
+      <FormItem label="分组：" prop="config_group">
+        <Select v-model="formData.config_group" filterable placeholder="请选择配置分组">
+          <Option v-for="(item,key) in config_group" :value="key" :key="key">{{ item.title }} </Option>
+        </Select>
       </FormItem>
-      <FormItem label="角色描述" prop="description">
+      <FormItem label="配置标识：" prop="flag">
+        <Input v-model="formData.flag" placeholder="请输入配置标识"></Input>
+        <input-helper text="英文字母与下划线组成"></input-helper>
+      </FormItem>
+      <FormItem label="配置标题：" prop="title">
+        <Input v-model="formData.title" placeholder="请输入"></Input>
+      </FormItem>
+      <FormItem label="配置值：">
+        <Input type="textarea" :rows="3" v-model="formData.value" placeholder="请输入"></Input>
+      </FormItem>
+      <FormItem label="是否启用：">
+        <RadioGroup v-model="formData.enable">
+          <Radio label="F">禁用</Radio>
+          <Radio label="T">启用</Radio>
+        </RadioGroup>
+      </FormItem>
+      <FormItem label="描述：">
         <Input type="textarea" :rows="3" v-model="formData.description" placeholder="请输入"></Input>
       </FormItem>
     </Form>
@@ -27,13 +45,21 @@
 import {
   edit,
   getInfoById
-} from '@/api/role'
+} from '@/api/system_config'
+import InputHelper from '_c/common/input-helper'
 
 export default {
+  components: {
+    InputHelper
+  },
   props: {
     modalId: {
       type: Number,
       default: 0
+    },
+    config_group: {
+      type: Object,
+      value: []
     }
   },
   data() {
@@ -42,16 +68,29 @@ export default {
       saveLoading: false,
       spinLoading: true,
       formData: {
-        name: '',
-        guard_name: '',
-        description: ''
+        flag: '',
+        title: '',
+        config_group: '',
+        value: '',
+        description: '',
+        enable: 'T'
       },
       rules: {
-        name: [{
+        flag: [{
           required: true,
-          message: '请填写角色限名称',
+          message: '请填写配置标识',
           trigger: 'blur'
         }],
+        title: [{
+          required: true,
+          message: '请填写配置标题',
+          trigger: 'blur'
+        }],
+        config_group: [{
+          required: true,
+          message: '请选择配置分组',
+          trigger: 'blur'
+        }]
       },
     }
   },
@@ -67,7 +106,11 @@ export default {
         let res_data = res.data
         t.formData = {
           id: res_data.id,
-          name: res_data.name,
+          config_group: res_data.config_group,
+          flag: res_data.flag,
+          title: res_data.title,
+          value: res_data.value,
+          enable: res_data.enable,
           description: res_data.description
         }
         t.spinLoading = false;

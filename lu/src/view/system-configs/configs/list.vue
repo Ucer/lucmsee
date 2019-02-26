@@ -7,15 +7,15 @@
     </Col>
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.enable" placeholder="请选择状态">
-        <Option value="" key="">全部</Option>
-        <Option v-for="(item,key) in tableStatus.enable" :value="key" :key="key">{{ item }}</Option>
-      </Select>
+      <Option value="" key="">全部</Option>
+      <Option v-for="(item,key) in tableStatus.enable" :value="key" :key="key">{{ item }}</Option>
+    </Select>
     </Col>
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.group" placeholder="请选择配置分组">
-        <Option value="" key="">全部</Option>
-        <Option v-for="(item,key) in tableStatus.config_group" :value="key" :key="key">{{ item.title }}</Option>
-      </Select>
+      <Option value="" key="">全部</Option>
+      <Option v-for="(item,key) in tableStatus.config_group" :value="key" :key="key">{{ item.title }}</Option>
+    </Select>
     </Col>
     <Col :xs="6" :lg="3" class="hidden-mobile">
     <Input icon="search" placeholder="请输入标识或标题搜索..." v-model="searchForm.table_name_or_flag"></Input>
@@ -36,7 +36,7 @@
 
     <Table size='small' :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
       <template slot-scope="{ row, index }" slot="config_group">
-        {{ tableStatus.group[row.config_group] }}
+        {{ tableStatus.config_group[row.config_group]['title'] }}
       </template>
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
@@ -59,11 +59,13 @@ import {
 
 import AddComponent from './components/add'
 import EditComponent from './components/edit'
+import InputHelper from '_c/common/input-helper'
 
 export default {
   components: {
     AddComponent,
-    EditComponent
+    EditComponent,
+    InputHelper
   },
   data() {
     return {
@@ -121,14 +123,19 @@ export default {
         },
         {
           title: '创建时间',
-          key: 'Create_time',
+          key: 'created_at',
           sortable: true,
           minWidth: 150,
         }, {
           title: '修改时间',
-          key: 'Update_time',
+          key: 'updated_at',
           sortable: true,
           minWidth: 150,
+        }, {
+          title: '操作',
+          key: '',
+          minWidth: 100,
+          slot: 'action'
         }
       ],
 
@@ -137,7 +144,6 @@ export default {
   created() {
     let t = this
     t.getGroupExcute()
-    t.getTableDataExcute(t.feeds.current_page)
   },
   methods: {
     getGroupExcute() {
@@ -146,6 +152,8 @@ export default {
         const response_data = res.data
         t.tableStatus.config_group = response_data.config_group
         t.tableStatus.enable = response_data.enable
+
+        t.getTableDataExcute(t.feeds.current_page)
       }, function(error) {})
     },
     getTableDataExcute(to_page) {
@@ -153,10 +161,7 @@ export default {
       t.tableLoading = true
       t.feeds.current_page = to_page
       getTableData(to_page, t.feeds.per_page, t.searchForm).then(res => {
-        t.feeds.data = res.data.data
-        t.all_tables_num = res.data.all_tables_num
-        t.all_tables_length = res.data.all_tables_length
-        t.bak_data_rows = res.data.bak_data_rows
+        t.feeds.data = res.data
         t.feeds.total = 0
         t.tableLoading = false
       }, function(error) {

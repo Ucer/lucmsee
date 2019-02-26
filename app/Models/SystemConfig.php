@@ -7,7 +7,7 @@ class SystemConfig extends Model
 {
 
     protected $fillable = [
-        'flag', 'title', 'config_group','value','weight', 'enable', 'description'
+        'flag', 'title', 'config_group', 'value', 'weight', 'enable', 'description'
     ];
 
     public function storeAction($input)
@@ -23,4 +23,15 @@ class SystemConfig extends Model
             return $this->baseFailed('内部错误');
         }
     }
+
+    public function destroyAction()
+    {
+        try {
+            $this->delete();
+            return $this->baseSucceed([], '系统配置删除成功');
+        } catch (\Exception $e) {
+            return $this->baseFailed('内部错误');
+        }
+    }
+
 }

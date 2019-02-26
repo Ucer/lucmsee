@@ -3,6 +3,11 @@
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
     <p slot="header">{{ $t('add') }}</p>
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
+      <FormItem label="分组：" prop="config_group">
+        <Select v-model="formData.config_group" filterable placeholder="请选择配置分组">
+          <Option v-for="(item,key) in config_group" :value="key" :key="key">{{ item.title }} </Option>
+        </Select>
+      </FormItem>
       <FormItem label="配置标识：" prop="flag">
         <Input v-model="formData.flag" placeholder="请输入配置标识"></Input>
         <input-helper text="英文字母与下划线组成"></input-helper>
@@ -10,13 +15,8 @@
       <FormItem label="配置标题：" prop="title">
         <Input v-model="formData.title" placeholder="请输入"></Input>
       </FormItem>
-      <FormItem label="分组：" prop="config_group">
-        <Select v-model="formData.config_group" filterable placeholder="请选择配置分组">
-            <Option v-for="(item,key) in config_group" :value="key" :key="key">{{ item.title }} </Option>
-        </Select>
-      </FormItem>
       <FormItem label="配置值：">
-        <Input type="textarea" :rows="3"  v-model="formData.value" placeholder="请输入"></Input>
+        <Input type="textarea" :rows="3" v-model="formData.value" placeholder="请输入"></Input>
       </FormItem>
       <FormItem label="是否启用：">
         <RadioGroup v-model="formData.enable">
