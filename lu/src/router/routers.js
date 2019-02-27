@@ -83,7 +83,7 @@ export default[
           title: '数据字典'
         },
         component: () => import ('@/view/system-configs/status_maps/list.vue')
-      },{
+      }, {
         path: '/dashboard/system_config',
         name: 'systemConfig',
         meta: {
@@ -110,8 +110,7 @@ export default[
           title: '系统附件'
         },
         component: () => import ('@/view/resources/attachments/list.vue')
-      },
-      {
+      }, {
         path: '/dashboard/images',
         name: 'imageList',
         meta: {
@@ -152,6 +151,25 @@ export default[
           title: '用户列表'
         },
         component: () => import ('@/view/privileges/users/list.vue')
+      }
+    ]
+  }, {
+    path: '/dashboard/newsSystem',
+    name: 'newsSystem',
+    component: Main,
+    meta: {
+      icon: 'ios-paper',
+      title: '新闻系统',
+      showAlways: true
+    },
+    children: [
+      {
+        path: '/dashboard/articleCategories',
+        name: 'articleCategory',
+        meta: {
+          title: '文章分类'
+        },
+        component: () => import ('@/view/news-system/article_categories/list.vue')
       }
     ]
   }, {

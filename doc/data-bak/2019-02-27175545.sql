@@ -1,7 +1,7 @@
 /* -----------------------------------------------------------*/
 /* Description:备份的数据表[结构]：status_maps,system_configs,tables*/
 /* Description:备份的数据表[数据]：status_maps,system_configs,tables*/
-/* Time: 2019-02-26 14:52:20*/
+/* Time: 2019-02-27 17:48:05*/
 /* -----------------------------------------------------------*/
 /* SQLFile Label：#1*/
 /* -----------------------------------------------------------*/
@@ -24,7 +24,7 @@ CREATE TABLE status_maps (
   KEY status_maps_column_index (`column`),
   KEY status_maps_status_code_index (status_code),
   KEY status_maps_status_description_index (status_description)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /* 表的结构 system_configs*/ 
 DROP TABLE IF EXISTS system_configs;
@@ -42,7 +42,7 @@ CREATE TABLE system_configs (
   KEY system_configs_flag_index (flag),
   KEY system_configs_enable_index (`enable`),
   KEY system_configs_config_group_index (config_group)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /* 表的结构 tables*/ 
 DROP TABLE IF EXISTS tables;
@@ -56,7 +56,7 @@ CREATE TABLE `tables` (
   updated_at timestamp NULL DEFAULT NULL,
   PRIMARY KEY (id),
   KEY tables_table_name_index (`table_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 
@@ -76,6 +76,8 @@ INSERT INTO `status_maps`(id,table_name,column,status_code,status_description,re
 INSERT INTO `status_maps`(id,table_name,column,status_code,status_description,remark,created_at,updated_at) VALUES ('14','system_configs','enable','T','启用','','2019-02-26 10:09:03','2019-02-26 10:09:21');
 INSERT INTO `status_maps`(id,table_name,column,status_code,status_description,remark,created_at,updated_at) VALUES ('15','system_configs','enable','F','禁用','','2019-02-26 10:09:10','2019-02-26 10:09:10');
 INSERT INTO `status_maps`(id,table_name,column,status_code,status_description,remark,created_at,updated_at) VALUES ('16','attachments','category','lucmsee','系统附件','','2019-02-26 14:46:05','2019-02-26 14:46:05');
+INSERT INTO `status_maps`(id,table_name,column,status_code,status_description,remark,created_at,updated_at) VALUES ('17','article_categories','enable','T','启用','','2019-02-27 17:21:39','2019-02-27 17:21:39');
+INSERT INTO `status_maps`(id,table_name,column,status_code,status_description,remark,created_at,updated_at) VALUES ('18','article_categories','enable','F','禁用','','2019-02-27 17:21:48','2019-02-27 17:21:48');
 
 
 /* 转存表中的数据:system_configs*/ 
@@ -93,3 +95,4 @@ INSERT INTO `tables`(id,table_name,table_name_cn,remark) VALUES ('7','roles','�
 INSERT INTO `tables`(id,table_name,table_name_cn,remark) VALUES ('8','model_has_roles','角色关联表','');
 INSERT INTO `tables`(id,table_name,table_name_cn,remark) VALUES ('9','attachments','附件表','');
 INSERT INTO `tables`(id,table_name,table_name_cn,remark,created_at,updated_at) VALUES ('19','system_configs','系统配置表','','2019-02-26 10:08:51','2019-02-26 10:08:51');
+INSERT INTO `tables`(id,table_name,table_name_cn,remark,created_at,updated_at) VALUES ('20','article_categories','文章分类表','','2019-02-27 17:21:26','2019-02-27 17:21:26');

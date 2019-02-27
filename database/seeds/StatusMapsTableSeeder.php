@@ -30,6 +30,9 @@ class StatusMapsTableSeeder extends Seeder
 
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'T', 'status_description' => '启用', 'remark' => ''],
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => ''],
+
+            ['table_name' => 'article_categories', 'column' => 'enable', 'status_code' => 'T', 'status_description' => '启用', 'remark' => ''],
+            ['table_name' => 'article_categories', 'column' => 'enable', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => ''],
         ];
         \App\Models\StatusMap::insert($data);
     }

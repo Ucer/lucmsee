@@ -58,18 +58,23 @@ class HttpRequest {
     instance.interceptors.response.use(res => {
       this.destroy(url)
       let resData = res.data
-      if (!resData.hasOwnProperty('status') | (resData.status != 'success')) {
-        let errorInfo = {
-          status: 200,
-          statusText: '接口返回非success:',
-          responseData: resData,
-          request: {
-            responseURL: res.config.url
+      if (!resData.hasOwnProperty('status') || (resData.status != 'success')) {
+        let response_url = res.config.url
+        if (response_url.indexOf("table_bak_sql_file_download") != -1) {
+          return res.data
+        } else {
+          let errorInfo = {
+            status: 200,
+            statusText: '接口返回非success:',
+            responseData: resData,
+            request: {
+              responseURL: response_url
+            }
           }
+          addErrorLog(errorInfo)
+          Notice.error({title: '出错了', desc: resData})
+          return Promise.reject(res)
         }
-        addErrorLog(errorInfo)
-        Notice.error({title: '出错了', desc: resData})
-        return Promise.reject(res)
       } else {
         return res.data
       }

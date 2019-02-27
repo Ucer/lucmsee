@@ -84,4 +84,12 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/system_configs/{system_config}', 'SystemConfigsController@show')->name('system_configs.show');
     Route::patch('admin/system_configs/{system_config}', 'SystemConfigsController@update')->name('system_configs.update');
     Route::delete('admin/system_configs/{system_config}', 'SystemConfigsController@destroy')->name('system_configs.destroy');
+
+
+    Route::get('admin/article_categories', 'ArticleCategoriesController@list')->name('article_categories.list');
+    Route::post('admin/article_categories', 'ArticleCategoriesController@store')->name('article_categories.store');
+    Route::patch('admin/article_categories/{article_category}', 'ArticleCategoriesController@update')->name('article_categories.update');
+    Route::get('admin/article_categories/all_article_categories', 'ArticleCategoriesController@getAllCategories')->name('article_categories.all_article_categories');
+    Route::get('admin/article_categories/{article_category}', 'ArticleCategoriesController@show')->name('article_categories.show');
+    Route::delete('admin/article_categories/{article_category}', 'ArticleCategoriesController@destroy')->name('article_categories.destroy');
 });
