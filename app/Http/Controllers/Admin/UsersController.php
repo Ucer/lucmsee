@@ -75,7 +75,7 @@ class UsersController extends AdminController
     {
         $request_data = $request->all();
 
-        $rest_validate = $validate->updateValidate($request_data);
+        $rest_validate = $validate->updateValidate($request_data,$model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $new_request_data = $rest_validate['data'];
 

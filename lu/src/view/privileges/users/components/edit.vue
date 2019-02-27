@@ -4,31 +4,33 @@
     <p slot="header">修改</p>
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
       <FormItem label="头像：">
-        <upload v-if='formdataFinished' v-model="formData.avatar" :is-delete='false' :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
+        <upload v-if='formdataFinished' v-model="formData.avatar" :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
       </FormItem>
-      <FormItem label="昵称：" prop="name">
-        <Input v-model="formData.name"></Input>
+      <FormItem label="真实姓名：" prop="real_name">
+        <Input v-model="formData.real_name"></Input>
+      </FormItem>
+      <FormItem label="昵称：" prop="nickname">
+        <Input v-model="formData.nickname"></Input>
       </FormItem>
       <FormItem label="邮箱：">
         <Input v-model="formData.email"></Input>
       </FormItem>
-      <FormItem label="登录密码：">
+      <FormItem label="登录密码：" prop="password">
         <Input type="password" v-model="formData.password"></Input>
       </FormItem>
-      <FormItem label="登录密码确认：">
+      <FormItem label="登录密码确认：" prop="password_confirmation">
         <Input type="password" v-model="formData.password_confirmation"></Input>
       </FormItem>
       <FormItem label="可登录后台：">
         <RadioGroup v-model="formData.is_admin">
-          <Radio label="F">否</Radio>
-          <Radio label="T">是</Radio>
+          <Radio v-for="(item,key) in tableStatus_is_admin" :label="key">{{ item }}</Radio>
         </RadioGroup>
       </FormItem>
     </Form>
     <div slot="footer">
       <Button type="text" @click="cancel">取消</Button>
       <Button type="primary" @click="editExcute" :loading='saveLoading'>保存
-                </Button>
+      </Button>
     </div>
     <div class="demo-spin-container" v-if='spinLoading === true'>
       <Spin fix>
@@ -55,7 +57,8 @@ export default {
     modalId: {
       type: Number,
       default: 0
-    }
+    },
+    'tableStatus_is_admin': ''
   },
   data() {
     return {
@@ -63,7 +66,8 @@ export default {
       saveLoading: false,
       spinLoading: true,
       formData: {
-        name: '',
+        nickname: '',
+        real_name: '',
         email: '',
         is_admin: 'F',
         password: '',
@@ -80,22 +84,23 @@ export default {
         },
         format: ['jpg', 'jpeg', 'png', 'gif'],
         max_size: 500,
-        upload_url: window.uploadUrl.imageUploadToFileSystemUrl+'/avatar',
+        upload_url: window.uploadUrl.imageUploadToFileSystemUrl + '/avatar',
         file_name: 'file',
         multiple: false,
         file_num: 1,
+        data: {},
         default_list: []
       },
       rules: {
-        name: [{
+        real_name: [{
             required: true,
-            message: '请填写昵称',
+            message: '请填写真实姓名',
             trigger: 'blur'
           },
           {
             type: 'string',
             min: 2,
-            message: '昵称至少要 2 个字符',
+            message: '真实姓名至少要 2 个字符',
             trigger: 'blur'
           }
         ],
@@ -108,7 +113,7 @@ export default {
             type: 'email',
             message: '邮箱格式不正确',
             trigger: 'blur'
-          }
+          },
         ],
       },
     }
@@ -125,7 +130,8 @@ export default {
         let res_data = res.data
         t.formData = {
           id: res_data.id,
-          name: res_data.name,
+          real_name: res_data.real_name,
+          nickname: res_data.nickname,
           email: res_data.email,
           is_admin: res_data.is_admin,
           password: '',
@@ -146,7 +152,7 @@ export default {
       t.$refs.formData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
-          edit(t.modalId, t.formData).then(res => {
+          edit(t.formData, t.modalId).then(res => {
             t.saveLoading = false
             t.modalShow = false
             t.$emit('on-edit-modal-success')

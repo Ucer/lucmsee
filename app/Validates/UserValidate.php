@@ -2,10 +2,10 @@
 
 namespace App\Validates;
 
-use App\Models\User;
 use App\Traits\SystemConfigTrait;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use Illuminate\Validation\Rule;
 
 class  UserValidate extends Validate
 {
@@ -27,21 +27,19 @@ class  UserValidate extends Validate
             $request_data['password'] = isset_and_not_empty($request_data, 'password');
             $request_data['avatar'] = isset_and_not_empty($request_data, 'avatar');
             if ($request_data['email']) {
-
-                $systemConfig = $this->getSystemConfigFunction(['regex_email']);
-                if (!preg_match($systemConfig['regex_email'], $request_data['email'])) {
-                    return $this->baseFailed('您输入的电子邮件地址合法');
-                }
-                $isset = User::columnEqualSearch('email', $request_data['email'])->count();
-                if ($isset) {
-                    return $this->baseFailed('管理员账号已经存在了');
+                $rules_email = [
+                    'email' => 'email|unique:users'
+                ];
+                $rest_validate_email = $this->validate($request_data, $rules_email);
+                if ($rest_validate_email !== true) {
+                    return $this->baseFailed($rest_validate_email);
                 }
             }
 
             if ($request_data['avatar']) {
                 $request_data['avatar'] = $request_data['avatar']['url'];
             }
-            $request_data = unset_if_no_value($request_data, ['nickname', 'email']);
+            $request_data = unset_if_no_value($request_data, ['nickname','avatar', 'email']);
             return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
@@ -54,31 +52,48 @@ class  UserValidate extends Validate
     {
         $rules = [
             'real_name' => 'required|between:3,50',
-            'password' => 'between:6,12|alpha_num|confirmed',
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
 
             $request_data['email'] = isset_and_not_empty($request_data, 'email');
             $request_data['password'] = isset_and_not_empty($request_data, 'password');
+            $request_data['avatar'] = isset_and_not_empty($request_data, 'avatar');
 
-            if ($model->id === 1) {
-                $request_data['password'] = '';
-                $request_data['email'] = $model->email;
+            if ($model->id === 1) { // 超级管理员密码只能在个人中心修改
+                if ($request_data['password'] || ($request_data['email'] != $model->email)) {
+                    return $this->baseFailed('超级管理员的密码与账号不可以修改');
+                }
+            }
+
+            if ($request_data['password']) {
+                $rules_password = [
+                    'password' => 'between:6,12|alpha_num|confirmed',
+                ];
+                $rest_validate_password = $this->validate($request_data, $rules_password);
+                if ($rest_validate_password !== true) {
+                    return $this->baseFailed($rest_validate_password);
+                }
             }
 
             if ($request_data['email']) {
-                $systemConfig = $this->getSystemConfigFunction(['regex_email']);
-                if (preg_match($systemConfig['regex_email'], $request_data['email'])) {
-                    return $this->baseFailed('您输入的电子邮件地址合法');
-                }
-                $isset = User::columnEqualSearch('email', $request_data['email'])->where('id', '<>', $model->id)->count();
-                if ($isset) {
-                    return $this->baseFailed('管理员账号已经存在了');
+                $rules_email = [
+                    'email' => [
+                        'email',
+                        Rule::unique('users')->ignore($model->id),
+                    ]
+                ];
+                $rest_validate_email = $this->validate($request_data, $rules_email);
+                if ($rest_validate_email !== true) {
+                    return $this->baseFailed($rest_validate_email);
                 }
             }
 
-            $request_data = unset_if_no_value($request_data, ['avatar', 'nickname', 'email']);
+            if ($request_data['avatar']) {
+                $request_data['avatar'] = $request_data['avatar']['url'];
+            }
+
+            $request_data = unset_if_no_value($request_data, ['nickname', 'avatar', 'email']);
 
             return $this->baseSucceed($request_data, $this->message);
         } else {

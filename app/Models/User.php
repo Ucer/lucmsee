@@ -66,11 +66,17 @@ class User extends Authenticatable
 
     public function updateAction($input)
     {
-        if ($input['id'] === 1) {
-            unset($input['email']);
-        }
+
         try {
-            $this->fill($input)->save();
+            $this->fill($input);
+            if ($input['password']) {
+                $this->password = bcrypt($input['password']);
+            }
+            if ($input['email']) {
+                $this->email = $input['email'];
+            }
+
+            $this->save();
             return $this->baseSucceed([], '操作成功');
         } catch (\Exception $e) {
             return $this->baseFailed('内部错误');

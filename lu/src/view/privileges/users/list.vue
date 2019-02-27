@@ -37,7 +37,7 @@
 
       <template slot-scope="{ row, index }" slot="avatar">
         <div class="text-center">
-          <img :src="row.avatar" v-if="row.avatar" class="fancybox" :href="row.avatar" title="头像" alt="头像" style="width:40px;height:40px">
+          <Avatar size="large" :src="row.avatar" v-if="row.avatar" class="fancybox" :href="row.avatar" title="头像" alt="头像"></Avatar>
           <Avatar v-else size="large" style="color: #f56a00;background-color: #fde3cf">{{ row.real_name.substr(0,1)}}</Avatar>
         </div>
       </template>
@@ -75,8 +75,7 @@
   </Modal>
 
   <add-component v-if='addModal.show' :tableStatus_is_admin="tableStatus.is_admin" @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
-  <!-- <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component> -->
-
+  <edit-component v-if='editModal.show' :tableStatus_is_admin="tableStatus.is_admin" :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component>
 </div>
 </template>
 
