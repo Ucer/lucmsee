@@ -241,7 +241,6 @@ export default {
         this.$Notice.success({
           title: '操作成功',
           desc: res.message,
-          duration: 0
         })
         this.loadingRepairBtn = false
       }).catch((err) => {

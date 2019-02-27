@@ -65,14 +65,14 @@ class HttpRequest {
         } else {
           let errorInfo = {
             status: 200,
-            statusText: '接口返回非success:',
+            statusText: '接口返回非success',
             responseData: resData,
             request: {
               responseURL: response_url
             }
           }
           addErrorLog(errorInfo)
-          Notice.error({title: '出错了', desc: resData})
+          Notice.error({title: '接口返回非success', desc: resData, duration: 0 })
           return Promise.reject(res)
         }
       } else {

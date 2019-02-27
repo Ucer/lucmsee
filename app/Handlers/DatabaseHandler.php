@@ -43,7 +43,7 @@ class DatabaseHandler
 
         //取得表结构信息
         //1，表示表名和字段名会用``包着的,0 则不用``
-        DB::select("SET SQL_QUOTE_SHOW_CREATE = 0");
+        DB::select("SET SQL_QUOTE_SHOW_CREATE = 1");
         $outstr = '';
         foreach ($tables as $k => $v) {
             $outstr .= "/* 表的结构 {$v}*/ \n";
@@ -74,13 +74,21 @@ class DatabaseHandler
                 if (!isset($one_row_for_table['deleted_at']) || !$one_row_for_table['deleted_at']) {
                     unset($one_row_for_table['deleted_at']);
                 }
-                $table_columns = implode(',', array_keys($one_row_for_table));
+                $table_columns = '';
+                foreach(array_keys($one_row_for_table) as $key => $table_column) {
+                    if($key < 1) {
+                       $table_columns = "`{$table_column}`";
+                    } else {
+                        $table_columns .=",`{$table_column}`";;
+                    }
+                }
+//                $table_columns = implode(',', array_keys($one_row_for_table));
                 foreach (array_values($one_row_for_table) as $value) {
                     $tem_sql .= $tn == 0 ? "" : ",";
                     $tem_sql .= $table_name == '' ? "''" : "'{$value}'";
                     $tn++;
                 }
-                $tem_sql = "INSERT INTO `{$table_name}`({$table_columns}) VALUES ({$tem_sql});\n";
+                $tem_sql = "INSERT INTO `{$table_name}` (".$table_columns.") VALUES ({$tem_sql});\n";
                 $sql_no = "\n/* Time: " . date("Y-m-d H:i:s", time()) . "*/\n" .
                     "/* -----------------------------------------------------------*/\n" .
                     "/* SQLFile Label：#{$file_n}*/\n/* -----------------------------------------------------------*/\n\n\n";
