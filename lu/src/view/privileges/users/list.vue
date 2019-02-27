@@ -12,7 +12,7 @@
     </Select>
     </Col>
     <Col :xs="3" :lg="3">
-    <Select v-model="searchForm.is_admin" placeholder="管理员">
+    <Select v-model="searchForm.is_admin" placeholder="是否能登录后台">
       <Option value="" key="">全部</Option>
       <Option v-for="(item,key) in tableStatus.is_admin" :value="key" :key="key">{{ item }}</Option>
     </Select>
@@ -107,7 +107,9 @@ export default {
   data() {
     return {
       searchForm: {
-        order_by: 'created_at,desc'
+        order_by: 'created_at,desc',
+        is_admin:'',
+        enable:''
       },
       tableLoading: false,
       tableStatus: {

@@ -30,12 +30,12 @@ class UsersController extends AdminController
 
         $enable = isset_and_not_empty($search_data, 'enable');
         if ($enable) {
-            $model = $model->enableSearch($enable);
+            $model = $model->columnEqualSearch('enable', $enable);
         }
 
         $is_admin = isset_and_not_empty($search_data, 'is_admin');
         if ($is_admin) {
-            $model = $model->isAdminSearch($is_admin);
+            $model = $model->columnEqualSearch('is_admin', $is_admin);
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
@@ -75,7 +75,7 @@ class UsersController extends AdminController
     {
         $request_data = $request->all();
 
-        $rest_validate = $validate->updateValidate($request_data,$model);
+        $rest_validate = $validate->updateValidate($request_data, $model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $new_request_data = $rest_validate['data'];
 

@@ -40,10 +40,12 @@ export const getUnreadCount = () => {
   })
 };
 
-export const getTableData = (searchdata) => {
+export const getTableData = (to_page, per_page, searchdata) => {
   return axios.request({
     url: '/api/admin/users',
     params: {
+      page: to_page,
+      per_page: per_page,
       search_data: JSON.stringify(searchdata)
     },
     method: 'get'
