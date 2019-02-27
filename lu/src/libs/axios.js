@@ -57,7 +57,22 @@ class HttpRequest {
     // 响应拦截
     instance.interceptors.response.use(res => {
       this.destroy(url)
-      return res.data
+      let resData = res.data
+      if (!resData.hasOwnProperty('status') | (resData.status != 'success')) {
+        let errorInfo = {
+          status: 200,
+          statusText: '接口返回非success:',
+          responseData: resData,
+          request: {
+            responseURL: res.config.url
+          }
+        }
+        addErrorLog(errorInfo)
+        Notice.error({title: '出错了', desc: resData})
+        return Promise.reject(res)
+      } else {
+        return res.data
+      }
     }, error => {
       this.destroy(url)
       const {
@@ -78,14 +93,13 @@ class HttpRequest {
           responseURL: config.url
         }
       }
+      addErrorLog(errorInfo)
       if (status === 401) { // 未登录，不记录错误日志
         Cookies.remove(TOKEN_KEY)
         window.location.href = window.location.pathname + '#/login'
       } else if (status === 412) { // 输入验证失败，不记录错误日志
 
-      } else {
-        addErrorLog(errorInfo)
-      }
+      } else {}
       Notice.error({
         title: '出错了',
         desc: responseData

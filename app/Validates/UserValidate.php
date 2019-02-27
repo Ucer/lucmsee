@@ -25,10 +25,11 @@ class  UserValidate extends Validate
         if ($rest_validate === true) {
             $request_data['email'] = isset_and_not_empty($request_data, 'email');
             $request_data['password'] = isset_and_not_empty($request_data, 'password');
+            $request_data['avatar'] = isset_and_not_empty($request_data, 'avatar');
             if ($request_data['email']) {
 
                 $systemConfig = $this->getSystemConfigFunction(['regex_email']);
-                if (preg_match($systemConfig['regex_email'], $request_data['email'])) {
+                if (!preg_match($systemConfig['regex_email'], $request_data['email'])) {
                     return $this->baseFailed('您输入的电子邮件地址合法');
                 }
                 $isset = User::columnEqualSearch('email', $request_data['email'])->count();
@@ -37,7 +38,10 @@ class  UserValidate extends Validate
                 }
             }
 
-            $request_data = unset_if_no_value($request_data, ['avatar', 'nickname', 'email']);
+            if ($request_data['avatar']) {
+                $request_data['avatar'] = $request_data['avatar']['url'];
+            }
+            $request_data = unset_if_no_value($request_data, ['nickname', 'email']);
             return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
