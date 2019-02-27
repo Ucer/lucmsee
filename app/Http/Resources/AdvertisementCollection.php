@@ -18,7 +18,8 @@ class AdvertisementCollection extends ResourceCollection
             $info->overdue_time = $overdu_time;
         });
         return [
-            'data' => $collection
+            'data' => $collection,
+            'status' => 'success'
         ];
 
     }

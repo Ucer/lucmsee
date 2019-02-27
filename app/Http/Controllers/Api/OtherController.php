@@ -14,7 +14,6 @@ class OtherController extends ApiController
 
     public function getCaptcha()
     {
-        echo 33;die;
         return $this->success(Captcha::create('admin_login', true));
     }
 }

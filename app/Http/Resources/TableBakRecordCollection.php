@@ -17,7 +17,8 @@ class TableBakRecordCollection extends ResourceCollection
             $info->file_size = format_bytes($info->file_size);
         });
         return [
-            'data' => $collection
+            'data' => $collection,
+            'status' => 'success'
         ];
 
     }
