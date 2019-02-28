@@ -1,6 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
-import {Notice} from 'iview'
+import {Notice, Message} from 'iview'
 import {getTokenFromCookies} from '@/libs/util'
 import config from '@/config'
 
@@ -61,7 +61,7 @@ class HttpRequest {
       if (!resData.hasOwnProperty('status') | (resData.status != 'success')) {
         let response_url = res.config.url
         var noSuccessUrlArray = config.noSuccessUrlArray;
-        for (var i = 0; i < noSuccessUrlArray.length; i) {
+        for (var i = 0; i < noSuccessUrlArray.length; i++) {
           if (response_url.indexOf(noSuccessUrlArray[i]) != -1) {
             return res.data
           }
@@ -76,7 +76,14 @@ class HttpRequest {
           }
         }
         addErrorLog(errorInfo)
-        Notice.error({title: '接口返回非success', desc: resData, duration: 0})
+
+        // Notice.error({title: '接口返回非success', desc: resData, duration: 0})
+        Message.error({
+          content: '接口返回非success:' + resData,
+          duration: 0,
+          closable:true
+        })
+
         return Promise.reject(res)
 
       } else {

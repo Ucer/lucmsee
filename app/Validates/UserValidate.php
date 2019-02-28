@@ -39,7 +39,7 @@ class  UserValidate extends Validate
             if ($request_data['avatar']) {
                 $request_data['avatar'] = $request_data['avatar']['url'];
             }
-            $request_data = unset_if_no_value($request_data, ['nickname','avatar', 'email']);
+            $request_data = unset_if_no_value($request_data, ['nickname','avatar']);
             return $this->baseSucceed($request_data, $this->message);
         } else {
             $this->message = $rest_validate;
@@ -93,7 +93,7 @@ class  UserValidate extends Validate
                 $request_data['avatar'] = $request_data['avatar']['url'];
             }
 
-            $request_data = unset_if_no_value($request_data, ['nickname', 'avatar', 'email']);
+            $request_data = unset_if_no_value($request_data, ['nickname', 'avatar']);
 
             return $this->baseSucceed($request_data, $this->message);
         } else {
