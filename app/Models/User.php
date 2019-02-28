@@ -18,7 +18,7 @@ class User extends Authenticatable
     use Notifiable, HasApiTokens, ScopeTrait, ExcuteTrait, HasRoles, BaseResponseTrait, SoftDeletes;
 
     protected $fillable = [
-        'nickname', 'real_name', 'password', 'avatar', 'description', 'is_admin'
+        'nickname', 'real_name', 'avatar', 'description', 'is_admin'
     ];
 
     protected $hidden = [

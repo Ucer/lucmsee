@@ -40,7 +40,7 @@
     <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
       <template slot-scope="{ row, index }" slot="download">
         <div v-if='attachmentIsImage(row)'>
-          <img style="max-height:60px;margin-top:5%" :src="getAttachmentUrl(row)" :href="getAttachmentUrl(row)" class="fancybox" :title="row.original_name" alt="头像" />
+          <img style="max-height:50px;margin-top:1%" :src="getAttachmentUrl(row)" :href="getAttachmentUrl(row)" class="fancybox" :title="row.original_name" alt="头像" />
         </div>
         <div v-else>
           <a :href="getAttachmentUrl(row)" target="black_">下载附件</a>
@@ -129,7 +129,7 @@ export default {
         },
         {
           title: '下载',
-          minWidth: 90,
+          minWidth: 60,
           slot: 'download'
         },
         {
