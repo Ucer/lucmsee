@@ -1,3 +1,14 @@
+<style>
+.ivu-table .first_node td {
+  /* background-color: #2db7f5; */
+  color: black;
+}
+
+.ivu-table .children_node td {
+  /* background-color: #e2e8ea; */
+  /* color: #2db7f5; */
+}
+</style>
 <template>
 <div id="privileges-users-list">
   <Row :gutter="24">
@@ -5,7 +16,7 @@
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="12" :lg="4" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入权限名称..." v-model="searchForm.name" />
+    <Input icon="search" placeholder="请输入权限名称..." v-model="searchForm.name" ></Input>
     </Col>
     <Col :xs="3" :lg="2" class="hidden-mobile">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute()">{{ $t('search') }}</Button>
@@ -20,7 +31,11 @@
       </Spin>
     </div>
 
-    <Table border :columns="columns" :data="dataList" @on-sort-change='onSortChange'>
+    <Table size="small" :row-class-name="rowClassName"  :columns="columns" :data="dataList" @on-sort-change='onSortChange'>
+
+      <template slot-scope="{ row, index }" slot="name">
+        <span v-html="row.name"></span>
+      </template>
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
@@ -30,14 +45,14 @@
   </Row>
 
   <add-component v-if='addModal.show' :tableStatus_enable="tableStatus.enable" @on-add-modal-success='getTableDataExcute' @on-add-modal-hide="addModalHide"></add-component>
-  <!-- <edit-component v-if='editModal.show' :tableStatus_enable="tableStatus.enable" :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute' @on-edit-modal-hide="editModalHide"> </edit-component> -->
+  <edit-component v-if='editModal.show' :tableStatus_enable="tableStatus.enable" :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute' @on-edit-modal-hide="editModalHide"> </edit-component>
 
 </div>
 </template>
 
 <script>
 import AddComponent from './components/add'
-// import EditComponent from './components/edit'
+import EditComponent from './components/edit'
 
 import {
   getTableData,
@@ -53,7 +68,7 @@ import {
 export default {
   components: {
     AddComponent,
-    // EditComponent
+    EditComponent
   },
   data() {
     return {
@@ -79,8 +94,8 @@ export default {
         minWidth: 100,
       }, {
         title: '分类名称',
-        key: 'name',
         minWidth: 150,
+        slot: 'name'
       }, {
         title: 'pid',
         key: 'pid',
@@ -153,7 +168,15 @@ export default {
     },
     editModalHide() {
       this.editModal.show = false
-    }
+    },
+    rowClassName(row, index) {
+      if (row.pid < 1) {
+        return 'first_node';
+      } else {
+        return 'children_node';
+      }
+      return '';
+    },
   }
 }
 </script>

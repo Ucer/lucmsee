@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ArticleCategory;
 use App\Models\Attachment;
 use App\Models\Permission;
 use App\Models\Role;
@@ -52,6 +53,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('system_config', function ($value) {
             return SystemConfig::findOrFail($value);
+        });
+        Route::bind('article_category', function ($value) {
+            return ArticleCategory::findOrFail($value);
         });
     }
 

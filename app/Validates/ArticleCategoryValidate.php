@@ -55,7 +55,7 @@ class  ArticleCategoryValidate extends Validate
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
             if ($request_data['pid'] == $model->id) return $this->baseFailed('上级不能是自己');
-            $rest_getChildrenTree = (new FunctionHandler())->getChildrenTree(ArticleCategory::get()->toArray());
+            $rest_getChildrenTree = (new FunctionHandler())->getChildrenTree(ArticleCategory::get()->toArray(),$model->id);
             if (in_array($request_data['pid'], $rest_getChildrenTree)) {
                 return $this->baseFailed('上级不能是自己的下级');
             }

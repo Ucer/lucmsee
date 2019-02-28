@@ -36,7 +36,7 @@ class ArticleCategoriesController extends AdminController
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
         $list = $model->get()->toArray();
-        $list = (new FunctionHandler())->formatTree($list);
+        $list = (new FunctionHandler())->formatArticleCategoryTree($list);
 
         return $this->success($list);
     }

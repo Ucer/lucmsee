@@ -62,10 +62,10 @@ class FunctionHandler
                     case 0:
                         break;
                     case 1:
-                        $v['name'] = $this->menu_style[1] . $v['title'];
+                        $v['name'] = $this->menu_style[1] . $v['name'];
                         break;
                     default:
-                        $v['name'] = $this->menu_style[2] . str_repeat('— ', $lev) . $v['title'];
+                        $v['name'] = $this->menu_style[2] . str_repeat('— ', $lev) . $v['name'];
                         break;
                 }
                 $res[] = $v;
@@ -81,8 +81,18 @@ class FunctionHandler
         foreach ($data as $k => $v) {
             $v['lev'] = $lev;
             if ($v['pid'] == $pid) {
+                switch ($lev) {
+                    case 0:
+                        break;
+                    case 1:
+                        $v['name'] = $this->menu_style[1] . $v['name'];
+                        break;
+                    default:
+                        $v['name'] = $this->menu_style[2] . str_repeat('— ', $lev) . $v['name'];
+                        break;
+                }
                 $res[] = $v;
-                $this->formatTree($data, $v['id'], $lev + 1);
+                $this->formatArticleCategoryTree($data, $v['id'], $lev + 1);
             }
         }
         return $res;

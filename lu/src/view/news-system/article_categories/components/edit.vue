@@ -3,12 +3,27 @@
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
     <p slot="header">{{ $t('edit') }}</p>
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
-      <FormItem label="权限名称" prop="name">
+      <FormItem label="上级分类：">
+        <Select v-model="formData.pid" filterable placeholder="请选择上级分类">
+            <Option :value="0">顶级分类 </Option>
+            <Option v-for="(item,key) in articleCategories" :value="item.id">{{ item.name }} </Option>
+        </Select>
+      </FormItem>
+      <FormItem label="分类名称">
         <Input v-model="formData.name" placeholder="请输入"></Input>
       </FormItem>
-      <FormItem label="权限描述" prop="description">
+      <FormItem label="启用状态：">
+        <RadioGroup v-model="formData.enable">
+          <Radio v-for="(item,key) in tableStatus_enable" :label="key">{{ item }}</Radio>
+        </RadioGroup>
+      </FormItem>
+      <FormItem label="分类描述" prop="description">
         <Input type="textarea" :rows="3" v-model="formData.description" placeholder="请输入"></Input>
       </FormItem>
+      <FormItem label="排序：">
+        <Input v-model="formData.weight" placeholder="请输入序号"></Input>
+      </FormItem>
+    </Form>
     </Form>
     <div slot="footer">
       <Button type="text" @click="cancel">{{ $t('cancel') }}</Button>
@@ -26,8 +41,9 @@
 <script>
 import {
   edit,
-  getInfoById
-} from '@/api/permission'
+  getInfoById,
+  getAllCategories
+} from '@/api/article_category'
 
 export default {
   props: {
@@ -35,17 +51,20 @@ export default {
       type: Number,
       default: 0
     },
-    tableStatus_enable: []
+    tableStatus_enable: {}
   },
   data() {
     return {
       modalShow: true,
       saveLoading: false,
       spinLoading: true,
+      articleCategories:[],
       formData: {
         name: '',
         enable: 'T',
+        pid: 0,
         description: '',
+        weight: 50,
       },
       tableStatus: {
         enable: ''
@@ -61,7 +80,7 @@ export default {
   },
   mounted() {
     if (this.modalId > 0) {
-      this.getInfoByIdExcute()
+      this.getAllCategoriesExcute()
     }
   },
   methods: {
@@ -72,7 +91,9 @@ export default {
         t.formData = {
           id: res_data.id,
           name: res_data.name,
-          guard_name: res_data.guard_name,
+          enable: res_data.enable,
+          pid: res_data.pid,
+          weight: res_data.weight,
           description: res_data.description
         }
         t.spinLoading = false;
@@ -101,7 +122,14 @@ export default {
     cancel() {
       this.modalShow = false
       this.$emit('on-edit-modal-hide')
-    }
+    },
+    getAllCategoriesExcute() {
+      let t = this
+      getAllCategories().then(res => {
+        t.articleCategories = res.data
+        this.getInfoByIdExcute()
+      })
+    },
   }
 }
 </script>
