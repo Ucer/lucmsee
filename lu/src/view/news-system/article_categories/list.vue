@@ -16,7 +16,7 @@
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="12" :lg="4" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入权限名称..." v-model="searchForm.name" ></Input>
+    <Input icon="search" placeholder="请输入权限名称..." v-model="searchForm.name"></Input>
     </Col>
     <Col :xs="3" :lg="2" class="hidden-mobile">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute()">{{ $t('search') }}</Button>
@@ -31,10 +31,13 @@
       </Spin>
     </div>
 
-    <Table size="small" :row-class-name="rowClassName"  :columns="columns" :data="dataList" @on-sort-change='onSortChange'>
+    <Table editable size="small" :row-class-name="rowClassName" :columns="columns" :data="dataList" @on-sort-change='onSortChange'>
 
       <template slot-scope="{ row, index }" slot="name">
         <span v-html="row.name"></span>
+      </template>
+      <template slot-scope="{ row, index }" slot="weight">
+        <table-edit table="article_categories" column="weight" :id="row.id"  :value="'weight'" ></table-edit>
       </template>
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
@@ -53,6 +56,7 @@
 <script>
 import AddComponent from './components/add'
 import EditComponent from './components/edit'
+import TableEdit from '_c/common/table-edit.vue'
 
 import {
   getTableData,
@@ -67,6 +71,7 @@ import {
 
 export default {
   components: {
+    TableEdit,
     AddComponent,
     EditComponent
   },
@@ -105,13 +110,19 @@ export default {
         key: 'description',
         minWidth: 150,
       }, {
+        title: '排序',
+        key: 'weight',
+        minWidth: 150,
+        sortable: 'customer',
+        slot:'weight'
+      }, {
         title: '创建时间',
         key: 'created_at',
         minWidth: 150,
       }, {
         title: '更新时间',
         key: 'created_at',
-        minWidth: 150,
+        minWidth: 150
       }, {
         title: '操作',
         minWidth: 200,
