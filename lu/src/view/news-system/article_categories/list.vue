@@ -37,7 +37,7 @@
         <span v-html="row.name"></span>
       </template>
       <template slot-scope="{ row, index }" slot="weight">
-        <table-edit table="article_categories" column="weight" :id="row.id"  :value="'weight'" ></table-edit>
+        <table-edit table="article_categories" column="weight" :id="row.id" :value="row.weight" :index="index"></table-edit>
       </template>
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
@@ -65,8 +65,7 @@ import {
 
 
 import {
-  getTableStatus,
-  switchEnable
+  getTableStatus
 } from '@/api/common'
 
 export default {
@@ -112,9 +111,9 @@ export default {
       }, {
         title: '排序',
         key: 'weight',
-        minWidth: 150,
+        minWidth: 50,
         sortable: 'customer',
-        slot:'weight'
+        slot: 'weight'
       }, {
         title: '创建时间',
         key: 'created_at',

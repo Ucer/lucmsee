@@ -8,7 +8,7 @@ Route::namespace('Api')->group(function () {
     Route::post('login', 'LoginController@login')->name('login');
 
     Route::post('common_switch_enable', 'CommonController@switchEnable');
-    Route::post('common_switch_talbe_status', 'CommonController@switchTableStatus')->name('common.switch_table_status');
+    Route::post('common_edit_talbe_column', 'CommonController@editTalbleColumn')->name('common.edit_table_column');
     Route::get('common_get_table_status/{table_name}/{column_name?}', 'CommonController@getTableStatus');
     Route::get('common_get_system_config/{search_data}', 'CommonController@getSystemConfig')->name('common.get_system_config');
 

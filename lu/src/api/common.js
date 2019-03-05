@@ -22,3 +22,16 @@ export const switchEnable = (id, table, value) => {
     method: 'post'
   })
 };
+
+export const commonEditTableColumn = (id, table, column, value) => {
+  return axios.request({
+    url: '/api/common_edit_talbe_column',
+    data: {
+      id: id,
+      table: table,
+      column: column,
+      value: value
+    },
+    method: 'post'
+  })
+};

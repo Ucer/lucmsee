@@ -45,20 +45,19 @@ class CommonController extends ApiController
     }
 
 
-    public function switchTableStatus(Request $request)
+    public function editTalbleColumn(Request $request)
     {
         switch ($request->table) {
             case 'users':
                 if (Auth::id() == $request->id) return $this->failed('操作对象不能是你自己');
-                if ($request->column == 'id') {
-                    return $this->failed('不允许的操作');
+                if (!in_array($request->column, ['status'])) {
+                    return $this->failed('不允许修改此字段操作');
                 }
                 break;
-            case 'attachments':
-                break;
-            case 'advertisements':
-                break;
-            case 'system_configs':
+            case 'article_categories':
+                if (!in_array($request->column, ['weight'])) {
+                    return $this->failed('不允许修改此字段操作');
+                }
                 break;
             default:
                 return $this->failed('不允许的操作');
@@ -68,7 +67,7 @@ class CommonController extends ApiController
         $rest = DB::table($request->table)
             ->where('id', $request->id)
             ->update([$request->column => $request->value]);
-        if ($rest) return $this->message('操作成功');
+        if ($rest) return $this->message('字段值修改成功');
         return $this->failed('出错了');
     }
 
