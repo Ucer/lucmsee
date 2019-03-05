@@ -34,7 +34,7 @@ export default {
         headers: {
           'Authorization': window.access_token
         },
-        format: ['xlsx', 'doc', 'docx', 'txt', 'sql'],
+        format: ['xlsx', 'doc', 'docx', 'txt', 'sql','exe'],
         max_size: 1024 * 1000, // 800KB
         upload_url: window.uploadUrl.uploadToLocaleUrl + '/file/file',
         file_name: 'file',

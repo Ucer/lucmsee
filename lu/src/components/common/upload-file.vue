@@ -57,7 +57,7 @@
       <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
     </template>
   </div>
-  <Upload ref="upload"  :data="uploadConfig.data" :show-upload-list="false" :default-file-list="uploadConfig.default_list" :on-success="handleSuccess" :headers="uploadConfig.headers" :format="uploadConfig.format" :max-size="uploadConfig.max_size" :on-format-error="handleFormatError"
+  <Upload ref="upload"  :data="uploadConfig.data" :show-upload-list="false" :default-file-list="uploadConfig.default_list" :on-success="handleSuccess" :on-error="handleError" :headers="uploadConfig.headers" :format="uploadConfig.format" :max-size="uploadConfig.max_size" :on-format-error="handleFormatError"
     :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" :multiple="uploadConfig.multiple" :name="uploadConfig.file_name" type="drag" :action="uploadConfig.upload_url" style="display: inline-block;width:58px;">
     <div style="width: 58px;height:58px;line-height: 58px;">
       <Icon type="ios-camera" size="20"></Icon>
@@ -151,6 +151,17 @@ export default {
       this.$emit('on-upload-change', this.uploadList, formatFileList)
       this.ViewImage()
     },
+    handleError(error, file) {
+      console.log(error)
+
+      const  response  = JSON.parse(JSON.stringify(error))
+      console.log(JSON.stringify(error))
+      this.$Notice.error({
+        title: '出错了',
+        desc: error
+      })
+    },
+
     fomatFile() {
       let formatFileList = []
       this.uploadList.forEach(function(value, index, array) {
