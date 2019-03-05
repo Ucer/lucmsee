@@ -88,7 +88,7 @@ export default {
         },
         format: ['jpg', 'jpeg', 'png', 'gif'],
         max_size: 500,
-        upload_url: window.uploadUrl.imageUploadToLocaleUrl + '/avatar',
+        upload_url: window.uploadUrl.uploadToLocaleUrl + '/avatar',
         file_name: 'file',
         multiple: false,
         file_num: 1,

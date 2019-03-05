@@ -31,7 +31,7 @@ window.baseUrl = baseUrl
 window.uploadUrl = {
   imageUploadToFileSystemUrl: config.domainForFileSystem + '/api/image_upload/' + config.platName,
   fileUploadToFileSystemUrl: config.domainForFileSystem + '/api/file_upload/' + config.platName,
-  imageUploadToLocaleUrl: baseUrl + '/api/uploads/common_upload'
+  uploadToLocaleUrl: baseUrl + '/api/uploads/common_upload'
 }
 
 Vue.use(iView, {
