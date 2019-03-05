@@ -14,7 +14,7 @@ Route::namespace('Api')->group(function () {
 
 
     /**       ==========================          文件上传           ====================   */
-    Route::post('uploads/common_upload/{image_category}', 'UploadController@commonUpload')->name('uploads.common_upload');
+    Route::post('uploads/common_upload/{file_type}/{image_category}', 'UploadController@commonUpload')->name('uploads.common_upload');
 
 });
 

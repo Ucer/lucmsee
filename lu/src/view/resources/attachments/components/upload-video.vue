@@ -36,7 +36,7 @@ export default {
         },
         format: ['mp4', 'avi'],
         max_size: 1024 * 1000, // 800KB
-        upload_url: window.uploadUrl.uploadToLocaleUrl + '/video',
+        upload_url: window.uploadUrl.uploadToLocaleUrl + '/video/video',
         file_name: 'file',
         multiple: false,
         file_num: 1,

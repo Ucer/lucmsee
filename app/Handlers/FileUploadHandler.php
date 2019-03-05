@@ -21,7 +21,7 @@ class FileUploadHandler
     }
 
 
-    public function uploadImage($file, $user_id, $max_width = 0, $category = 'tmp', $extend = '')
+    public function uploadImage($file, $min_type, $file_type, $user_id, $max_width = 0, $category = 'tmp', $extend = '')
     {
         $up_dir = $this->base_image_up_dir . '/' . $category;
 
@@ -40,10 +40,10 @@ class FileUploadHandler
             $this->message = '请选择要上传的图片';
             return ['status' => $this->status, 'data' => $this->data, 'message' => $this->message];
         }
-        $min_type = $file->getClientMimeType();
         $inser_data = [
             'user_id' => $user_id,
             'ip' => '',
+            'file_type' => $file_type,
             'original_name' => $file->getClientOriginalName(),
             'mime_type' => $min_type,
             'size' => round($file->getClientSize() / 1000, 2),
@@ -71,88 +71,39 @@ class FileUploadHandler
         return ['status' => $this->status, 'data' => $this->data, 'message' => $this->message];
     }
 
-    public function base64ImageUpload($base_str, $user_id, $max_width = 0, $cqtegory = 'avatars', $storage_position = 'locale')
+    public function uploadFile($file, $min_type, $file_type, $user_id, $category = 'tmp', $extend = '')
     {
-        $up_dir = $this->base_image_up_dir . '/' . $cqtegory;
-
-        if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base_str, $result)) {
-            $type = $result[2];
-            if (in_array($type, array('pjpeg', 'jpeg', 'jpg', 'gif', 'bmp', 'png'))) {
-                if (in_array($type, ['jpeg', 'pjpeg'])) $type = 'jpg';
-                $new_file = $up_dir . '/' . md5(microtime(true)) . '.' . $type;
-                Storage::put($new_file, base64_decode(str_replace($result[1], '', $base_str)));
-                $full_path = storage_path('app') . '/public';
-                $inser_data = [
-                    'user_id' => $user_id,
-                    'ip' => '',
-                    'original_name' => '',
-                    'mime_type' => $type,
-                    'size' => round(filesize($full_path . '/' . $new_file) / 1000, 2),
-                    'category' => $cqtegory,
-                    'storage_position' => $storage_position,
-                    'domain' => config('app.url'),
-                    'link_path' => 'storage/' . $up_dir,
-                    'storage_name' => basename($new_file),
-
-                ];
-                $inser_data['storage_path'] = $full_path . '/' . $up_dir;
-                $inser_data['url'] = $inser_data['domain'] . '/' . $inser_data['link_path'] . '/' . $inser_data['storage_name'];
-
-                try {
-                    $rest_insert_attachment_table = $this->m_attachment->saveData($inser_data);
-                    // 如果限制了图片宽度，就进行裁剪
-                    if ($max_width && ( $type != 'gif')) {
-
-                        // 此类中封装的函数，用于裁剪图片
-                        $this->reduceSize($inser_data['storage_path'] . '/' . $inser_data['storage_name'], $max_width);
-                    }
-                    $this->data = array_merge($inser_data, ['attachment_id' => $rest_insert_attachment_table->id]);
-                } catch (\Exception $e) {
-                    $this->message = $e;
-                }
-
-            } else {
-                $this->message = '图片格式错误';
-                $this->status = false;
-            }
-
-        } else {
-            $this->status = false;
-            $this->message = 'base64 编码格式不正确';
-        }
-        return ['status' => $this->status, 'data' => $this->data, 'message' => $this->message];
-
-    }
-
-    public function uploadFile($file, $user_id)
-    {
-        $originalName = $file->getClientOriginalName();
-        $extension = explode('.', $originalName)[1];
+        $up_dir = $this->base_image_up_dir . '/' . $category;
 
         if ($file) {
-            $file_name = md5($file->getFilename()) . rand(1000, 100000) . '.' . $extension;
-            $file->storeAs($this->base_file_up_dir, $file_name);
+            $rest_upload = $this->data = $file->store($up_dir);
+            if ($extend) {
+                $old_file = storage_path() . '/app/public/' . $rest_upload;
+                $new_file = explode('.', $old_file)[0] . '.' . $extend;
+                rename($old_file, $new_file);
+                $storage_name = basename($new_file);
+            } else {
+                $storage_name = basename($rest_upload);
+            }
         } else {
             $this->status = false;
             $this->message = '请选择要上传的文件';
             return ['status' => $this->status, 'data' => $this->data, 'message' => $this->message];
         }
-        $min_type = $file->getClientMimeType();
         $inser_data = [
             'user_id' => $user_id,
             'ip' => '',
-            'original_name' => $originalName,
+            'file_type' => $file_type,
+            'original_name' => $file->getClientOriginalName(),
             'mime_type' => $min_type,
             'size' => round($file->getClientSize() / 1000, 2),
-            'type' => 'files',
-            'storage_position' => 'local',
+            'category' => $category,
             'domain' => config('app.url'),
-            'link_path' => 'storage/' . $this->base_file_up_dir,
-            'storage_name' => $file_name
+            'link_path' => 'storage/' . $up_dir,
+            'storage_name' => $storage_name,
         ];
 
-
-        $inser_data['storage_path'] = storage_path() . '/app/public/' . $this->base_file_up_dir;
+        $inser_data['storage_path'] = storage_path() . '/app/public/' . $up_dir;
         $inser_data['url'] = $inser_data['domain'] . '/' . $inser_data['link_path'] . '/' . $inser_data['storage_name'];
 
         try {

@@ -37,7 +37,7 @@ export default {
         },
         format: ['jpg', 'jpeg', 'png', 'gif'],
         max_size: 500,
-        upload_url: window.uploadUrl.uploadToLocaleUrl + '/lucmsee',
+        upload_url: window.uploadUrl.uploadToLocaleUrl + '/pic/lucmsee',
         file_name: 'file',
         multiple: true,
         file_num: 10,
