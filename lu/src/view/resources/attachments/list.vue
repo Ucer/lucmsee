@@ -10,7 +10,7 @@
     </ButtonGroup>
     </Col>
     <Col :xs="3" :lg="3">
-    <Select v-model="searchForm.enable" placeholder="请选择文件类型">
+    <Select v-model="searchForm.file_type" placeholder="请选择文件类型">
       <Option value="" key="">全部</Option>
       <Option v-for="(item,key) in tableStatus.file_type" :value="key" :key="key">{{ item }}</Option>
     </Select>
@@ -66,8 +66,8 @@
     </div>
   </Row>
   <upload-image-component v-if='uploadImageModal.show' @on-upload-image-modal-hide="uploadImageModalHide"></upload-image-component>
-  <upload-file-component v-if='uploadFileModal.show' @on-upload-image-modal-hide="uploadFileModalHide"></upload-file-component>
-  <upload-video-component v-if='uploadVideoModal.show' @on-upload-image-modal-hide="uploadVideoModalHide"></upload-video-component>
+  <upload-file-component v-if='uploadFileModal.show' @on-upload-file-modal-hide="uploadFileModalHide"></upload-file-component>
+  <upload-video-component v-if='uploadVideoModal.show' @on-upload-video-modal-hide="uploadVideoModalHide"></upload-video-component>
 
 </div>
 </template>
@@ -95,7 +95,9 @@ export default {
   data() {
     return {
       searchForm: {
-        order_by: 'created_at,desc'
+        order_by: 'created_at,desc',
+        file_type: '',
+        category: ''
       },
       tableLoading: false,
       tableStatus: {

@@ -58,7 +58,7 @@ class HttpRequest {
     instance.interceptors.response.use(res => {
       this.destroy(url)
       let resData = res.data
-      if (!resData.hasOwnProperty('status') | (resData.status != 'success')) {
+      if (!resData.hasOwnProperty('status') || (resData.status != 'success')) {
         let response_url = res.config.url
         var noSuccessUrlArray = config.noSuccessUrlArray;
         for (var i = 0; i < noSuccessUrlArray.length; i++) {
