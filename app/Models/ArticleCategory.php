@@ -36,7 +36,7 @@ class ArticleCategory extends Model
     {
         try {
             $this->delete();
-            return $this->baseSucceed([], '系统配置删除成功');
+            return $this->baseSucceed([], '文章分类删除成功');
         } catch (\Exception $e) {
             return $this->baseFailed('内部错误');
         }

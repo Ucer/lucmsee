@@ -15,7 +15,7 @@ class AttachmentsController extends AdminController
         $this->middleware('auth:api');
     }
 
-    public function list(Request $request, Attachment $attachment)
+    public function list(Request $request, Attachment $model)
     {
         $per_page = $request->get('per_page', 10);
 
@@ -23,28 +23,28 @@ class AttachmentsController extends AdminController
 
         $file_type = isset_and_not_empty($search_data, 'file_type');
         if ($file_type) {
-            $attachment = $attachment->columnEqualSearch('file_type', $file_type);
+            $model = $model->columnEqualSearch('file_type', $file_type);
         }
         $category = isset_and_not_empty($search_data, 'category');
         if ($category) {
-            $attachment = $attachment->columnLikeSearch('category', $category);
+            $model = $model->columnLikeSearch('category', $category);
         }
         $mime_type = isset_and_not_empty($search_data, 'mime_type');
         if ($mime_type) {
-            $attachment = $attachment->columnLikeSearch('mime_type', $mime_type);
+            $model = $model->columnLikeSearch('mime_type', $mime_type);
         }
         $original_name = isset_and_not_empty($search_data, 'original_name');
         if ($original_name) {
-            $attachment = $attachment->columnLikeSearch('original_name', '%' . $original_name);
+            $model = $model->columnLikeSearch('original_name', '%' . $original_name);
         }
         $order_by = isset_and_not_empty($search_data, 'order_by');
         if ($order_by) {
             $order_by = explode(',', $order_by);
-            $attachment = $attachment->orderBy($order_by[0], $order_by[1]);
+            $model = $model->orderBy($order_by[0], $order_by[1]);
         }
 
-        $attachment = $attachment->with('user')->paginate($per_page);
-        return new CommonCollection($attachment);
+        $model = $model->with('user')->paginate($per_page);
+        return new CommonCollection($model);
     }
 
 

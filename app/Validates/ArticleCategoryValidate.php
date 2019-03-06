@@ -3,6 +3,7 @@
 namespace App\Validates;
 
 use App\Handlers\FunctionHandler;
+use App\Models\Article;
 use App\Models\ArticleCategory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -75,6 +76,8 @@ class  ArticleCategoryValidate extends Validate
     {
         $authUser = Auth::user();
         if (!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
+        $children_article_count = Article::where('article_category_id',$model->id)->count();
+        if($children_article_count) return $this->baseFailed('该分类下有文章，请先删除文章再操作');
         return $this->baseSucceed($this->data, $this->message);
     }
 

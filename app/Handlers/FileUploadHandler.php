@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Storage;
 class FileUploadHandler
 {
     protected $status = true;
-    protected $message = '图片上传成功';
+    protected $message = '附件上传成功';
     protected $data = [];
-    protected $base_image_up_dir = 'images';
+    protected $base_image_up_dir = 'uploads';
     protected $base_file_up_dir = 'files';
     protected $m_attachment;
 
