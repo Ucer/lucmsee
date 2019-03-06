@@ -34,7 +34,6 @@ class CreateArticlesTable extends Migration
             $table->enum('access_type',['pub','pri','pwd'])->default('pub')->comment('访问权限类型：公开、私密、密码访问');
             $table->string('access_value')->default('')->comment('访问权限值：pub->不公开的用户ids 逗号隔开,为空则所有人都能访问,pri->公开的用户ids 逗号隔开，为空则只有作者能访问,pwd->访问密码，aes-ecb-128加密方式加密');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->index('weight');
             $table->index('article_category_id');

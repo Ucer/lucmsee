@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Resources\CommonCollection;
 use App\Http\Resources\UserResource;
-use App\Models\AdminMessage;
 use App\Validates\UserValidate;
 use App\Models\User;
 use Illuminate\Http\Request;

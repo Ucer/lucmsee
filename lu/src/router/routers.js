@@ -170,6 +170,13 @@ export default[
           title: '文章分类'
         },
         component: () => import ('@/view/news-system/article_categories/list.vue')
+      },{
+        path: '/dashboard/tagsManage',
+        name: 'tagsManage',
+        meta: {
+          title: '标签管理'
+        },
+        component: () => import ('@/view/news-system/tags/list.vue')
       }
     ]
   }, {

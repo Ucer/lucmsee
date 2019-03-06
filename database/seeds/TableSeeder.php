@@ -21,7 +21,9 @@ class TableSeeder extends Seeder
             ['table_name' => 'roles', 'table_name_cn' => '角色表'],
             ['table_name' => 'model_has_roles', 'table_name_cn' => '角色关联表'],
             ['table_name' => 'attachments', 'table_name_cn' => '附件表'],
-            ['table_name' => 'system_configs', 'table_name_cn' => '附件表'],
+            ['table_name' => 'system_configs', 'table_name_cn' => '系统配置表'],
+            ['table_name' => 'article_categories', 'table_name_cn' => '文章分类表'],
+            ['table_name' => 'articles', 'table_name_cn' => '文章表'],
         ];
         \App\Models\Table::insert($data);
     }

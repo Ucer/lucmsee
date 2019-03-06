@@ -10,8 +10,6 @@ use Auth;
 
 class ArticlesController extends AdminController
 {
-    use TableStatusTrait;
-
     public function __construct()
     {
         parent::__construct();
