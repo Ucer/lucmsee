@@ -16,6 +16,7 @@ export default {
   imageList: '图片列表',
   newsSystem: '新闻系统',
   articleCategory: '文章分类',
+  tagsManage: '标签管理',
 
   edit: '修改',
   add: '添加',

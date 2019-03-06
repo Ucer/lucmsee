@@ -15,12 +15,6 @@
     <Col :xs="8" :lg="16">
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
-    <Col :xs="12" :lg="4" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入权限名称..." v-model="searchForm.name"></Input>
-    </Col>
-    <Col :xs="3" :lg="2" class="hidden-mobile">
-    <Button type="primary" icon="ios-search" @click="getTableDataExcute()">{{ $t('search') }}</Button>
-    </Col>
   </Row>
   <br>
   <Row>

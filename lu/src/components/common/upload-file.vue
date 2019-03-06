@@ -57,8 +57,8 @@
       <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
     </template>
   </div>
-  <Upload ref="upload"  :data="uploadConfig.data" :show-upload-list="false" :default-file-list="uploadConfig.default_list" :on-success="handleSuccess" :on-error="handleError" :headers="uploadConfig.headers" :format="uploadConfig.format" :max-size="uploadConfig.max_size" :on-format-error="handleFormatError"
-    :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" :multiple="uploadConfig.multiple" :name="uploadConfig.file_name" type="drag" :action="uploadConfig.upload_url" style="display: inline-block;width:58px;">
+  <Upload ref="upload" :data="uploadConfig.data" :show-upload-list="false" :default-file-list="uploadConfig.default_list" :on-success="handleSuccess" :on-error="handleError" :headers="uploadConfig.headers" :format="uploadConfig.format" :max-size="uploadConfig.max_size"
+    :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" :multiple="uploadConfig.multiple" :name="uploadConfig.file_name" type="drag" :action="uploadConfig.upload_url" style="display: inline-block;width:58px;">
     <div style="width: 58px;height:58px;line-height: 58px;">
       <Icon type="ios-camera" size="20"></Icon>
     </div>
@@ -97,7 +97,7 @@ export default {
         file_name: 'file',
         multiple: false,
         file_num: 0,
-        data:[],
+        data: [],
         default_list: [{
             name: '',
             attachment_id: 0,
@@ -142,6 +142,25 @@ export default {
       this.ViewImage()
     },
     handleSuccess(res, file) {
+
+      if (!res.hasOwnProperty('status') || (res.status != 'success')) {
+        this.$Notice.error({
+          title: '出错了，请删除后重新上传',
+          desc: res.message
+        })
+        return false
+      }
+
+      let errorInfo = {
+        status: 200,
+        statusText: '接口返回非success',
+        responseData: resData,
+        request: {
+          responseURL: response_url
+        }
+      }
+
+
       file.url = res.data.url
       file.name = res.data.original_name
       file.attachment_id = res.data.attachment_id
@@ -152,13 +171,9 @@ export default {
       this.ViewImage()
     },
     handleError(error, file) {
-      console.log(error)
-
-      const  response  = JSON.parse(JSON.stringify(error))
-      console.log(JSON.stringify(error))
       this.$Notice.error({
         title: '出错了',
-        desc: error
+        desc: '服务内部错误'
       })
     },
 

@@ -1,0 +1,96 @@
+<template>
+<div>
+  <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
+    <p slot="header">{{ $t('edit') }}</p>
+    <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
+      <FormItem label="标签名称" prop="name">
+        <Input v-model="formData.name" placeholder="请输入"></Input>
+      </FormItem>
+    </Form>
+    <div slot="footer">
+      <Button type="text" @click="cancel">{{ $t('cancel') }}</Button>
+      <Button type="primary" @click="editExcute" :loading='saveLoading'>{{ $t('save') }} </Button>
+    </div>
+    <div class="demo-spin-container" v-if='spinLoading === true'>
+      <Spin fix>
+        <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
+        <div>{{ $t('table_loading') }}</div>
+      </Spin>
+    </div>
+  </Modal>
+</div>
+</template>
+<script>
+import {
+  edit,
+  getInfoById
+} from '@/api/tag'
+
+export default {
+  props: {
+    modalId: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {
+      modalShow: true,
+      saveLoading: false,
+      spinLoading: true,
+      formData: {
+        name: ''
+      },
+      rules: {
+        name: [{
+          required: true,
+          message: '请填写标签限名称',
+          trigger: 'blur'
+        }],
+      },
+    }
+  },
+  mounted() {
+    if (this.modalId > 0) {
+      this.getInfoByIdExcute()
+    }
+  },
+  methods: {
+    getInfoByIdExcute() {
+      let t = this;
+      getInfoById(t.modalId).then(res => {
+        let res_data = res.data
+        t.formData = {
+          id: res_data.id,
+          name: res_data.name
+        }
+        t.spinLoading = false;
+      })
+
+    },
+    editExcute() {
+      let t = this
+      t.$refs.formData.validate((valid) => {
+        if (valid) {
+          t.saveLoading = true
+          edit(t.formData, t.formData.id).then(res => {
+            t.saveLoading = false
+            t.modalShow = false
+            t.$emit('on-edit-modal-success')
+            t.$emit('on-edit-modal-hide')
+            t.$Notice.success({
+              title: res.message
+            })
+          }, function(error) {
+            t.saveLoading = false;
+          })
+        }
+      })
+    },
+    cancel() {
+      this.modalShow = false
+      this.$emit('on-edit-modal-hide')
+    }
+  }
+}
+</script>

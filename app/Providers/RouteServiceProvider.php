@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\StatusMap;
 use App\Models\SystemConfig;
 use App\Models\Table;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -56,6 +57,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('article_category', function ($value) {
             return ArticleCategory::findOrFail($value);
+        });
+        Route::bind('tag', function ($value) {
+            return Tag::findOrFail($value);
         });
     }
 

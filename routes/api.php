@@ -1,6 +1,6 @@
 <?php
 
-    /**       ==========================          基本APi           ====================   */
+/**       ==========================          基本APi           ====================   */
 Route::namespace('Api')->group(function () {
 
     Route::get('get_captcha', 'OtherController@getCaptcha')->name('other.get_captcha');
@@ -92,4 +92,11 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/article_categories/all_article_categories', 'ArticleCategoriesController@getAllCategories')->name('article_categories.all_article_categories');
     Route::get('admin/article_categories/{article_category}', 'ArticleCategoriesController@show')->name('article_categories.show');
     Route::delete('admin/article_categories/{article_category}', 'ArticleCategoriesController@destroy')->name('article_categories.destroy');
+
+
+    Route::get('admin/tags', 'TagsController@list')->name('tags.list');
+    Route::post('admin/tags', 'TagsController@store')->name('tags.store');
+    Route::patch('admin/tags/{tag}', 'TagsController@update')->name('tags.update');
+    Route::get('admin/tags/{tag}', 'TagsController@show')->name('tags.show');
+    Route::delete('admin/tags/{tag}', 'TagsController@destroy')->name('tags.destroy');
 });

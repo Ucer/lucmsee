@@ -3,12 +3,29 @@
 namespace App\Models;
 
 
-class ArticleCategory extends Model
-{
 
+class Article extends Model
+{
     protected $fillable = [
-        'name', 'pid', 'enable', 'weight', 'description'
+        'title', 'slug', 'keywords', 'description', 'cover_image', 'content', 'user_id', 'article_category_id', 'view_count', 'vote_count', 'comment_count',
+        'collection_count', 'enable', 'recommend', 'top', 'weight', 'access_type', 'access_value'
     ];
+
+    /**
+     * Set the title and the readable slug.
+     *
+     * @param $value
+     */
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = $value;
+
+        if (!config('services.youdao.appKey') || !config('services.youdao.appSecret')) {
+            $this->setUniqueSlug($value, str_random(7));
+        } else {
+            $this->setUniqueSlug(translug($value), '');
+        }
+    }
 
     public function storeAction($input)
     {
@@ -36,7 +53,7 @@ class ArticleCategory extends Model
     {
         try {
             $this->delete();
-            return $this->baseSucceed([], '文章分类删除成功');
+            return $this->baseSucceed([], '文章删除成功');
         } catch (\Exception $e) {
             return $this->baseFailed('内部错误');
         }

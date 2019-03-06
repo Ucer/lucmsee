@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use DB;
 
-class ArticleCategory extends Model
+class Tag extends Model
 {
-
     protected $fillable = [
-        'name', 'pid', 'enable', 'weight', 'description'
+        'name'
     ];
+
 
     public function storeAction($input)
     {
         try {
-
             $this->fill($input)->save();
             return $this->baseSucceed([], '操作成功');
         } catch (\Exception $e) {
@@ -34,10 +34,13 @@ class ArticleCategory extends Model
 
     public function destroyAction()
     {
+        DB::beginTransaction();
         try {
             $this->delete();
-            return $this->baseSucceed([], '文章分类删除成功');
+            DB::commit();
+            return $this->baseSucceed([], '删除成功');
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->baseFailed('内部错误');
         }
     }
