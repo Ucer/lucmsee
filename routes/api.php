@@ -93,10 +93,15 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/article_categories/{article_category}', 'ArticleCategoriesController@show')->name('article_categories.show');
     Route::delete('admin/article_categories/{article_category}', 'ArticleCategoriesController@destroy')->name('article_categories.destroy');
 
-
     Route::get('admin/tags', 'TagsController@list')->name('tags.list');
     Route::post('admin/tags', 'TagsController@store')->name('tags.store');
     Route::patch('admin/tags/{tag}', 'TagsController@update')->name('tags.update');
     Route::get('admin/tags/{tag}', 'TagsController@show')->name('tags.show');
     Route::delete('admin/tags/{tag}', 'TagsController@destroy')->name('tags.destroy');
+
+    Route::get('admin/articles', 'ArticlesController@list')->name('articles.list');
+    Route::post('admin/articles', 'ArticlesController@store')->name('articles.store');
+    Route::patch('admin/articles/{tag}', 'ArticlesController@update')->name('articles.update');
+    Route::get('admin/articles/{tag}', 'ArticlesController@show')->name('articles.show');
+    Route::delete('admin/articles/{tag}', 'ArticlesController@destroy')->name('articles.destroy');
 });

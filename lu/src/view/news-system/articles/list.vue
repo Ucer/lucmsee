@@ -2,11 +2,11 @@
 <template>
 <div>
   <Row :gutter="24">
-    <Col :xs="6" :lg="6">
+    <Col :xs="1" :lg="1">
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="3" :lg="3">
-    <Select v-model="searchForm.article_category_id" placeholder="请选择文章分类">
+    <Select v-model="searchForm.article_category_id" filterable placeholder="请选择文章分类">
       <Option value="" key="">全部</Option>
       <Option v-for="(item,key) in articleCategories" :value="item.id">{{ item.name }} </Option>
     </Select>
@@ -70,8 +70,8 @@
     </div>
   </Row>
 
-  <add-component v-if='addModal.show' :tableStatus_is_admin="tableStatus.is_admin" @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
-  <edit-component v-if='editModal.show' :tableStatus_is_admin="tableStatus.is_admin" :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component>
+  <add-component v-if='addModal.show' :articleCategories="articleCategories" :tableStatus_recommend="tableStatus.recommend" :tableStatus_top="tableStatus.top" :tableStatus_enable="tableStatus.enable" @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
+  <edit-component v-if='editModal.show' :tableStatus_recommend="tableStatus.recommend" :tableStatus_top="tableStatus.top" :tableStatus_enable="tableStatus.enable" :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component>
 </div>
 </template>
 
@@ -87,9 +87,6 @@ import EditComponent from './components/edit'
 import {
   getAllCategories
 } from '@/api/article_category'
-import {
-  getTableStatus
-} from '@/api/common'
 import {
   getTableStatus,
   switchEnable
@@ -150,7 +147,7 @@ export default {
           title: '分类',
           minWidth: 90,
           slot: 'article_category'
-},
+        },
         {
           title: '启用状态',
           key: 'enable',
@@ -194,8 +191,10 @@ export default {
     getTableStatusExcute(params) {
       let t = this
       getTableStatus(params).then(res => {
-        t.tableStatus.file_type = res.data.file_type
-        t.tableStatus.category = res.data.category
+        t.tableStatus.access_type = res.data.access_type
+        t.tableStatus.enable = res.data.enable
+        t.tableStatus.recommend = res.data.recommend
+        t.tableStatus.top = res.data.top
         t.getTableDataExcute(t.feeds.current_page)
       })
     },
@@ -241,7 +240,6 @@ export default {
       let t = this
       getAllCategories().then(res => {
         t.articleCategories = res.data
-        this.getInfoByIdExcute()
       })
     },
   }

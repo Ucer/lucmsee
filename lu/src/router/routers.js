@@ -164,19 +164,26 @@ export default[
     },
     children: [
       {
-        path: '/dashboard/articleCategories',
-        name: 'articleCategory',
-        meta: {
-          title: '文章分类'
-        },
-        component: () => import ('@/view/news-system/article_categories/list.vue')
-      },{
         path: '/dashboard/tagsManage',
         name: 'tagsManage',
         meta: {
           title: '标签管理'
         },
         component: () => import ('@/view/news-system/tags/list.vue')
+      }, {
+        path: '/dashboard/articleCategories',
+        name: 'articleCategory',
+        meta: {
+          title: '文章分类'
+        },
+        component: () => import ('@/view/news-system/article_categories/list.vue')
+      }, {
+        path: '/dashboard/articleList',
+        name: 'articleList',
+        meta: {
+          title: '文章列表'
+        },
+        component: () => import ('@/view/news-system/articles/list.vue')
       }
     ]
   }, {
