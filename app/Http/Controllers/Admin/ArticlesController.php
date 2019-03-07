@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Resources\CommonCollection;
 use App\Models\Article;
 use App\Traits\TableStatusTrait;
 use App\Validates\ArticleValidate;
@@ -19,40 +20,27 @@ class ArticlesController extends AdminController
     public function list(Request $request, Article $model)
     {
         $per_page = $request->get('per_page', 10);
-
         $search_data = json_decode($request->get('search_data'), true);
+        $tag_id = 0;
+        $user_id = 0;
+        $filter = isset_and_not_empty($search_data, 'filter');
         $title = isset_and_not_empty($search_data, 'title');
-        if ($title) {
-            $model = $model->columnLikeSearch('title', '%' . $title);
-        }
-        $enable = isset_and_not_empty($search_data, 'enable');
-        if ($enable) {
-            $model = $model->columnEqualSearch('enable', $enable);
-        }
         $article_category_id = isset_and_not_empty($search_data, 'article_category_id');
-        if ($article_category_id) {
-            $model = $model->columnEqualSearch('article_category_id', $article_category_id);
-        }
         $recommend = isset_and_not_empty($search_data, 'recommend');
-        if ($recommend) {
-            $model = $model->columnEqualSearch('recommend', $recommend);
-        }
         $top = isset_and_not_empty($search_data, 'top');
-        if ($top) {
-            $model = $model->columnEqualSearch('top', $top);
-        }
-        $access_type = isset_and_not_empty($search_data, 'access_type');
-        if ($access_type) {
-            $model = $model->columnEqualSearch('access_type', $access_type);
-        }
+        $enable = isset_and_not_empty($search_data, 'enable');
+        $order = 'created_at';
+        $order_type = 'desc';
+
         $order_by = isset_and_not_empty($search_data, 'order_by');
         if ($order_by) {
             $order_by = explode(',', $order_by);
-            $model = $model->orderBy($order_by[0], $order_by[1]);
+            $order = $order_by[0];
+            $order_type = $order_by[1];
         }
-        $list = $model->paginate($per_page);
 
-        return $this->success($list);
+        $list = $model->getArticlesWithFilter($filter, $user_id, $title, $tag_id, $article_category_id, $recommend, $top, $enable, $order, $order_type, $per_page);
+        return new CommonCollection($list);
     }
 
     public function show(Article $model)

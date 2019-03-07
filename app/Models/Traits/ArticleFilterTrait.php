@@ -17,12 +17,12 @@ trait ArticleFilterTrait
      * @param int $limit
      * @return mixed
      */
-    public function getArticlesWithFilter($filter, $user_id = 0, $title = '', $tag_id = 0, $category_id = 0, $recommend = '', $top = '', $enable = '', $year = '', $month = '', $order = 'created_at', $order_type = 'desc', $limit = 15)
+    public function getArticlesWithFilter($filter, $user_id = 0, $title = '', $tag_id = 0, $category_id = 0, $recommend = '', $top = '', $enable = '', $order = 'created_at', $order_type = 'desc', $limit = 15)
     {
         $filter = $this->getArticleFilter($filter);
 
-        return $this->applyFilter($filter, $user_id, $title, $tag_id, $category_id, $recommend, $top, $enable, $year, $month, $order, $order_type)
-            ->with('user', 'category', 'tags')
+        return $this->applyFilter($filter, $user_id, $title, $tag_id, $category_id, $recommend, $top, $enable, $order, $order_type)
+            ->with('user', 'articleCategory', 'tags')
             ->paginate($limit);
     }
 
@@ -36,17 +36,8 @@ trait ArticleFilterTrait
             ->paginate($limit);
     }
 
-    public function tags()
-    {
-        return $this->morphToMany('App\Models\Tag', 'model', 'model_has_tags', 'model_id');
-    }
 
-    public function syncTag($tags = '')
-    {
-        return $this->tags()->sync($tags);
-    }
-
-    protected function applyFilter($filter, $user_id, $title, $tag_id, $category_id, $recommend, $top, $enable, $year, $month, $order, $order_type)
+    protected function applyFilter($filter, $user_id, $title, $tag_id, $category_id, $recommend, $top, $enable, $order, $order_type)
     {
         $query = $this;
         if ($user_id) {
@@ -81,24 +72,9 @@ trait ArticleFilterTrait
         if ($title) {
             $query = $query->titleSearch($title);
         }
-        if ($year) {
-            $query = $query->yearSearch($year);
-        }
-        if ($month) {
-            $query = $query->monthSearch($month);
-        }
 
-        switch ($filter) {
-            case 'public' :
-                $query = $query->withAccessType('PUB');
-                break;
-            case 'private':
-                $query = $query->withAccessType('PRI');
-                break;
-            case 'password':
-                $query = $query->withAccessType('PWD');
-            case 'default':
-                break;
+        if ($filter) {
+            $query = $query->withAccessType('PRI');
         }
         return $query->orderBy($order, $order_type);
     }
@@ -113,19 +89,9 @@ trait ArticleFilterTrait
         return $query->where('title', 'like', '%' . $title . '%');
     }
 
-    public function scopeYearSearch($query, $year)
+    public function scopeArticleCategorySearch($query, $category_id)
     {
-        return $query->where('created_year', '=', $year);
-    }
-
-    public function scopeMonthSearch($query, $month)
-    {
-        return $query->where('created_month', '=', $month);
-    }
-
-    public function scopeCategorySearch($query, $category_id)
-    {
-        return $query->where('category_id', '=', $category_id);
+        return $query->where('article_category_id', '=', $category_id);
     }
 
     public function scopeRecommendSearch($query, $recommend)
@@ -150,11 +116,11 @@ trait ArticleFilterTrait
 
     protected function getArticleFilter($request_filter)
     {
-        $filters = ['public', 'private', 'password'];
+        $filters = ['pub', 'pri', 'pwd'];
         if (in_array($request_filter, $filters)) {
             return $request_filter;
         }
-        return 'default';
+        return '';
     }
 
 }

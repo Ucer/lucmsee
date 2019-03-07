@@ -3,28 +3,34 @@
 namespace App\Models;
 
 
+use App\Models\Traits\ArticleFilterTrait;
 
 class Article extends Model
 {
+    use ArticleFilterTrait;
     protected $fillable = [
         'title', 'slug', 'keywords', 'description', 'cover_image', 'content', 'user_id', 'article_category_id', 'view_count', 'vote_count', 'comment_count',
         'collection_count', 'enable', 'recommend', 'top', 'weight', 'access_type', 'access_value'
     ];
 
-    /**
-     * Set the title and the readable slug.
-     *
-     * @param $value
-     */
-    public function setTitleAttribute($value)
+    public function user()
     {
-        $this->attributes['title'] = $value;
+        return $this->belongsTo('App\Models\User');
+    }
 
-        if (!config('services.youdao.appKey') || !config('services.youdao.appSecret')) {
-            $this->setUniqueSlug($value, str_random(7));
-        } else {
-            $this->setUniqueSlug(translug($value), '');
-        }
+    public function articleCategory()
+    {
+        return $this->belongsTo('App\Models\ArticleCategory');
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany('App\Models\Tag', 'model', 'model_has_tags', 'model_id');
+    }
+
+    public function syncTag($tags = '')
+    {
+        return $this->tags()->sync($tags);
     }
 
     public function storeAction($input)
