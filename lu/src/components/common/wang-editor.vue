@@ -1,55 +1,21 @@
 <style lang="less">
 .w-e-text {
     overflow-y: hidden;
+    padding: 0;
 }
 .w-e-text-container .w-e-text {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .w-e-toolbar .w-e-menu {
     position: relative;
     text-align: center;
-    padding: 0 10px;
     cursor: pointer;
+    padding-right: 20px;
+    padding-left: 0;
 }
 .wang-editor-toolbar.w-e-toolbar {
     max-width: 100%;
-}
-.w-e-text-container {
-    /*滚动条样式*/
-    .w-e-text::-webkit-scrollbar {
-        /*滚动条整体样式*/
-        width: 1px;
-        /*高宽分别对应横竖滚动条的尺寸*/
-        height: 1px;
-    }
-
-    .w-e-text::-webkit-scrollbar-thumb {
-        /*滚动条里面小方块*/
-        background-color: #8c0776;
-    }
-    .w-e-text::-webkit-scrollbar-track {
-        /*滚动条里面轨道*/
-        /* -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); */
-        background: white;
-    }
-}
-
-/*滚动条样式*/
-.w-e-toolbar::-webkit-scrollbar {
-    /*滚动条整体样式*/
-    width: 1px;
-    /*高宽分别对应横竖滚动条的尺寸*/
-    height: 1px;
-}
-
-.w-e-toolbar::-webkit-scrollbar-thumb {
-    /*滚动条里面小方块*/
-    background-color: #fff;
-}
-.w-e-toolbar::-webkit-scrollbar-track {
-    /*滚动条里面轨道*/
-    /* -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); */
-    background: white;
+    border: none;
 }
 </style>
 <template>

@@ -2,7 +2,7 @@
 <template>
 <div>
   <Row :gutter="24">
-    <Col :xs="1" :lg="1">
+    <Col :xs="5" :lg="1">
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="3" :lg="3">

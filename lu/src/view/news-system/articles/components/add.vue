@@ -9,61 +9,70 @@
 </style>
 <template>
 <div>
-  <Modal v-model="modalShow" :closable='false' :mask-closable=false width="100" class-name="article-modal">
+  <Modal v-model="modalShow" :closable='false' :mask-closable=false width="70" class-name="article-modal">
     <p slot="header">{{ $t('add') }}</p>
 
-    <Row>
-      <Col span="16">
-      <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
-        <FormItem label="分类：">
-          <Select v-model="formData.category_id" filterable placeholder="请选择文章分类">
-            <Option v-for="(item,key) in articleCategories" :value="item.id" :key="key">{{ item.name }} </Option>
-          </Select>
-        </FormItem>
-        <FormItem label="标题：" prop="title">
-          <Input v-model="formData.title"></Input>
-        </FormItem>
-        <FormItem label="封面：">
-          <upload v-model="formData.cover_image" :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
-        </FormItem>
-        <FormItem label="关键词：" prop="keywords">
-          <Input type="textarea" v-model="formData.keywords" placeholder="以英文逗号隔开"></Input>
-        </FormItem>
-        <FormItem label="描述：" prop="description">
-          <Input type="textarea" v-model="formData.descriptions" placeholder="请输入"></Input>
-        </FormItem>
-        <FormItem label="文章内容：">
-          <wang-editor v-model="formData.content" @on-change="editContentChange" :upload-config='wangUploadConfig'></wang-editor>
-        </FormItem>
-      </Form>
-      </Col>
-
-      <Col span="8" class="padding-left-20">
-      <Card>
-        <p slot="title">
-          <Icon type="paper-airplane"></Icon>
-          其它信息
-        </p>
-        <Form label-position="right" :label-width="80">
-          <FormItem label="启用状态：">
-            <RadioGroup v-model="formData.enable">
-              <Radio v-for="(item,key) in tableStatus_enable" :label="key">{{ item }}</Radio>
+    <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
+      <FormItem label="分类">
+        <Select v-model="formData.category_id" filterable placeholder="请选择文章分类">
+          <Option v-for="(item,key) in articleCategories" :value="item.id" :key="key">{{ item.name }} </Option>
+        </Select>
+      </FormItem>
+      <FormItem label="标题" prop="title">
+        <Input v-model="formData.title"></Input>
+      </FormItem>
+      <FormItem label="封面">
+        <upload v-model="formData.cover_image" :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
+      </FormItem>
+      <FormItem label="关键词" prop="keywords">
+        <Input type="textarea" v-model="formData.keywords" placeholder="以英文逗号隔开"></Input>
+      </FormItem>
+      <FormItem label="描述" prop="description">
+        <Input type="textarea" v-model="formData.descriptions" placeholder="请输入"></Input>
+      </FormItem>
+      <FormItem label="状态">
+        <RadioGroup v-model="formData.enable">
+          <Radio v-for="(item,key) in tableStatus_enable" :label="key">{{ item }}</Radio>
+        </RadioGroup>
+      </FormItem>
+      <FormItem label="置顶">
+        <RadioGroup v-model="formData.top">
+          <Radio v-for="(item,key) in tableStatus_top" :label="key">{{ item }}</Radio>
+        </RadioGroup>
+      </FormItem>
+      <FormItem label="推荐">
+        <RadioGroup v-model="formData.recommend">
+          <Radio v-for="(item,key) in tableStatus_recommend" :label="key">{{ item }}</Radio>
+        </RadioGroup>
+      </FormItem>
+      <FormItem label="访问权限">
+        <Icon type="eye"></Icon><b>{{ Openness }}</b>
+        <Button v-show="!editOpenness" size="small" type="text" @click="handleEditOpenness"><a>修改</a></Button>
+        <transition name="openness-con">
+          <div v-show="editOpenness" class="publish-time-picker-con">
+            <RadioGroup v-model="formData.access_type" vertical>
+              <Radio label="pub" title="所有人可见"> 公开</Radio>
+              <Radio label="pwd" title="需要密码验证"> 密码
+                <Input v-show="formData.access_type === 'pwd'" v-model="formData.access_value" style="width:50%" size="small" placeholder="请输入密码" />
+              </Radio>
+              <Radio label="pri">私密</Radio>
             </RadioGroup>
-          </FormItem>
-          <FormItem label="是否置顶：">
-            <RadioGroup v-model="formData.top">
-              <Radio v-for="(item,key) in tableStatus_top" :label="key">{{ item }}</Radio>
-            </RadioGroup>
-          </FormItem>
-          <FormItem label="是否推荐：">
-            <RadioGroup v-model="formData.recommend">
-              <Radio v-for="(item,key) in tableStatus_recommend" :label="key">{{ item }}</Radio>
-            </RadioGroup>
-          </FormItem>
-        </Form>
-      </Card>
-      </Col>
-    </Row>
+            <div>
+              <Button type="primary" @click="handleSaveOpenness">确认</Button>
+            </div>
+          </div>
+        </transition>
+      </FormItem>
+      <FormItem label="标签：">
+        <Select v-model="formData.tags" multiple filterable placeholder="请选择文章标签" style="width: auto">
+          <Option v-for="item in articleTags" :value="item.id" :key="item.id">{{ item.name }} </Option>
+        </Select>
+        <Input v-model="newTagName" search enter-button="新建" placeholder="标签名字" @on-search="addTagExcute" style="width: auto"></Input>
+      </FormItem>
+      <FormItem label="文章内容">
+        <wang-editor v-model="formData.content" @on-change="editContentChange" :upload-config='wangUploadConfig'></wang-editor>
+      </FormItem>
+    </Form>
     <div slot="footer">
       <Button type="text" @click="cancel">{{ $t('cancel') }}</Button>
       <Button type="primary" @click="addExcute" :loading='saveLoading'>{{ $t('save') }} </Button>
@@ -75,13 +84,15 @@
 import {
   add
 } from '@/api/article'
-
 import Upload from '_c/common/upload'
-
 import WangEditor from '_c/common/wang-editor'
+import {
+  addTag,
+  getTagList
+} from '@/api/tag'
 
 export default {
-  props: ['articleCategories','tableStatus_enable', 'tableStatus_recommend', 'tableStatus_top'],
+  props: ['articleCategories', 'tableStatus_enable', 'tableStatus_recommend', 'tableStatus_top'],
   components: {
     Upload,
     WangEditor
@@ -110,6 +121,10 @@ export default {
     return {
       modalShow: true,
       saveLoading: false,
+      editOpenness: false,
+      Openness: '公开',
+      articleTags: [],
+      newTagName: '',
       formData: {
         title: '',
         cover_image: {
@@ -124,7 +139,7 @@ export default {
         weight: 20,
         top: 'F',
         recommend: 'F',
-        access_type: 'PUB',
+        access_type: 'pub',
         access_value: '',
         tags: 0,
       },
@@ -179,6 +194,9 @@ export default {
       },
     }
   },
+  created() {
+    this.getTagListExcute()
+  },
   methods: {
     addExcute() {
       let t = this;
@@ -208,7 +226,50 @@ export default {
     editContentChange(html, text) {
       // console.log(this.formData.content)
     },
-    uploadChange(fileList, formatFileList) {}
+    uploadChange(fileList, formatFileList) {},
+    handleEditOpenness() {
+      this.editOpenness = !this.editOpenness;
+    },
+    handleSaveOpenness() {
+      var access_type = this.formData.access_type;
+      if (this.passwordValidate()) {
+        this.Openness = (access_type === 'pub') ? '公开' : (access_type === 'pwd') ? '密码' : '私密';
+        this.editOpenness = false;
+      }
+    },
+    passwordValidate() {
+      var access_type = this.formData.access_type;
+      var access_value = this.formData.access_value;
+      if (access_type === 'pwd') {
+        var patt = /^[a-zA-Z0-9]{4,8}$/;
+        if (!patt.test(access_value)) {
+          this.$Notice.error({
+            title: '出错了',
+            desc: '密码只能是4到8位的数字与字母'
+          });
+          return false;
+        }
+
+      }
+      return true;
+    },
+    getTagListExcute() {
+      let t = this;
+      getTagList([]).then(res => {
+        t.articleTags = res.data;
+      })
+    },
+    addTagExcute() {
+      let t = this;
+      addTag({
+        name: t.newTagName
+      }).then(res => {
+        t.getTagListExcute()
+        t.$Notice.success({
+          title: res.message
+        })
+      })
+    }
   }
 }
 </script>

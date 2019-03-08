@@ -534,7 +534,7 @@ img.head_image {
 }
 
 .amap-page-container {
-  overflow: scroll;
+  overflow: auto;
 }
 
 .amap-search-box {
@@ -564,29 +564,27 @@ img.head_image {
 
 .ivu-message-custom-content {
   max-height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .ivu-message-notice {
   text-align: left;
 }
 /*滚动条样式*/
-// ::-webkit-scrollbar {
-//   /*滚动条整体样式*/
-//   width: 10px;
-//   /*高宽分别对应横竖滚动条的尺寸*/
-//   height: 10px;
-// }
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 1px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
 
-// ::-webkit-scrollbar-thumb {
-//   /*滚动条里面小方块*/
-//   border-radius: 10px;
-//   background-color: #fff;
-// }
-//
-// ::-webkit-scrollbar-track {
-//   /*滚动条里面轨道*/
-//   -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-//   /*border-radius: 10px;*/
-//   // background: #EDEDED;
-// }
+::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  background-color: #8c0776;
+}
+
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  /* -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); */
+  background: white;
+}

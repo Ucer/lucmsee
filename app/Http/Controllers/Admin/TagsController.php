@@ -18,7 +18,6 @@ class TagsController extends AdminController
 
     public function list(Request $request, Tag $model)
     {
-        $per_page = $request->get('per_page', 10);
         $search_data = json_decode($request->get('search_data'), true);
         $name = isset_and_not_empty($search_data, 'name');
         if ($name) {
@@ -31,7 +30,7 @@ class TagsController extends AdminController
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
 
-        return new CommonCollection($model->paginate($per_page));
+        return new CommonCollection($model->get());
     }
 
     public function show(Tag $model)

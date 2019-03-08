@@ -31,3 +31,15 @@ export const destroy = (id) => {
     method: 'delete'
   })
 };
+export const getTagList = (searchdata) => {
+  return axios.request({
+    url: '/api/admin/tags',
+    params: {
+      search_data: JSON.stringify(searchdata)
+    },
+    method: 'get'
+  })
+};
+export const addTag = (formData) => {
+  return axios.request({url: '/api/admin/tags', data: formData, method: 'post'})
+};
