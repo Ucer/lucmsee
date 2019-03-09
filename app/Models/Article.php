@@ -4,6 +4,9 @@ namespace App\Models;
 
 
 use App\Models\Traits\ArticleFilterTrait;
+use Auth;
+use Purifier;
+use DB;
 
 class Article extends Model
 {
@@ -33,24 +36,59 @@ class Article extends Model
         return $this->tags()->sync($tags);
     }
 
+    protected function setContentAttribute($value)
+    {
+        $value = Purifier::clean($value, 'article_content');
+        $data = [
+            'raw' => '',
+            'html' => $value,
+//            'html' => (new MarkdownerHandler())->convertMarkdownToHtml($value)
+        ];
+        $this->attributes['content'] = json_encode($data);
+    }
+
+    protected function getContentAttribute($value)
+    {
+        return json_decode($value, true);
+    }
+
     public function storeAction($input)
     {
+        DB::beginTransaction();
         try {
 
-            $this->fill($input)->save();
+            $this->fill($input);
+            $this->user_id = Auth::id();
+            $this->save();
+
+            if (is_array($input['tags']) && count($input['tags']) > 0) {
+                $this->syncTag($input['tags']);
+            }
+            DB::commit();
             return $this->baseSucceed([], '操作成功');
         } catch (\Exception $e) {
+            throw $e;
+            DB::rollBack();
             return $this->baseFailed('内部错误');
         }
     }
 
     public function updateAction($input)
     {
+        DB::beginTransaction();
         try {
             $this->fill($input)->save();
-            $this->save();
+            if($input['tags']) {
+                $this->syncTag($input['tags']);
+            } else {
+                $this->syncTag([]);
+            }
+
+            DB::commit();
             return $this->baseSucceed([], '操作成功');
         } catch (\Exception $e) {
+            throw $e;
+            DB::rollBack();
             return $this->baseFailed('内部错误');
         }
     }

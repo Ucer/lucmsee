@@ -45,7 +45,7 @@ trait ArticleFilterTrait
         }
 
         if ($category_id) {
-            $query = $query->categorySearch($category_id);
+            $query = $query->ArticleCategorySearch($category_id);
         }
 
         if ($recommend) {
@@ -74,7 +74,7 @@ trait ArticleFilterTrait
         }
 
         if ($filter) {
-            $query = $query->withAccessType('PRI');
+            $query = $query->withAccessType($filter);
         }
         return $query->orderBy($order, $order_type);
     }

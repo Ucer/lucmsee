@@ -101,7 +101,7 @@ Route::namespace('Admin')->group(function () {
 
     Route::get('admin/articles', 'ArticlesController@list')->name('articles.list');
     Route::post('admin/articles', 'ArticlesController@store')->name('articles.store');
-    Route::patch('admin/articles/{tag}', 'ArticlesController@update')->name('articles.update');
-    Route::get('admin/articles/{tag}', 'ArticlesController@show')->name('articles.show');
-    Route::delete('admin/articles/{tag}', 'ArticlesController@destroy')->name('articles.destroy');
+    Route::patch('admin/articles/{article}', 'ArticlesController@update')->name('articles.update');
+    Route::get('admin/articles/{article}', 'ArticlesController@show')->name('articles.show');
+    Route::delete('admin/articles/{article}', 'ArticlesController@destroy')->name('articles.destroy');
 });

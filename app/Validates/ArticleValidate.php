@@ -46,6 +46,8 @@ class  ArticleValidate extends Validate
             if (!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
 
             $request_data['access_value'] = isset_and_not_empty($request_data, 'access_value');
+            $request_data['cover_image'] = isset_and_not_empty($request_data, 'cover_image');
+            $request_data['tags'] = isset_and_not_empty($request_data, 'tags');
 
             $parent_is_exist = ArticleCategory::where('id', $request_data['article_category_id'])->count();
             if (!$parent_is_exist) return $this->baseFailed('上级分类不存在，可能已经被删除，请刷新后重试');
@@ -59,6 +61,9 @@ class  ArticleValidate extends Validate
                 $request_data['access_value'] = AesEncryptHandler::securedEncrypt($request_data['access_value']);
             }
 
+            if ($request_data['cover_image']) {
+                $request_data['cover_image'] = $request_data['cover_image']['url'];
+            }
             $request_data = unset_if_no_value($request_data, ['keywords', 'description', 'cover_image']);
             return $this->baseSucceed($request_data, $this->message);
         } else {
@@ -98,6 +103,8 @@ class  ArticleValidate extends Validate
             if (!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
 
             $request_data['access_value'] = isset_and_not_empty($request_data, 'access_value');
+            $request_data['cover_image'] = isset_and_not_empty($request_data, 'cover_image');
+            $request_data['tags'] = isset_and_not_empty($request_data, 'tags');
 
             if ($model->article_category_id != $request_data['article_category_id']) {
                 $parent_is_exist = ArticleCategory::where('id', $request_data['article_category_id'])->count();
@@ -111,9 +118,20 @@ class  ArticleValidate extends Validate
             }
 
 
-            if ($request_data['access_type'] === 'pwd') {
-                if (!$request_data['access_value']) return $this->baseFailed('密码访问方式必须要输入密码');
-                $request_data['access_value'] = AesEncryptHandler::securedEncrypt($request_data['access_value']);
+            if ($request_data['access_type'] === 'pwd' ) {
+                if(($model->access_type === 'pwd') && $model->access_value) {
+                    if($request_data['access_value']) {
+                        $request_data['access_value'] = AesEncryptHandler::securedEncrypt($request_data['access_value']);
+                    }
+                    unset($request_data['access_value']);
+                } else {
+                    if (!$request_data['access_value']) return $this->baseFailed('密码访问方式必须要输入密码');
+                    $request_data['access_value'] = AesEncryptHandler::securedEncrypt($request_data['access_value']);
+                }
+            }
+
+            if ($request_data['cover_image']) {
+                $request_data['cover_image'] = $request_data['cover_image']['url'];
             }
 
             $request_data = unset_if_no_value($request_data, ['keywords', 'description', 'cover_image']);

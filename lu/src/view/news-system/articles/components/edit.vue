@@ -1,30 +1,72 @@
 <template>
 <div>
-  <Modal v-model="modalShow" :closable='false' :mask-closable=false width="600">
+  <Modal v-model="modalShow" :closable='false' :mask-closable=false width="70" class-name="article-modal">
     <p slot="header">修改</p>
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
-      <FormItem label="头像：">
-        <upload v-if='formdataFinished' v-model="formData.avatar" :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
+      <FormItem label="分类">
+        <Select v-model="formData.article_category_id" filterable placeholder="请选择文章分类">
+          <Option v-for="(item,key) in articleCategories" :value="item.id" :key="key">{{ item.name }} </Option>
+        </Select>
       </FormItem>
-      <FormItem label="真实姓名：" prop="real_name">
-        <Input v-model="formData.real_name"></Input>
+      <FormItem label="标题" prop="title">
+        <Input v-model="formData.title"></Input>
       </FormItem>
-      <FormItem label="昵称：" prop="nickname">
-        <Input v-model="formData.nickname"></Input>
+      <FormItem label="封面">
+        <upload v-if='formdataFinished' v-model="formData.cover_image"  :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
       </FormItem>
-      <FormItem label="邮箱：">
-        <Input v-model="formData.email"></Input>
+      <FormItem label="关键词" prop="keywords">
+        <Input type="textarea" v-model="formData.keywords" placeholder="以英文逗号隔开"></Input>
       </FormItem>
-      <FormItem label="登录密码：" prop="password">
-        <Input type="password" v-model="formData.password"></Input>
+      <FormItem label="描述" prop="description">
+        <Input type="textarea" v-model="formData.descriptions" placeholder="请输入"></Input>
       </FormItem>
-      <FormItem label="登录密码确认：" prop="password_confirmation">
-        <Input type="password" v-model="formData.password_confirmation"></Input>
-      </FormItem>
-      <FormItem label="可登录后台：">
-        <RadioGroup v-model="formData.is_admin">
-          <Radio v-for="(item,key) in tableStatus_is_admin" :label="key">{{ item }}</Radio>
+      <FormItem label="状态">
+        <RadioGroup v-model="formData.enable">
+          <Radio v-for="(item,key) in tableStatus_enable" :key="key" :label="key">{{ item }}</Radio>
         </RadioGroup>
+      </FormItem>
+      <FormItem label="置顶">
+        <RadioGroup v-model="formData.top">
+          <Radio v-for="(item,key) in tableStatus_top" :key="key" :label="key">{{ item }}</Radio>
+        </RadioGroup>
+      </FormItem>
+      <FormItem label="推荐">
+        <RadioGroup v-model="formData.recommend">
+          <Radio v-for="(item,key) in tableStatus_recommend" :key="key" :label="key">{{ item }}</Radio>
+        </RadioGroup>
+      </FormItem>
+      <FormItem label="标签">
+        <Select v-model="formData.tags" multiple filterable placeholder="请选择文章标签" style="width: auto">
+          <Option v-for="item in articleTags" :value="item.id" :key="item.id">{{ item.name }} </Option>
+        </Select>
+      </FormItem>
+      <FormItem label="新建标签">
+        <Input v-model="newTagName" search enter-button="新建" placeholder="标签名字" @on-search="addTagExcute" style="width: auto"></Input>
+        <input-helper styleClass="input-helper-error" text="标签不存在时可在此处添加"></input-helper>
+      </FormItem>
+      <FormItem label="访问权限">
+        <Icon type="eye"></Icon><b>{{ Openness }}</b>
+        <Button v-show="!editOpenness" size="small" type="text" @click="handleEditOpenness"><a>修改</a></Button>
+        <transition name="openness-con">
+          <div v-show="editOpenness" class="publish-time-picker-con">
+            <RadioGroup v-model="formData.access_type" vertical>
+              <Radio label="pub" title="所有人可见"> 公开</Radio>
+              <Radio label="pwd" title="需要密码验证"> 密码
+                <Input v-show="formData.access_type === 'pwd'" v-model="formData.access_value" style="width:50%" size="small" placeholder="请输入密码" />
+              </Radio>
+              <Radio label="pri">私密</Radio>
+            </RadioGroup>
+            <div>
+              <Button type="primary" @click="handleSaveOpenness">保存</Button>
+            </div>
+          </div>
+        </transition>
+      </FormItem>
+      <FormItem label="排序：">
+        <Input v-model="formData.weight" placeholder="请输入序号" style="width: auto"></Input>
+      </FormItem>
+      <FormItem label="文章内容">
+        <wang-editor v-if="formdataFinished" :cache="false" :value="formData.content" v-model="formData.content" @on-change="editContentChange" :upload-config='wangUploadConfig'></wang-editor>
       </FormItem>
     </Form>
     <div slot="footer">
@@ -43,39 +85,50 @@
 </div>
 </template>
 <script>
-import Upload from '_c/common/upload'
 import {
   edit,
   getInfoById
-} from '@/api/user'
-
+} from '@/api/article'
+import Upload from '_c/common/upload'
+import WangEditor from '_c/common/wang-editor'
+import {
+  addTag,
+  getTagList
+} from '@/api/tag'
+import InputHelper from '_c/common/input-helper'
 export default {
+  props: ['modalId','articleCategories', 'tableStatus_enable', 'tableStatus_recommend', 'tableStatus_top'],
   components: {
-    Upload
-  },
-  props: {
-    modalId: {
-      type: Number,
-      default: 0
-    },
-    'tableStatus_is_admin': ''
+    Upload,
+    WangEditor,
+    InputHelper
   },
   data() {
     return {
       modalShow: true,
       saveLoading: false,
       spinLoading: true,
+      editOpenness: false,
+      Openness: '公开',
+      articleTags: [],
+      newTagName: '',
       formData: {
-        nickname: '',
-        real_name: '',
-        email: '',
-        is_admin: 'F',
-        password: '',
-        password_confirmation: '',
-        avatar: {
+        title: '',
+        cover_image: {
           attachment_id: 0,
-          url: ''
+          url: '',
         },
+        enable: 'F',
+        keywords: '',
+        description: '',
+        content: '',
+        article_category_id: 0,
+        weight: 50,
+        top: 'F',
+        recommend: 'F',
+        access_type: 'pub',
+        access_value: '',
+        tags: 0
       },
       formdataFinished: false,
       imguploadConfig: {
@@ -84,44 +137,54 @@ export default {
         },
         format: ['jpg', 'jpeg', 'png', 'gif'],
         max_size: 500,
-        upload_url: window.uploadUrl.imageUploadToFileSystemUrl + '/pic/avatar',
+        upload_url: window.uploadUrl.uploadToLocaleUrl + '/pic/avatar',
         file_name: 'file',
         multiple: false,
         file_num: 1,
         data: {},
         default_list: []
       },
+      wangUploadConfig: {
+        headers: {
+          'Authorization': window.access_token
+        },
+        wang_size: 1 * 1024 * 1024, // 1M
+        uploadUrl: window.uploadUrl.uploadToLocaleUrl + '/pic/editor_article_content',
+        params: {},
+        max_length: 3,
+        file_name: 'file',
+        z_index: 10000,
+        heightStyle: 'wang-editor-text-300'
+      },
       rules: {
-        real_name: [{
+        title: [{
             required: true,
-            message: '请填写真实姓名',
+            message: '请填写文章标题',
             trigger: 'blur'
           },
           {
             type: 'string',
             min: 2,
-            message: '真实姓名至少要 2 个字符',
+            message: '文章标题至少要 2 个字符',
             trigger: 'blur'
           }
         ],
-        email: [{
-            required: true,
-            message: '请填写邮箱',
-            trigger: 'blur'
-          },
-          {
-            type: 'email',
-            message: '邮箱格式不正确',
-            trigger: 'blur'
-          },
-        ],
+        article_category_id: [{
+          required: true,
+          message: '请选择分类',
+          trigger: 'blur'
+        }],
+        content: [{
+          required: true,
+          message: '请填写文章内容',
+          trigger: 'blur'
+        }]
       },
     }
   },
   mounted() {
-    if (this.modalId > 0) {
-      this.getInfoByIdExcute()
-    }
+    this.getTagListExcute()
+
   },
   methods: {
     getInfoByIdExcute() {
@@ -130,18 +193,27 @@ export default {
         let res_data = res.data
         t.formData = {
           id: res_data.id,
-          real_name: res_data.real_name,
-          nickname: res_data.nickname,
-          email: res_data.email,
-          is_admin: res_data.is_admin,
-          password: '',
-          password_confirmation: '',
-          avatar: {
+          title: res_data.title,
+          cover_image: {
             attachment_id: 0,
-            url: res_data.avatar
+            url: res_data.cover_image,
           },
+          enable: res_data.enable,
+          keywords: res_data.keywords,
+          description: res_data.description,
+          content: res_data.content.html,
+          article_category_id: res_data.article_category_id,
+          weight: res_data.weight,
+          top: res_data.top,
+          recommend: res_data.recommend,
+          access_type: res_data.access_type,
+          access_value: ''
         }
-        t.imguploadConfig.default_list = [t.formData.avatar]
+        t.handleSaveOpenness();
+        t.imguploadConfig.default_list = [t.formData.cover_image]
+        t.formData.tags = res_data.tagids;
+        t.formData.content = res_data.content.html
+
         t.formdataFinished = true
         t.spinLoading = false
       })
@@ -175,7 +247,53 @@ export default {
     editContentChange(html, text) {
       // console.log(this.formData.content)
     },
-    uploadChange(fileList, formatFileList) {}
+    uploadChange(fileList, formatFileList) {},
+    handleEditOpenness() {
+      this.editOpenness = !this.editOpenness;
+    },
+    handleSaveOpenness() {
+      var access_type = this.formData.access_type;
+      if (this.passwordValidate()) {
+        this.Openness = (access_type === 'pub') ? '公开' : (access_type === 'pwd') ? '密码' : '私密';
+        this.editOpenness = false;
+      }
+    },
+    passwordValidate() {
+      var access_type = this.formData.access_type;
+      var access_value = this.formData.access_value;
+      if (access_type === 'pwd' && this.access_value) {
+        var patt = /^[a-zA-Z0-9]{4,8}$/;
+        if (!patt.test(access_value)) {
+          this.$Notice.error({
+            title: '出错了',
+            desc: '密码只能是4到8位的数字与字母'
+          });
+          return false;
+        }
+
+      }
+      return true;
+    },
+    getTagListExcute() {
+      let t = this;
+      getTagList([]).then(res => {
+        t.articleTags = res.data;
+        if (this.modalId > 0) {
+          this.getInfoByIdExcute()
+        }
+      })
+    },
+    addTagExcute() {
+      let t = this;
+      addTag({
+        name: t.newTagName
+      }).then(res => {
+        t.getTagListExcute()
+        t.$Notice.success({
+          title: res.message
+        })
+      })
+    }
   }
 }
 </script>

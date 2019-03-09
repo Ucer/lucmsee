@@ -14,7 +14,9 @@
         "laravel/framework": "5.7.*",
         "laravel/passport": "^7.0",
         "laravel/tinker": "^1.0",
+        "league/html-to-markdown": "^4.8",
         "mews/captcha": "^2.2",
+        "mews/purifier": "^2.1",
         "overtrue/pinyin": "~4.0",
         "spatie/laravel-permission": "^2.29"
     },

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Resources\CommonCollection;
 use App\Models\Article;
-use App\Traits\TableStatusTrait;
 use App\Validates\ArticleValidate;
 use Illuminate\Http\Request;
 use Auth;
@@ -23,7 +22,7 @@ class ArticlesController extends AdminController
         $search_data = json_decode($request->get('search_data'), true);
         $tag_id = 0;
         $user_id = 0;
-        $filter = isset_and_not_empty($search_data, 'filter');
+        $filter = isset_and_not_empty($search_data, 'access_type');
         $title = isset_and_not_empty($search_data, 'title');
         $article_category_id = isset_and_not_empty($search_data, 'article_category_id');
         $recommend = isset_and_not_empty($search_data, 'recommend');
@@ -45,13 +44,14 @@ class ArticlesController extends AdminController
 
     public function show(Article $model)
     {
+        $article_tag = $model->tags->toArray();
+        $model->tagids = array_column($article_tag, 'id');
         return $this->success($model);
     }
 
     public function store(Request $request, Article $model, ArticleValidate $validate)
     {
         $request_data = $request->all();
-        $request_data['description'] = strval($request_data['description']);
         $rest_validate = $validate->storeValidate($request_data);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $new_request_data = $rest_validate['data'];
@@ -65,12 +65,11 @@ class ArticlesController extends AdminController
     public function update(Request $request, Article $model, ArticleValidate $validate)
     {
         $request_data = $request->all();
-        $request_data['description'] = strval($request_data['description']);
         $rest_validate = $validate->updateValidate($request_data, $model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $new_request_data = $rest_validate['data'];
 
-        $res = $model->storeAction($new_request_data);
+        $res = $model->updateAction($new_request_data);
         if ($res['status'] === true) return $this->message($res['message']);
         return $this->failed($res['message']);
     }

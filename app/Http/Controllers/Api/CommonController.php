@@ -20,6 +20,8 @@ class CommonController extends ApiController
 
     public function switchEnable(Request $request)
     {
+        $table = $request->table;
+        $column = 'enable';
         switch ($request->table) {
             case 'users':
                 if (Auth::id() == $request->id) return $this->failed('操作对象不能是你自己');
@@ -30,16 +32,25 @@ class CommonController extends ApiController
                 break;
             case 'system_configs':
                 break;
-            case 'articles':
+            case 'articles_column_enable':
+                $table = 'articles';
+                break;
+            case 'articles_column_top':
+                $table = 'articles';
+                $column = 'top';
+                break;
+            case 'articles_column_recommend':
+                $table = 'articles';
+                $column = 'recommend';
                 break;
             default:
                 return $this->failed('不允许的操作');
                 break;
 
         }
-        $rest = DB::table($request->table)
+        $rest = DB::table($table)
             ->where('id', $request->id)
-            ->update(['enable' => $request->value]);
+            ->update([$column => $request->value]);
         if ($rest) return $this->message('操作成功');
         return $this->failed('出错了');
     }

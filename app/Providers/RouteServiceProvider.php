@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\Attachment;
 use App\Models\Permission;
@@ -60,6 +61,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('tag', function ($value) {
             return Tag::findOrFail($value);
+        });
+        Route::bind('article', function ($value) {
+            return Article::findOrFail($value);
         });
     }
 

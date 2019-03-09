@@ -1,12 +1,3 @@
-<style lang="less">
-.article-modal {
-    .ivu-modal-body {
-        overflow: scroll;
-        overflow-x: hidden;
-        max-height: 700px;
-    }
-}
-</style>
 <template>
 <div>
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="70" class-name="article-modal">
@@ -14,7 +5,7 @@
 
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
       <FormItem label="分类">
-        <Select v-model="formData.category_id" filterable placeholder="请选择文章分类">
+        <Select v-model="formData.article_category_id" filterable placeholder="请选择文章分类">
           <Option v-for="(item,key) in articleCategories" :value="item.id" :key="key">{{ item.name }} </Option>
         </Select>
       </FormItem>
@@ -32,18 +23,27 @@
       </FormItem>
       <FormItem label="状态">
         <RadioGroup v-model="formData.enable">
-          <Radio v-for="(item,key) in tableStatus_enable" :label="key">{{ item }}</Radio>
+          <Radio v-for="(item,key) in tableStatus_enable" :key="key" :label="key">{{ item }}</Radio>
         </RadioGroup>
       </FormItem>
       <FormItem label="置顶">
         <RadioGroup v-model="formData.top">
-          <Radio v-for="(item,key) in tableStatus_top" :label="key">{{ item }}</Radio>
+          <Radio v-for="(item,key) in tableStatus_top" :key="key" :label="key">{{ item }}</Radio>
         </RadioGroup>
       </FormItem>
       <FormItem label="推荐">
         <RadioGroup v-model="formData.recommend">
-          <Radio v-for="(item,key) in tableStatus_recommend" :label="key">{{ item }}</Radio>
+          <Radio v-for="(item,key) in tableStatus_recommend" :key="key" :label="key">{{ item }}</Radio>
         </RadioGroup>
+      </FormItem>
+      <FormItem label="标签">
+        <Select v-model="formData.tags" multiple filterable placeholder="请选择文章标签" style="width: auto">
+          <Option v-for="item in articleTags" :value="item.id" :key="item.id">{{ item.name }} </Option>
+        </Select>
+      </FormItem>
+      <FormItem label="新建标签">
+        <Input v-model="newTagName" search enter-button="新建" placeholder="标签名字" @on-search="addTagExcute" style="width: auto"></Input>
+        <input-helper styleClass="input-helper-error" text="标签不存在时可在此处添加"></input-helper>
       </FormItem>
       <FormItem label="访问权限">
         <Icon type="eye"></Icon><b>{{ Openness }}</b>
@@ -58,16 +58,13 @@
               <Radio label="pri">私密</Radio>
             </RadioGroup>
             <div>
-              <Button type="primary" @click="handleSaveOpenness">确认</Button>
+              <Button type="primary" @click="handleSaveOpenness">保存</Button>
             </div>
           </div>
         </transition>
       </FormItem>
-      <FormItem label="标签：">
-        <Select v-model="formData.tags" multiple filterable placeholder="请选择文章标签" style="width: auto">
-          <Option v-for="item in articleTags" :value="item.id" :key="item.id">{{ item.name }} </Option>
-        </Select>
-        <Input v-model="newTagName" search enter-button="新建" placeholder="标签名字" @on-search="addTagExcute" style="width: auto"></Input>
+      <FormItem label="排序：">
+        <Input v-model="formData.weight" placeholder="请输入序号" style="width: auto"></Input>
       </FormItem>
       <FormItem label="文章内容">
         <wang-editor v-model="formData.content" @on-change="editContentChange" :upload-config='wangUploadConfig'></wang-editor>
@@ -90,12 +87,14 @@ import {
   addTag,
   getTagList
 } from '@/api/tag'
+import InputHelper from '_c/common/input-helper'
 
 export default {
   props: ['articleCategories', 'tableStatus_enable', 'tableStatus_recommend', 'tableStatus_top'],
   components: {
     Upload,
-    WangEditor
+    WangEditor,
+    InputHelper
   },
   data() {
     const validatePassword = (rule, value, callback) => {
@@ -133,10 +132,10 @@ export default {
         },
         enable: 'F',
         keywords: '',
-        descriptions: '',
+        description: '',
         content: '',
-        category_id: 0,
-        weight: 20,
+        article_category_id: 0,
+        weight: 50,
         top: 'F',
         recommend: 'F',
         access_type: 'pub',

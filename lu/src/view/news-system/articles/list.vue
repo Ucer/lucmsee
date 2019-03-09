@@ -8,7 +8,7 @@
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.article_category_id" filterable placeholder="请选择文章分类">
       <Option value="" key="">全部</Option>
-      <Option v-for="(item,key) in articleCategories" :value="item.id">{{ item.name }} </Option>
+      <Option v-for="(item,key) in articleCategories" :key="key" :value="item.id">{{ item.name }} </Option>
     </Select>
     </Col>
     <Col :xs="3" :lg="3">
@@ -56,10 +56,17 @@
         {{ row.article_category.name }}
       </template>
       <template slot-scope="{ row, index }" slot="enable">
-        <iSwitch :slot="'open'" type='primary' :value="row.enable === 'T'" @on-change="switchChange(row,index)"></iSwitch>
+        <iSwitch :slot="'open'" type='primary' :value="row.enable === 'T'" @on-change="switchChange(row,index,'enable')"></iSwitch>
+      </template>
+      <template slot-scope="{ row, index }" slot="top">
+        <iSwitch :slot="'open'" type='primary' :value="row.top === 'T'" @on-change="switchChange(row,index,'top')"></iSwitch>
+      </template>
+      <template slot-scope="{ row, index }" slot="recommend">
+        <iSwitch :slot="'open'" type='primary' :value="row.recommend === 'T'" @on-change="switchChange(row,index,'recommend')"></iSwitch>
       </template>
 
       <template slot-scope="{ row, index }" slot="action">
+        <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
@@ -70,8 +77,10 @@
     </div>
   </Row>
 
-  <add-component v-if='addModal.show' :articleCategories="articleCategories" :tableStatus_recommend="tableStatus.recommend" :tableStatus_top="tableStatus.top" :tableStatus_enable="tableStatus.enable" @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
-  <edit-component v-if='editModal.show' :tableStatus_recommend="tableStatus.recommend" :tableStatus_top="tableStatus.top" :tableStatus_enable="tableStatus.enable" :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component>
+  <add-component v-if='addModal.show' :articleCategories="articleCategories" :tableStatus_recommend="tableStatus.recommend" :tableStatus_top="tableStatus.top" :tableStatus_enable="tableStatus.enable" @on-add-modal-success='getTableDataExcute(feeds.current_page)'
+    @on-add-modal-hide="addModalHide"></add-component>
+  <edit-component v-if='editModal.show' :articleCategories="articleCategories" :tableStatus_recommend="tableStatus.recommend" :tableStatus_top="tableStatus.top" :tableStatus_enable="tableStatus.enable" :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)'
+    @on-edit-modal-hide="editModalHide"> </edit-component>
 </div>
 </template>
 
@@ -89,7 +98,8 @@ import {
 } from '@/api/article_category'
 import {
   getTableStatus,
-  switchEnable
+  switchEnable,
+  commonEditTableColumn
 } from '@/api/common'
 
 
@@ -151,8 +161,20 @@ export default {
         {
           title: '启用状态',
           key: 'enable',
-          minWidth: 80,
+          minWidth: 50,
           slot: 'enable'
+        },
+        {
+          title: '置顶',
+          key: 'top',
+          minWidth: 50,
+          slot: 'top'
+        },
+        {
+          title: '推荐',
+          key: 'recommend',
+          minWidth: 50,
+          slot: 'recommend'
         },
         {
           title: '创建时间',
@@ -234,6 +256,21 @@ export default {
         t.$Notice.success({
           title: res.message
         })
+      })
+    },
+    switchChange: function(row, index, column) {
+      let t = this
+      let new_status = 'T'
+      if (t.feeds.data[index][column] === 'T') {
+        new_status = 'F'
+      }
+      switchEnable(t.feeds.data[index].id, 'articles_column_' + column, new_status).then(res => {
+        t.feeds.data[index][column] = new_status
+        t.$Notice.success({
+          title: res.message
+        })
+      }).catch((err) => {
+        t.getTableDataExcute(t.feeds.current_page)
       })
     },
     getAllCategoriesExcute() {
