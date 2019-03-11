@@ -52,6 +52,9 @@ import {
   getTableData,
   destroy,
 } from '@/api/table'
+import {
+  oneOf,
+} from '@/libs/tools'
 
 export default {
   components: {
@@ -66,6 +69,7 @@ export default {
         table_name: '',
         column: ''
       },
+      notRealySortKey: ['map_count'],
       tableLoading: false,
       feeds: {
         data: [],
@@ -101,6 +105,11 @@ export default {
           key: 'table_name_cn',
           className: 'table-column-style-table-name-cn',
           minWidth: 150,
+        }, {
+          title: '字典数量',
+          key: 'map_count',
+          sortable: true,
+          minWidth: 50,
         },
         {
           title: '操作',
@@ -142,8 +151,12 @@ export default {
     },
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order
-      this.searchForm.order_by = order
-      this.getTableDataExcute(this.feeds.current_page)
+      if (oneOf(data.column.key, this.notRealySortKey)) {
+
+      } else {
+        this.searchForm.order_by = order
+        this.getTableDataExcute(this.feeds.current_page)
+      }
     },
     tableButtonEdit(row, index) {
       this.editModal.show = true

@@ -73,6 +73,7 @@ export default {
       searchForm: {
         order_by: 'weight,asc'
       },
+      notRealySortKey:[],
       tableStatus: {
         enable: []
       },
@@ -161,8 +162,12 @@ export default {
     },
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order
-      this.searchForm.order_by = order
-      this.getTableDataExcute()
+      if (oneOf(data.column.key, this.notRealySortKey)) {
+
+      } else {
+        this.searchForm.order_by = order
+        this.getTableDataExcute(this.feeds.current_page)
+      }
     },
     addBtn() {
       this.addModal.show = true

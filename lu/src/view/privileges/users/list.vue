@@ -111,6 +111,7 @@ export default {
         is_admin:'',
         enable:''
       },
+      notRealySortKey:[],
       tableLoading: false,
       tableStatus: {
         enable: [],
@@ -236,8 +237,12 @@ export default {
     },
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order
-      this.searchForm.order_by = order
-      this.getTableDataExcute(this.feeds.current_page)
+      if (oneOf(data.column.key, this.notRealySortKey)) {
+
+      } else {
+        this.searchForm.order_by = order
+        this.getTableDataExcute(this.feeds.current_page)
+      }
     },
     tableButtonEdit(row, index) {
       this.editModal.show = true

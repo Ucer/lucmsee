@@ -99,6 +99,7 @@ export default {
         file_type: '',
         category: ''
       },
+      notRealySortKey:[],
       tableLoading: false,
       tableStatus: {
         file_type: [],
@@ -214,8 +215,12 @@ export default {
     },
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order
-      this.searchForm.order_by = order
-      this.getTableDataExcute(this.feeds.current_page)
+      if (oneOf(data.column.key, this.notRealySortKey)) {
+
+      } else {
+        this.searchForm.order_by = order
+        this.getTableDataExcute(this.feeds.current_page)
+      }
     },
     tableButtonDestroyOk(row, index) {
       let t = this

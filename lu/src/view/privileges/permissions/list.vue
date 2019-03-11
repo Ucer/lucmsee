@@ -54,6 +54,7 @@ export default {
       searchForm: {
         order_by: 'id,desc'
       },
+      notRealySortKey:[],
       tableLoading: true,
       dataList: [],
       addModal: {
@@ -125,8 +126,12 @@ export default {
     },
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order
-      this.searchForm.order_by = order
-      this.getTableDataExcute()
+      if (oneOf(data.column.key, this.notRealySortKey)) {
+
+      } else {
+        this.searchForm.order_by = order
+        this.getTableDataExcute(this.feeds.current_page)
+      }
     },
     addBtn() {
       this.addModal.show = true

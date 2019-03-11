@@ -8,7 +8,7 @@
     <Col :xs="5" :lg="4">
     </Col>
     <Col :xs="5" :lg="4">
-    <Select v-model="searchForm.type" placeholder="请选择附件归类">
+    <Select v-model="searchForm.category" placeholder="请选择附件归类">
       <Option value="" key="">全部</Option>
       <Option v-for="(item,key) in tableStatus.category" :value="key" :key="key">{{ item }}</Option>
     </Select>
@@ -32,7 +32,7 @@
           <li v-for="(item, key) in feeds.data">
             <img :data-original="item.domain + '/' + item.link_path + '/' + item.storage_name" :src="item.domain + '/' + item.link_path + '/' + item.storage_name" alt="">
             <div class="photo-text">
-              <span class="photo-size">{{ item.size }} kb</span>
+              <span class="photo-size">{{ item.size }}</span>
               <span class="photo-date">{{ item.created_at.substring(0,10) }}</span>
             </div>
             <span class="photo-name">{{ item.original_name}}</span>
@@ -69,6 +69,7 @@ export default {
         mime_type: "image",
         original_name: ''
       },
+      notRealySortKey:[],
       tableLoading: false,
       tableStatus: {
         category: [],
@@ -119,8 +120,12 @@ export default {
     },
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order
-      this.searchForm.order_by = order
-      this.getTableDataExcute(this.feeds.current_page)
+      if (oneOf(data.column.key, this.notRealySortKey)) {
+
+      } else {
+        this.searchForm.order_by = order
+        this.getTableDataExcute(this.feeds.current_page)
+      }
     },
     handleReachEdge(dir) {
       this.scroll_text = '拼命加载中...'

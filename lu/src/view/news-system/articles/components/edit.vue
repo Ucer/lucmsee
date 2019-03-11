@@ -137,7 +137,7 @@ export default {
         },
         format: ['jpg', 'jpeg', 'png', 'gif'],
         max_size: 500,
-        upload_url: window.uploadUrl.uploadToLocaleUrl + '/pic/avatar',
+        upload_url: window.uploadUrl.uploadToLocaleUrl + '/pic/article_cover_img',
         file_name: 'file',
         multiple: false,
         file_num: 1,

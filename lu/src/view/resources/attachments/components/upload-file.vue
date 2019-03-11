@@ -36,7 +36,7 @@ export default {
         },
         format: ['xlsx', 'doc', 'docx', 'txt', 'sql','exe'],
         max_size: 1024 * 1000, // 800KB
-        upload_url: window.uploadUrl.uploadToLocaleUrl + '/file/file',
+        upload_url: window.uploadUrl.uploadToLocaleUrl + '/file/lucmsee',
         file_name: 'file',
         multiple: false,
         file_num: 1,

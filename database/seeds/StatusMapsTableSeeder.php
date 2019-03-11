@@ -29,6 +29,9 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'attachments', 'column' => 'file_type', 'status_code' => 'video', 'status_description' => '视频', 'remark' => ''],
 
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'lucmsee', 'status_description' => '系统附件', 'remark' => ''],
+            ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'avatar', 'status_description' => '用户头像', 'remark' => ''],
+            ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'article_cover_img', 'status_description' => '文章封面', 'remark' => ''],
+            ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'editor_article_content', 'status_description' => '富文本文章内容', 'remark' => ''],
             // logs_table
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'T', 'status_description' => '启用', 'remark' => ''],
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => ''],

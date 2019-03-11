@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\StatusMap;
 use App\Models\Table;
 use App\Validates\TableValidate;
 use Illuminate\Http\Request;
@@ -30,8 +31,15 @@ class TablesController extends AdminController
             $order_by = explode(',', $order_by);
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
+        $list = $model->get();
+        if($list) {
+            $model_status_map = new StatusMap();
+            $list->each(function ($item) use ($model_status_map) {
+                $item->map_count = $model_status_map->where('table_name',$item->table_name)->count();
+            });
+        }
 
-        return $this->success($model->get());
+        return $this->success($list);
     }
 
 

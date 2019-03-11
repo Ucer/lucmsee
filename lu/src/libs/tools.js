@@ -50,6 +50,7 @@ export const hasOneOf = (targetarr, arr) => {
 /**
  * @param {String|Number} value 要验证的字符串或数值
  * @param {*} validList 用来验证的列表
+ * @description 判断要查询的字符串是一维数组中的一个值
  */
 export function oneOf(value, validList) {
   for (let i = 0; i < validList.length; i++) {

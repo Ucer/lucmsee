@@ -118,6 +118,7 @@ export default {
         top: '',
         recommend: '',
       },
+      notRealySortKey:[],
       tableLoading: false,
       tableStatus: {
         access_type: [],
@@ -236,8 +237,12 @@ export default {
     },
     onSortChange: function(data) {
       const order = data.column.key + ',' + data.order
-      this.searchForm.order_by = order
-      this.getTableDataExcute(this.feeds.current_page)
+      if (oneOf(data.column.key, this.notRealySortKey)) {
+
+      } else {
+        this.searchForm.order_by = order
+        this.getTableDataExcute(this.feeds.current_page)
+      }
     },
     addModalHide() {
       this.addModal.show = false
