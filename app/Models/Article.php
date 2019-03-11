@@ -78,7 +78,7 @@ class Article extends Model
         DB::beginTransaction();
         try {
             $this->fill($input)->save();
-            if($input['tags']) {
+            if ($input['tags']) {
                 $this->syncTag($input['tags']);
             } else {
                 $this->syncTag([]);
@@ -95,10 +95,14 @@ class Article extends Model
 
     public function destroyAction()
     {
+        DB::beginTransaction();
         try {
+            $this->syncTag([]);
             $this->delete();
+            DB::commit();
             return $this->baseSucceed([], '文章删除成功');
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->baseFailed('内部错误');
         }
     }
