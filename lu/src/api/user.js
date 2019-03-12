@@ -1,43 +1,25 @@
 import axios from '@/libs/api.request'
 
-export const login = ({
-  email,
-  password,
-  captcha,
-  captcha_key
-}) => {
+export const login = ({email, password, captcha, captcha_key}) => {
   const data = {
     email,
     password,
     captcha,
     captcha_key
   };
-  return axios.request({
-    url: 'api/login',
-    data,
-    method: 'post'
-  })
+  return axios.request({url: 'api/login', data, method: 'post'})
 };
 
 export const getUserInfo = () => {
-  return axios.request({
-    url: 'api/admin/users/current_user',
-    method: 'get'
-  })
+  return axios.request({url: 'api/admin/users/current_user', method: 'get'})
 };
 
 export const logout = (token) => {
-  return axios.request({
-    url: 'api/logout',
-    method: 'post'
-  })
+  return axios.request({url: 'api/logout', method: 'post'})
 };
 
 export const getUnreadCount = () => {
-  return axios.request({
-    url: 'message/count',
-    method: 'get'
-  })
+  return axios.request({url: 'message/count', method: 'get'})
 };
 
 export const getTableData = (to_page, per_page, searchdata) => {
@@ -91,11 +73,17 @@ export const giveUserRole = (userId, roles) => {
   })
 };
 export const updatePassword = (userId, roles) => {
-    return axios.request({
-        url: '/api/admin/users/give/' + userId + '/roles',
-        data: {
-            role: roles
-        },
-        method: 'post'
-    })
+  return axios.request({
+    url: '/api/admin/users/give/' + userId + '/roles',
+    data: {
+      role: roles
+    },
+    method: 'post'
+  })
+};
+export const searchUserPassMobile = (mobile) => {
+  return axios.request({
+    url: '/api/admin/users/search_user_pass_mobile/' + mobile,
+    method: 'get'
+  })
 };

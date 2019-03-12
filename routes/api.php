@@ -24,6 +24,7 @@ Route::namespace('Admin')->group(function () {
 
     /**       ==========================          自带 Api           ====================   */
     Route::get('admin/users/current_user', 'UsersController@currentUser')->name('users.current_user');
+    Route::get('admin/users/search_user_pass_mobile/{mobile}', 'UsersController@searchUserPassMobile')->name('users.search_user_pass_mobile');
     Route::get('admin/statistics', 'StatisticsController@base')->name('statistics.base');
 
 
@@ -104,4 +105,8 @@ Route::namespace('Admin')->group(function () {
     Route::patch('admin/articles/{article}', 'ArticlesController@update')->name('articles.update');
     Route::get('admin/articles/{article}', 'ArticlesController@show')->name('articles.show');
     Route::delete('admin/articles/{article}', 'ArticlesController@destroy')->name('articles.destroy');
+
+    Route::get('admin/app_messages', 'AppMessagesController@list')->name('app_messages.list');
+    Route::post('admin/app_messages/send_message_to_app_user', 'AppMessagesController@sendMessageToAppUser')->name('app_messages.send_message_to_app_user');
+    Route::delete('admin/app_messages/{article}', 'AppMessagesController@destroy')->name('app_messages.destroy');
 });

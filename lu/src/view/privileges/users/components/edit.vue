@@ -23,7 +23,7 @@
       </FormItem>
       <FormItem label="可登录后台：">
         <RadioGroup v-model="formData.is_admin">
-          <Radio v-for="(item,key) in tableStatus_is_admin" :label="key">{{ item }}</Radio>
+          <Radio v-for="(item,key) in tableStatus_is_admin" :key="key" :label="key">{{ item }}</Radio>
         </RadioGroup>
       </FormItem>
     </Form>

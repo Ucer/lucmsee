@@ -18,6 +18,8 @@ export default {
   tagsManage: '标签管理',
   articleCategory: '文章分类',
   articleList: '文章列表',
+  messageCenter: '消息中心',
+  appMessages: '站内信',
 
   edit: '修改',
   add: '添加',

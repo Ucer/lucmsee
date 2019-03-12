@@ -187,6 +187,26 @@ export default[
       }
     ]
   }, {
+    path: '/dashboard/messageCenter',
+    name: 'messageCenter',
+    component: Main,
+    meta: {
+      icon: 'ios-notifications',
+      title: '消息中心',
+      access: ['Founder'],
+      showAlways: true
+    },
+    children: [
+      {
+        path: '/dashboard/appMessages',
+        name: 'appMessages',
+        meta: {
+          title: '站内信'
+        },
+        component: () => import ('@/view/message-center/app_messages/list.vue')
+      }
+    ]
+  }, {
     path: '/401',
     name: 'error_401',
     meta: {

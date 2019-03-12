@@ -62,17 +62,17 @@ class AdminMessagesController extends AdminController
         if ($rest_validate['status'] === true) {
             $rest_destroy = $model->destroyAction();
             if ($rest_destroy['status'] === true) return $this->message($rest_destroy['message']);
-            return $this->failed($rest_destroy['message'], 500);
+            return $this->failed($rest_destroy['message']);
         } else {
             return $this->failed($rest_validate['message']);
         }
     }
 
-    public function destroyMany(AdminMessage $model, AdminMessageValidate $validate, $admin_message_ids)
+    public function destroyMany(AdminMessage $model, AdminMessageValidate $validate, $ids)
     {
         $rest_validate = $validate->destroyManyValidate($model);
         if ($rest_validate['status'] === true) {
-            $model->whereIn('id', explode(',', $admin_message_ids))->delete();
+            $model->whereIn('id', explode(',', $ids))->delete();
             return $this->message('操作成功');
         } else {
             return $this->failed($rest_validate['message']);

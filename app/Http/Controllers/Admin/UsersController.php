@@ -147,4 +147,11 @@ class UsersController extends AdminController
         return $this->message('角色分配成功');
     }
 
+    public function searchUserPassMobile($mobile, User $user)
+    {
+        $rest_user = $user->columnLikeSearch('mobile', '%' . $mobile)->select('id', 'real_name', 'mobile')->get();
+        return $this->success($rest_user);
+
+    }
+
 }
