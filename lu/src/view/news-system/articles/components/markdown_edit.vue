@@ -12,7 +12,7 @@
         <Input v-model="formData.title"></Input>
       </FormItem>
       <FormItem label="封面">
-        <upload v-if='formdataFinished' v-model="formData.cover_image"  :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
+        <upload v-if='formdataFinished' v-model="formData.cover_image" :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
       </FormItem>
       <FormItem label="关键词" prop="keywords">
         <Input type="textarea" v-model="formData.keywords" placeholder="以英文逗号隔开"></Input>
@@ -66,7 +66,7 @@
         <Input v-model="formData.weight" placeholder="请输入序号" style="width: auto"></Input>
       </FormItem>
       <FormItem label="文章内容">
-        <wang-editor v-if="formdataFinished" :cache="false" :value="formData.content" v-model="formData.content" @on-change="editContentChange" :upload-config='wangUploadConfig'></wang-editor>
+        <markdown-editor v-if="formdataFinished" :cache="false" v-model="formData.content" :value="formData.content" :upload_url="markdownEditorUploadUrl" />
       </FormItem>
     </Form>
     <div slot="footer">
@@ -90,17 +90,17 @@ import {
   getInfoById
 } from '@/api/article'
 import Upload from '_c/common/upload'
-import WangEditor from '_c/common/wang-editor'
+import MarkdownEditor from '_c/markdown_editor'
 import {
   addTag,
   getTagList
 } from '@/api/tag'
 import InputHelper from '_c/common/input-helper'
 export default {
-  props: ['modalId','articleCategories', 'tableStatus_enable', 'tableStatus_recommend', 'tableStatus_top'],
+  props: ['modalId', 'articleCategories', 'tableStatus_enable', 'tableStatus_recommend', 'tableStatus_top'],
   components: {
     Upload,
-    WangEditor,
+    MarkdownEditor,
     InputHelper
   },
   data() {
@@ -112,6 +112,7 @@ export default {
       Openness: '公开',
       articleTags: [],
       newTagName: '',
+      markdownEditorUploadUrl: window.uploadUrl.uploadToLocaleUrl + '/pic/markdown_editor_article_content',
       formData: {
         title: '',
         cover_image: {
@@ -143,18 +144,6 @@ export default {
         file_num: 1,
         data: {},
         default_list: []
-      },
-      wangUploadConfig: {
-        headers: {
-          'Authorization': window.access_token
-        },
-        wang_size: 1 * 1024 * 1024, // 1M
-        uploadUrl: window.uploadUrl.uploadToLocaleUrl + '/pic/editor_article_content',
-        params: {},
-        max_length: 3,
-        file_name: 'file',
-        z_index: 10000,
-        heightStyle: 'wang-editor-text-300'
       },
       rules: {
         title: [{
@@ -201,7 +190,7 @@ export default {
           enable: res_data.enable,
           keywords: res_data.keywords,
           description: res_data.description,
-          content: res_data.content.html,
+          content: res_data.content.raw,
           article_category_id: res_data.article_category_id,
           weight: res_data.weight,
           top: res_data.top,
@@ -211,7 +200,7 @@ export default {
         }
         t.handleSaveOpenness();
         t.imguploadConfig.default_list = [t.formData.cover_image]
-        t.formData.tags = res_data.tagids
+        t.formData.tags = res_data.tagids;
 
         t.formdataFinished = true
         t.spinLoading = false

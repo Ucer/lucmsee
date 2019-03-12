@@ -89,8 +89,10 @@ import {
   getTableData,
   destroy
 } from '@/api/article'
-import AddComponent from './components/add'
-import EditComponent from './components/edit'
+// import AddComponent from './components/add'
+// import EditComponent from './components/edit'
+import AddComponent from './components/markdown_add'
+import EditComponent from './components/markdown_edit'
 
 
 import {

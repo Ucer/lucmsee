@@ -1,7 +1,8 @@
 <template>
 <div>
   <Modal v-model="modalShow" :closable='false' :mask-closable=false width="70" class-name="article-modal">
-    <p slot="header">修改</p>
+    <p slot="header">{{ $t('add') }}</p>
+
     <Form ref="formData" :model="formData" :rules="rules" label-position="left" :label-width="100">
       <FormItem label="分类">
         <Select v-model="formData.article_category_id" filterable placeholder="请选择文章分类">
@@ -12,7 +13,7 @@
         <Input v-model="formData.title"></Input>
       </FormItem>
       <FormItem label="封面">
-        <upload v-if='formdataFinished' v-model="formData.cover_image"  :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
+        <upload v-model="formData.cover_image" :upload-config="imguploadConfig" @on-upload-change='uploadChange'></upload>
       </FormItem>
       <FormItem label="关键词" prop="keywords">
         <Input type="textarea" v-model="formData.keywords" placeholder="以英文逗号隔开"></Input>
@@ -66,52 +67,64 @@
         <Input v-model="formData.weight" placeholder="请输入序号" style="width: auto"></Input>
       </FormItem>
       <FormItem label="文章内容">
-        <wang-editor v-if="formdataFinished" :cache="false" :value="formData.content" v-model="formData.content" @on-change="editContentChange" :upload-config='wangUploadConfig'></wang-editor>
+          <markdown-editor v-model="formData.content" :upload_url="markdownEditorUploadUrl" :cache='true' />
       </FormItem>
     </Form>
     <div slot="footer">
-      <Button type="text" @click="cancel">取消</Button>
-      <Button type="primary" @click="editExcute" :loading='saveLoading'>保存
-      </Button>
-    </div>
-    <div class="demo-spin-container" v-if='spinLoading === true'>
-      <Spin fix>
-        <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
-        <div>{{ $t('table_loading') }}</div>
-      </Spin>
+      <Button type="text" @click="cancel">{{ $t('cancel') }}</Button>
+      <Button type="primary" @click="addExcute" :loading='saveLoading'>{{ $t('save') }} </Button>
     </div>
   </Modal>
-
 </div>
 </template>
 <script>
 import {
-  edit,
-  getInfoById
+  add
 } from '@/api/article'
 import Upload from '_c/common/upload'
-import WangEditor from '_c/common/wang-editor'
+import MarkdownEditor from '_c/markdown_editor'
 import {
   addTag,
   getTagList
 } from '@/api/tag'
 import InputHelper from '_c/common/input-helper'
+
 export default {
-  props: ['modalId','articleCategories', 'tableStatus_enable', 'tableStatus_recommend', 'tableStatus_top'],
+  props: ['articleCategories', 'tableStatus_enable', 'tableStatus_recommend', 'tableStatus_top'],
   components: {
     Upload,
-    WangEditor,
-    InputHelper
+    InputHelper,
+    MarkdownEditor
   },
   data() {
+    const validatePassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入登录密码'))
+      } else {
+        if (this.formData.password !== '') {
+          // 对第二个密码框单独验证
+          this.$refs.formData.validateField('password_confirmation')
+        }
+        callback()
+      }
+    }
+    const validatePasswordConfirm = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入确认密码'))
+      } else if (value !== this.formData.password) {
+        callback(new Error('两次密码不一致 '))
+      } else {
+        callback()
+      }
+    }
     return {
       modalShow: true,
       saveLoading: false,
-      spinLoading: true,
       editOpenness: false,
       Openness: '公开',
       articleTags: [],
       newTagName: '',
+      markdownEditorUploadUrl: window.uploadUrl.uploadToLocaleUrl + '/pic/markdown_editor_article_content',
       formData: {
         title: '',
         cover_image: {
@@ -128,9 +141,8 @@ export default {
         recommend: 'F',
         access_type: 'pub',
         access_value: '',
-        tags: 0
+        tags: 0,
       },
-      formdataFinished: false,
       imguploadConfig: {
         headers: {
           'Authorization': window.access_token
@@ -143,18 +155,6 @@ export default {
         file_num: 1,
         data: {},
         default_list: []
-      },
-      wangUploadConfig: {
-        headers: {
-          'Authorization': window.access_token
-        },
-        wang_size: 1 * 1024 * 1024, // 1M
-        uploadUrl: window.uploadUrl.uploadToLocaleUrl + '/pic/editor_article_content',
-        params: {},
-        max_length: 3,
-        file_name: 'file',
-        z_index: 10000,
-        heightStyle: 'wang-editor-text-300'
       },
       rules: {
         title: [{
@@ -182,52 +182,20 @@ export default {
       },
     }
   },
-  mounted() {
+  created() {
     this.getTagListExcute()
-
   },
   methods: {
-    getInfoByIdExcute() {
-      let t = this;
-      getInfoById(t.modalId).then(res => {
-        let res_data = res.data
-        t.formData = {
-          id: res_data.id,
-          title: res_data.title,
-          cover_image: {
-            attachment_id: 0,
-            url: res_data.cover_image,
-          },
-          enable: res_data.enable,
-          keywords: res_data.keywords,
-          description: res_data.description,
-          content: res_data.content.html,
-          article_category_id: res_data.article_category_id,
-          weight: res_data.weight,
-          top: res_data.top,
-          recommend: res_data.recommend,
-          access_type: res_data.access_type,
-          access_value: ''
-        }
-        t.handleSaveOpenness();
-        t.imguploadConfig.default_list = [t.formData.cover_image]
-        t.formData.tags = res_data.tagids
-
-        t.formdataFinished = true
-        t.spinLoading = false
-      })
-
-    },
-    editExcute() {
+    addExcute() {
       let t = this;
       t.$refs.formData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
-          edit(t.formData, t.modalId).then(res => {
+          add(t.formData).then(res => {
             t.saveLoading = false
             t.modalShow = false
-            t.$emit('on-edit-modal-success')
-            this.$emit('on-edit-modal-hide')
+            t.$emit('on-add-modal-success')
+            t.$emit('on-add-modal-hide')
             t.$Notice.success({
               title: res.message
             })
@@ -241,7 +209,7 @@ export default {
     },
     cancel() {
       this.modalShow = false
-      this.$emit('on-edit-modal-hide')
+      this.$emit('on-add-modal-hide')
     },
     editContentChange(html, text) {
       // console.log(this.formData.content)
@@ -260,7 +228,7 @@ export default {
     passwordValidate() {
       var access_type = this.formData.access_type;
       var access_value = this.formData.access_value;
-      if (access_type === 'pwd' && this.access_value) {
+      if (access_type === 'pwd') {
         var patt = /^[a-zA-Z0-9]{4,8}$/;
         if (!patt.test(access_value)) {
           this.$Notice.error({
@@ -277,9 +245,6 @@ export default {
       let t = this;
       getTagList([]).then(res => {
         t.articleTags = res.data;
-        if (this.modalId > 0) {
-          this.getInfoByIdExcute()
-        }
       })
     },
     addTagExcute() {

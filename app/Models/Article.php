@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Handlers\MarkdownerHandler;
 use App\Models\Traits\ArticleFilterTrait;
 use Auth;
 use Purifier;
@@ -38,12 +39,23 @@ class Article extends Model
 
     protected function setContentAttribute($value)
     {
+        /***
+         * wangeditor
         $value = Purifier::clean($value, 'article_content');
         $data = [
             'raw' => '',
             'html' => $value,
-//            'html' => (new MarkdownerHandler())->convertMarkdownToHtml($value)
         ];
+         */
+
+        /***
+         * markdowneditor
+         */
+        $data = [
+            'raw' => $value,
+            'html' => (new MarkdownerHandler())->convertMarkdownToHtml($value)
+        ];
+
         $this->attributes['content'] = json_encode($data);
     }
 
