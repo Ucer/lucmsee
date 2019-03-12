@@ -101,7 +101,7 @@ export default {
         {
           title: '字段名',
           key: 'column',
-          minWidth: 60,
+          minWidth: 100,
         },
         {
           title: '状态码',

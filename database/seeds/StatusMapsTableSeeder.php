@@ -52,6 +52,20 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'articles', 'column' => 'access_type', 'status_code' => 'pub', 'status_description' => '公开', 'remark' => ''],
             ['table_name' => 'articles', 'column' => 'access_type', 'status_code' => 'pri', 'status_description' => '私密', 'remark' => ''],
             ['table_name' => 'articles', 'column' => 'access_type', 'status_code' => 'pwd', 'status_description' => '密码访问', 'remark' => ''],
+            // admin_messages_table
+            ['table_name' => 'admin_messages', 'column' => 'message_type', 'status_code' => 'system', 'status_description' => '系统消息', 'remark' => ''],
+            ['table_name' => 'admin_messages', 'column' => 'message_type', 'status_code' => 'suggest', 'status_description' => '意建反馈', 'remark' => ''],
+
+            ['table_name' => 'admin_messages', 'column' => 'is_read', 'status_code' => 'T', 'status_description' => '已读', 'remark' => ''],
+            ['table_name' => 'admin_messages', 'column' => 'is_read', 'status_code' => 'F', 'status_description' => '未读', 'remark' => ''],
+            // app_messages_table
+            ['table_name' => 'app_messages', 'column' => 'message_type', 'status_code' => 'system', 'status_description' => '系统消息', 'remark' => ''],
+
+            ['table_name' => 'app_messages', 'column' => 'is_read', 'status_code' => 'T', 'status_description' => '已读', 'remark' => ''],
+            ['table_name' => 'app_messages', 'column' => 'is_read', 'status_code' => 'F', 'status_description' => '未读', 'remark' => ''],
+
+            ['table_name' => 'app_messages', 'column' => 'is_alert_at_home', 'status_code' => 'T', 'status_description' => '是', 'remark' => '是否在首页弹出'],
+            ['table_name' => 'app_messages', 'column' => 'is_alert_at_home', 'status_code' => 'F', 'status_description' => '否', 'remark' => '是否在首页弹出'],
         ];
         \App\Models\StatusMap::insert($data);
     }
