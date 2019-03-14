@@ -1,9 +1,9 @@
 <template>
 <div class="user-avator-dropdown">
   <Dropdown @on-click="handleClick">
-    <Avatar v-if="userAvator" :src="userAvator" />
-    <Avatar size="large" v-else style="color: #f56a00;background-color: #fde3cf">{{ userRealName.substr(0,1)}}</Avatar>
-    <span>{{ userNickName }}</span>
+    <Avatar v-if="stateAvatar" :src="stateAvatar" />
+    <Avatar size="large" v-else style="color: #f56a00;background-color: #fde3cf">{{ stateRealName.substr(0,1)}}</Avatar>
+    <span>{{ stateNickname }}</span>
     <Icon :size="18" type="md-arrow-dropdown"></Icon>
     <DropdownMenu slot="list">
       <DropdownItem name="profile">个人资料</DropdownItem>
@@ -92,16 +92,16 @@ export default {
     }
   },
   computed: {
-    userAvator() {
+    stateAvatar() {
       return this.$store.state.user.avator
     },
-    userNickName() {
+    stateNickname() {
       return this.$store.state.user.nickname
     },
-    userRealName() {
+    stateRealName() {
       return this.$store.state.user.real_name
     },
-    userEmail() {
+    stateEmail() {
       return this.$store.state.user.email
     },
   },

@@ -37,7 +37,7 @@
 import echarts from 'echarts'
 import userChartTheme from './user-chart/theme.json'
 
-import InforCard from '_c/info-card'
+import InforCard from './components/info-card'
 import CountTo from '_c/count-to'
 import ChartBar from './user-chart/bar.vue'
 

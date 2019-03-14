@@ -6,6 +6,7 @@ Route::namespace('Api')->group(function () {
     Route::get('get_captcha', 'OtherController@getCaptcha')->name('other.get_captcha');
 
     Route::post('login', 'LoginController@login')->name('login');
+    Route::post('logout', 'LoginController@logout')->name('logout');
 
     Route::post('common_switch_enable', 'CommonController@switchEnable');
     Route::post('common_edit_talbe_column', 'CommonController@editTalbleColumn')->name('common.edit_table_column');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Resources\CommonCollection;
 use App\Http\Resources\UserResource;
+use App\Models\AdminMessage;
 use App\Validates\UserValidate;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -109,8 +110,7 @@ class UsersController extends AdminController
         foreach ($authUser->roles as $role) {
             $return['roles'][] = $role['name'];
         }
-//        $return['unread_message'] = AdminMessage::where('status', 'U')->count();
-        $return['unread_message'] = 0;
+        $return['unread_message'] = AdminMessage::where('is_read', 'F')->whereIn('admin_id',[$authUser->id,0])->count();
 
         return $this->success($return);
     }

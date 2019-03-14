@@ -90,7 +90,7 @@ import {
   getInfoById
 } from '@/api/article'
 import Upload from '_c/common/upload'
-import MarkdownEditor from '_c/markdown_editor'
+import MarkdownEditor from '_c/markdown-editor'
 import {
   addTag,
   getTagList

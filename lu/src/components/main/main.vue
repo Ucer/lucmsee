@@ -4,13 +4,13 @@
   <Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
     <side-menu accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
       <Row class="sidebar-title">
-        <Col span="12" class="title-text hidden-mobile">Lucms</Col>
+        <Col span="12" class="title-text hidden-mobile">Lucmsee</Col>
         <Col span="12" class="notify-text">
-        <Badge :count="unReadMessage">
-          <a href="#/admin-messages" :title="unReadMessage+' 条未读消息'" v-if="unReadMessage > 0">
+        <Badge :count="stateUnreadMessage">
+          <a  @click="quickToRouter('adminMessages',{})" :title="stateUnreadMessage+' 条未读消息'" v-if="stateUnreadMessage > 0">
             <Icon type="ios-notifications" size="26"></Icon>
           </a>
-          <a href="#/admin-messages" title="暂无未读消息" v-else>
+          <a @click="quickToRouter('adminMessages',{})" title="暂无未读消息" v-else>
             <Icon type="ios-notifications" size="26"></Icon>
           </a>
         </Badge>
@@ -23,11 +23,11 @@
       <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
         <user />
         <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px;" :lang="local" />
-        <Dropdown style="margin-right:10px"  @on-click="useTools">
+        <Dropdown style="margin-right:10px" @on-click="useTools">
           <a href="javascript:void(0)">
             工具栏
             <Icon type="ios-arrow-down"></Icon>
-        </a>
+          </a>
           <DropdownMenu slot="list">
             <DropdownItem name='photo_editor'>图片裁剪</DropdownItem>
           </DropdownMenu>
@@ -119,8 +119,8 @@ export default {
     hasReadErrorPage() {
       return this.$store.state.app.hasReadErrorPage
     },
-    unReadMessage() {
-      return this.$store.state.user.unReadMessage
+    stateUnreadMessage() {
+      return this.$store.state.user.unread_message
     },
   },
   methods: {
@@ -179,11 +179,17 @@ export default {
     useTools(key) {
       switch (key) {
         case 'photo_editor':
-          window.open(window.baseUrl+'/'+key);
+          window.open(window.baseUrl + '/' + key);
           break;
         default:
 
       }
+    },
+    quickToRouter(name, param) {
+      this.$router.push({
+        name: name,
+        params: param
+      });
     }
   },
   watch: {
