@@ -48,8 +48,8 @@ class AppMessage extends Model
         }
         $now = date('Y-m-d H:i:s');
         $sql = "insert into app_messages (user_id,admin_id,title,content,url,is_alert_at_home,message_type,is_read,created_at)  values ";
-        foreach ($user_ids as $v) {
-            $sql .= "('" . $v . "','" . $admin_id . "','" . $title . "','" . $content . "','" . $url . "','" . $is_alert_at_home . "','" . $message_type . "','F','" . $now . "'),";
+        foreach ($user_ids as $user_id) {
+            $sql .= "('" . $user_id . "','" . $admin_id . "','" . $title . "','" . $content . "','" . $url . "','" . $is_alert_at_home . "','" . $message_type . "','F','" . $now . "'),";
         }
         $insert_sql = substr($sql, 0, -1);
         DB::beginTransaction();

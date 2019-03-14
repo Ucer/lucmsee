@@ -5,12 +5,23 @@
     <Col :xs="6" :lg="2">
     <Button type="success" icon="plus" @click="addBtn()">发消息</Button>
     </Col>
-    <Col :xs="0" :lg="2" class="hidden-mobile">
+    <Col :xs="1" :lg="3">
+    <Select v-model="searchForm.sendByMyself_or_beloneMe" placeholder="状态" @on-change="getTableDataExcute(feeds.current_page)">
+      <Option value="send_by_myself" key="send_by_myself">我发送的</Option>
+      <Option value="belone_me" key="belone_me">发给我的</Option>
+    </Select>
+    </Col>
+    <Col :xs="0" :lg="2" class="hidden-mobile" v-if="canOpMessage">
     <Poptip confirm placement="bottom" title="确认要删除选中的数据?" @on-ok="batchDestroyExcute(selectIds)" ok-text="确认" cancel-text="点错了">
       <Button type="error" :loading="loadingBatchDestroy">
         <span v-if="!loadingBatchDestroy">删除</span>
         <span v-else>删除中...</span>
       </Button>
+    </Poptip>
+    </Col>
+    <Col :xs="0" :lg="2" class="hidden-mobile" v-if="canOpMessage">
+    <Poptip confirm placement="bottom" title="确认要把所有消息置为已读?" @on-ok="readAllExcute()" ok-text="确认" cancel-text="点错了">
+      <Button type="warning">一键已读</Button>
     </Poptip>
     </Col>
     <Col :xs="1" :lg="3">
@@ -24,9 +35,6 @@
       <Option value="" key="">全部</Option>
       <Option v-for="(item,key) in tableStatus.is_read" :value="key" :key="key">{{ item }}</Option>
     </Select>
-    </Col>
-    <Col :xs="0" :lg="3" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入发送人手机号搜索..." v-model="searchForm.send_user_mobile"></Input>
     </Col>
     <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
@@ -43,10 +51,10 @@
     </div>
     <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange' @on-selection-change='onSelectionChange'>
 
-      <template slot-scope="{ row, index }" slot="send_user">
+      <template slot-scope="{ row, index }" slot="recive_user">
         {{ row.admin_user.real_name }}
       </template>
-      <template slot-scope="{ row, index }" slot="recive_user">
+      <template slot-scope="{ row, index }" slot="send_user">
         {{ row.user.real_name }}
       </template>
       <template slot-scope="{ row, index }" slot="message_type">
@@ -57,7 +65,8 @@
       </template>
       <template slot-scope="{ row, index }" slot="action">
         <Button type="primary" size="small" style="margin-right: 5px" @click="tableButtonShowInfo(row,index)">{{ $t('show_info') }}</Button>
-        <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
+        <Button v-if="row.is_read === 'F'" type="success" size="small" style="margin-right: 5px" @click="readOneExcute(row,index)">标为已读</Button>
+        <Poptip v-if="canOpMessage" confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
     <div style="margin: 10px;overflow: hidden">
@@ -67,8 +76,7 @@
     </div>
   </Row>
 
-
-  <add-component v-if='addModal.show' :tableStatus_is_alert_at_home="tableStatus.is_alert_at_home" :tableStatus_message_type="tableStatus.message_type" @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
+  <add-component v-if='addModal.show' :tableStatus_message_type="tableStatus.message_type" @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
   <show-info v-if='showInfoModal.show' :info='showInfoModal.info' @show-modal-close="showModalClose"></show-info>
 </div>
 </template>
@@ -79,9 +87,11 @@ import ShowInfo from './components/show-info'
 
 import {
   getTableData,
+  readOne,
+  readAll,
   destroy,
   batchDestroy
-} from '@/api/app_message'
+} from '@/api/admin_message'
 import {
   getTableStatus,
 } from '@/api/common'
@@ -95,10 +105,9 @@ export default {
     return {
       searchForm: {
         order_by: 'created_at,desc',
+        sendByMyself_or_beloneMe: 'belone_me',
         message_type: '',
         is_read: '',
-        is_alert_at_home: '',
-        send_user_mobile: ''
       },
       notRealySortKey: [],
       tableLoading: false,
@@ -137,15 +146,13 @@ export default {
           key: 'title',
           minWidth: 100,
         }, {
-          title: '发送人',
-          key: 'send_user',
-          minWidth: 80,
-          slot: 'send_user'
-        }, {
           title: '接收人',
-          key: 'recive_user',
           minWidth: 80,
           slot: 'recive_user'
+        }, {
+          title: '发送人',
+          minWidth: 80,
+          slot: 'send_user'
         },
         {
           title: '消息类型',
@@ -156,12 +163,6 @@ export default {
           minWidth: 40,
           slot: 'is_read'
         }, {
-          title: '内容',
-          key: 'content',
-          tooltip: true,
-          minWidth: 100
-        },
-        {
           title: '创建时间',
           key: 'created_at',
           minWidth: 150,
@@ -182,9 +183,14 @@ export default {
 
     }
   },
+  computed: {
+    canOpMessage() {
+      return this.searchForm.sendByMyself_or_beloneMe == 'belone_me';
+    }
+  },
   created() {
     let t = this
-    t.getTableStatusExcute('app_messages')
+    t.getTableStatusExcute('admin_messages')
   },
   methods: {
     handleOnPageChange: function(to_page) {
@@ -267,7 +273,28 @@ export default {
     },
     showModalClose() {
       this.showInfoModal.show = false
-    }
-  },
+    },
+    readAllExcute() {
+      let t = this
+      if (t.feeds.data.length < 1) {
+        this.$Notice.error({
+          title: '出错了',
+          desc: '没有消息'
+        })
+        return false
+      }
+
+      readAll().then(res => {
+        t.getTableDataExcute(t.feeds.current_page)
+      })
+
+    },
+    readOneExcute(row,index) {
+      let t = this
+      readOne(row.id).then(res => {
+        t.getTableDataExcute(t.feeds.current_page)
+      })
+    },
+  }
 }
 </script>

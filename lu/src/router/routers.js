@@ -204,6 +204,13 @@ export default[
           title: '站内信'
         },
         component: () => import ('@/view/message-center/app_messages/list.vue')
+      },{
+        path: '/dashboard/adminMessages',
+        name: 'adminMessages',
+        meta: {
+          title: '后台消息'
+        },
+        component: () => import ('@/view/message-center/admin_messages/list.vue')
       }
     ]
   }, {

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\AdminMessage;
 use App\Models\AppMessage;
 use App\Models\Article;
 use App\Models\ArticleCategory;
@@ -68,6 +69,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('app_message', function ($value) {
             return AppMessage::findOrFail($value);
+        });
+        Route::bind('admin_message', function ($value) {
+            return AdminMessage::findOrFail($value);
         });
     }
 

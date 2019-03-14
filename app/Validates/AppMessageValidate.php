@@ -12,8 +12,11 @@ class  AppMessageValidate extends Validate
     protected $message = '操作成功';
     protected $data = [];
 
-    public function storeValidate($request_data)
+    public function sendMessageToAppUserValidate($request_data)
     {
+        $authUser = Auth::user();
+        if (!$authUser->hasRole('Founder')) return $this->baseFailed('抱歉，您没有操作权限');
+
         $rules = [
             'title' => 'between:2,255',
             'message_type' => 'required',

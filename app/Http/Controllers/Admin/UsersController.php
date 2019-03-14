@@ -151,7 +151,12 @@ class UsersController extends AdminController
     {
         $rest_user = $user->columnLikeSearch('mobile', '%' . $mobile)->select('id', 'real_name', 'mobile')->get();
         return $this->success($rest_user);
+    }
 
+    public function searchAdminUserPassEmail($email, User $user)
+    {
+        $rest_user = $user->columnEqualSearch('is_admin', 'T')->columnLikeSearch('email', '%' . $email)->select('id', 'email', 'mobile')->get();
+        return $this->success($rest_user);
     }
 
 }

@@ -20,6 +20,7 @@ export default {
   articleList: '文章列表',
   messageCenter: '消息中心',
   appMessages: '站内信',
+  adminMessages: '后台消息',
 
   edit: '修改',
   add: '添加',

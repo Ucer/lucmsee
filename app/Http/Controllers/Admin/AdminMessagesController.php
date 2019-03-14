@@ -31,28 +31,65 @@ class AdminMessagesController extends AdminController
         if ($is_read) {
             $model = $model->columnEqualSearch('is_read', $is_read);
         }
+        $sendByMyself_or_beloneMe = isset_and_not_empty($search_data, 'sendByMyself_or_beloneMe');
+        $authId = Auth::id();
+        if ($sendByMyself_or_beloneMe == 'send_by_myself') {
+            $model = $model->where('user_id', $authId);
+        } elseif ($sendByMyself_or_beloneMe == 'belone_me') {
+            $model = $model->whereIn('admin_id', [$authId, 0]);
+        }
         $order_by = isset_and_not_empty($search_data, 'order_by');
         if ($order_by) {
             $order_by = explode(',', $order_by);
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
 
-        $model = $model->with('user')->paginate($per_page);
+        $model = $model->with('user', 'adminUser')->paginate($per_page);
         return new CommonCollection($model);
     }
 
-
-    public function readMessages(Request $request, AdminMessage $model)
+    public function sendMessageToAdmin(Request $request, AdminMessage $model, AdminMessageValidate $validate)
     {
-        $is_read_all = $request->is_read_all;
-        $message_ids = $request->message_ids;
-        if ($is_read_all) {
-            $model->where('is_read', 'F')->whereIn('admin_id', [Auth::id(), 0])->update(['is_read' => 'T']);
+        $request_data = $request->all();
+        $is_send_to_all = true;
+        if ($request_data['users']) {
+            $is_send_to_all = false;
         } else {
-            $model->whereIn('id', explode(',', $message_ids))->update(['is_rea' => 'T']);
+            unset($request_data['users']);
         }
-        return $this->message('操作成功');
+        $rest_validate = $validate->sendMessageToAdminValidate($request_data);
+        if ($rest_validate['status'] === true) {
+            $new_request_data = $rest_validate['data'];
+            $admin_id = Auth::id();
+            if ($is_send_to_all) {
+                $rest = $model->manyMessage([], $new_request_data['title'], $new_request_data['content'], $admin_id, $new_request_data['message_type']);
+            } else {
+                $rest = $model->manyMessage($new_request_data['users'], $new_request_data['title'], $new_request_data['content'], $admin_id, $new_request_data['message_type']);
+            }
+            if ($rest['status'] === true) return $this->message($rest['message']);
+            return $this->failed($rest['message']);
+        } else {
+            return $this->failed($rest_validate['message']);
+        }
+    }
 
+    public function readOne(AdminMessage $model, AdminMessageValidate $validate)
+    {
+        $authId = Auth::id();
+        $rest_validate = $validate->readOneValidate($model, $authId);
+        if ($rest_validate['status'] === true) {
+            $model->is_read = 'T';
+            $model->save();
+            return $this->message('操作成功');
+        } else {
+            return $this->failed($rest_validate['message']);
+        }
+    }
+
+    public function readAll(Request $request, AdminMessage $model)
+    {
+        $model->where('is_read', 'F')->whereIn('admin_id', [Auth::id(), 0])->update(['is_read' => 'T']);
+        return $this->message('操作成功');
     }
 
     public function destroy(AdminMessage $model, AdminMessageValidate $validate)
@@ -68,9 +105,9 @@ class AdminMessagesController extends AdminController
         }
     }
 
-    public function destroyMany(AdminMessage $model, AdminMessageValidate $validate, $ids)
+    public function destroyBatch(AdminMessage $model, AdminMessageValidate $validate, $ids)
     {
-        $rest_validate = $validate->destroyManyValidate($model);
+        $rest_validate = $validate->destroyBatchValidate($model);
         if ($rest_validate['status'] === true) {
             $model->whereIn('id', explode(',', $ids))->delete();
             return $this->message('操作成功');

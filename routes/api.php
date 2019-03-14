@@ -25,6 +25,7 @@ Route::namespace('Admin')->group(function () {
     /**       ==========================          自带 Api           ====================   */
     Route::get('admin/users/current_user', 'UsersController@currentUser')->name('users.current_user');
     Route::get('admin/users/search_user_pass_mobile/{mobile}', 'UsersController@searchUserPassMobile')->name('users.search_user_pass_mobile');
+    Route::get('admin/users/search_admin_user_pass_email/{email}', 'UsersController@searchAdminUserPassEmail')->name('users.search_admin_user_pass_email');
     Route::get('admin/statistics', 'StatisticsController@base')->name('statistics.base');
 
 
@@ -110,4 +111,11 @@ Route::namespace('Admin')->group(function () {
     Route::post('admin/app_messages/send_message_to_app_user', 'AppMessagesController@sendMessageToAppUser')->name('app_messages.send_message_to_app_user');
     Route::delete('admin/app_messages/{app_message}', 'AppMessagesController@destroy')->name('app_messages.destroy');
     Route::delete('admin/app_messages/{ids}/batch', 'AppMessagesController@destroyBatch')->name('app_messages.destroy_batch');
+
+    Route::get('admin/admin_messages', 'AdminMessagesController@list')->name('admin_messages.list');
+    Route::post('admin/admin_messages/send_message_to_admin', 'AdminMessagesController@sendMessageToAdmin')->name('admin_messages.send_message_to_admin');
+    Route::delete('admin/admin_messages/{admin_message}', 'AdminMessagesController@destroy')->name('admin_messages.destroy');
+    Route::delete('admin/admin_messages/{ids}/batch', 'AdminMessagesController@destroyBatch')->name('admin_messages.destroy_batch');
+    Route::patch('admin/admin_messages/read_all', 'AdminMessagesController@readAll')->name('admin_messages.read_all');
+    Route::patch('admin/admin_messages/read/{admin_message}', 'AdminMessagesController@readOne')->name('admin_messages.read_one');
 });

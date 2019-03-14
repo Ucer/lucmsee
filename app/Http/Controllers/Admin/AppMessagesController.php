@@ -24,10 +24,10 @@ class AppMessagesController extends AdminController
 
         $search_data = json_decode($request->get('search_data'), true);
 
-        $mobile = isset_and_not_empty($search_data, 'mobile');
-        if ($mobile) {
-            $user_ids = User::columnLikeSearch('mobile', '%' . $mobile)->pluck('id')->toArray();
-            $model = $model->columnInSearch('user_id', $user_ids);
+        $send_user_mobile = isset_and_not_empty($search_data, 'send_user_mobile');
+        if ($search_data) {
+            $user_ids = User::columnLikeSearch('mobile', '%' . $send_user_mobile)->pluck('id')->toArray();
+            $model = $model->columnInSearch('admin_id', $user_ids);
         }
 
         $message_type = isset_and_not_empty($search_data, 'message_type');
@@ -44,7 +44,7 @@ class AppMessagesController extends AdminController
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
 
-        $model = $model->with('user','adminUser')->paginate($per_page);
+        $model = $model->with('user', 'adminUser')->paginate($per_page);
         return new CommonCollection($model);
     }
 
@@ -58,7 +58,7 @@ class AppMessagesController extends AdminController
         } else {
             unset($request_data['users']);
         }
-        $rest_validate = $validate->storeValidate($request_data);
+        $rest_validate = $validate->sendMessageToAppUserValidate($request_data);
         if ($rest_validate['status'] === true) {
             $new_request_data = $rest_validate['data'];
             $admin_id = Auth::id();
