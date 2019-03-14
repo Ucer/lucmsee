@@ -12,11 +12,21 @@ export const getTableData = (to_page, per_page, searchdata) => {
   })
 };
 export const sendMessageToAppUser = (formData) => {
-  return axios.request({url: '/api/admin/app_messages/send_message_to_app_user', data: formData, method: 'post'})
+  return axios.request({
+    url: '/api/admin/app_messages/send_message_to_app_user',
+    data: formData,
+    method: 'post'
+  })
 };
 export const destroy = (id) => {
   return axios.request({
     url: '/api/admin/app_messages/' + id,
+    method: 'delete'
+  })
+};
+export const batchDestroy = (ids) => {
+  return axios.request({
+    url: '/api/admin/app_messages/' + ids + '/batch',
     method: 'delete'
   })
 };

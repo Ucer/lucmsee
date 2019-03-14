@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Resources\CommonCollection;
 use App\Models\AppMessage;
+use App\Models\User;
 use App\Validates\AppMessageValidate;
 use Illuminate\Http\Request;
 use Auth;
@@ -43,7 +44,7 @@ class AppMessagesController extends AdminController
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
 
-        $model = $model->with('user')->paginate($per_page);
+        $model = $model->with('user','adminUser')->paginate($per_page);
         return new CommonCollection($model);
     }
 
@@ -86,7 +87,7 @@ class AppMessagesController extends AdminController
         }
     }
 
-    public function destroyMany(AppMessage $model, AppMessageValidate $validate, $ids)
+    public function destroyBatch(AppMessage $model, AppMessageValidate $validate, $ids)
     {
         $rest_validate = $validate->destroyManyValidate($model);
         if ($rest_validate['status'] === true) {

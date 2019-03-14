@@ -1,15 +1,14 @@
 <template>
 <div>
   <Drawer :closable="true" v-model="show" @on-close='closed' title="消息详情" :width="platformIsPc?30:80">
-    <p class="drawer-title">基本资料：</p>
     <div class="drawer-profile">
       <Row>
-        <Col span="12"> 消息标题： {{info.title}} </Col>
-        <Col span="12" v-if="info.user"> 接收人：{{ info.user.name }} ({{ info.user.phone }}) </Col>
+        <li> <span class="blod-font">消息标题：</span> {{info.title}} </li>
+        <li v-if="info.admin_user"> <span class="blod-font">发送人：</span>{{ info.admin_user.real_name }} ({{ info.admin_user.mobile }}) </li>
+        <li v-if="info.user"><span class="blod-font"> 接收人：</span>{{ info.user.real_name }} ({{ info.user.mobile }}) </li>
       </Row>
-      <Divider/>
-      <p class="drawer-title">消息内容：</p>
-      <div v-html='info.content'> </div>
+      <h2 class="text-center margin-top-8">消息内容</h2>
+      <div class="text-center" v-html='info.content'> </div>
     </div>
   </Drawer>
 </div>

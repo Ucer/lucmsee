@@ -5,7 +5,14 @@
     <Col :xs="6" :lg="2">
     <Button type="success" icon="plus" @click="addBtn()">发消息</Button>
     </Col>
-    <Col :xs="1" :lg="6" class="hidden-mobile">
+
+    <Col :xs="0" :lg="2" class="hidden-mobile">
+    <Button type="error" :loading="loadingBatchDestroy" @click="batchDestroyExcute(selectIds,false)">
+      <span v-if="!loadingBatchDestroy">删除</span>
+      <span v-else>删除中...</span>
+    </Button>
+    </Col>
+    <Col :xs="1" :lg="3" class="hidden-mobile">
     <Input icon="search" placeholder="请输入用户电话..." v-model="searchForm.mobile" />
     </Col>
     <Col :xs="1" :lg="3">
@@ -39,24 +46,20 @@
         <div>{{ $t('table_loading') }}</div>
       </Spin>
     </div>
-    <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
+    <Table border :columns="columns" :data="feeds.data" @on-sort-change='onSortChange' @on-selection-change='onSelectionChange'>
 
-      <template slot-scope="{ row, index }" slot="avatar">
-        <div class="text-center">
-          <Avatar size="large" :src="row.avatar" v-if="row.avatar" class="fancybox" :href="row.avatar" title="头像" alt="头像"></Avatar>
-          <Avatar v-else size="large" style="color: #f56a00;background-color: #fde3cf">{{ row.real_name.substr(0,1)}}</Avatar>
-        </div>
+      <template slot-scope="{ row, index }" slot="send_user">
+        {{ row.admin_user.real_name }}
       </template>
-
-      <template slot-scope="{ row, index }" slot="is_admin">
-        <Tag v-if="row.is_admin === 'T'" :color="'green'">可登录</Tag>
-        <Tag v-else :color="'red'">不可登录</Tag>
+      <template slot-scope="{ row, index }" slot="recive_user">
+        {{ row.user.real_name }}
       </template>
-
-      <template slot-scope="{ row, index }" slot="enable">
-        <iSwitch :slot="'open'" type='primary' :value="row.enable === 'T'" @on-change="switchChange(row,index)"></iSwitch>
+      <template slot-scope="{ row, index }" slot="message_type">
+        {{ tableStatus.message_type[row.message_type] }}
       </template>
-
+      <template slot-scope="{ row, index }" slot="is_read">
+        {{ tableStatus.is_read[row.is_read] }}
+      </template>
       <template slot-scope="{ row, index }" slot="action">
         <Button type="primary" size="small" style="margin-right: 5px" @click="tableButtonShowInfo(row,index)">{{ $t('show_info') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
@@ -70,8 +73,7 @@
   </Row>
 
 
-  <add-component v-if='addModal.show' :tableStatus_is_alert_at_home="tableStatus.is_alert_at_home"  :tableStatus_message_type="tableStatus.message_type" @on-add-modal-success='getTableDataExcute(feeds.current_page)'
-    @on-add-modal-hide="addModalHide"></add-component>
+  <add-component v-if='addModal.show' :tableStatus_is_alert_at_home="tableStatus.is_alert_at_home" :tableStatus_message_type="tableStatus.message_type" @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
   <show-info v-if='showInfoModal.show' :info='showInfoModal.info' @show-modal-close="showModalClose"></show-info>
 </div>
 </template>
@@ -83,7 +85,8 @@ import ShowInfo from './components/show-info'
 import {
   getTableData,
   sendMessageToAppUser,
-  destroy
+  destroy,
+  batchDestroy
 } from '@/api/app_message'
 import {
   getTableStatus,
@@ -105,6 +108,8 @@ export default {
       },
       notRealySortKey: [],
       tableLoading: false,
+      loadingBatchDestroy: false,
+      selectIds: '',
       tableStatus: {
         message_type: [],
         is_read: [],
@@ -124,6 +129,10 @@ export default {
         info: ''
       },
       columns: [{
+          type: 'selection',
+          width: 60,
+          align: 'center'
+        }, {
           title: 'ID',
           key: 'id',
           sortable: 'customer',
@@ -150,7 +159,7 @@ export default {
           slot: 'message_type'
         }, {
           title: '是否已读',
-          minWidth: 100,
+          minWidth: 40,
           slot: 'is_read'
         }, {
           title: '内容',
@@ -222,6 +231,12 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
+    onSelectionChange: function(selection) {
+      this.selectIds = ''
+      for (let index in selection) {
+        this.selectIds += ',' + selection[index].id
+      }
+    },
     tableButtonDestroyOk(row, index) {
       let t = this
       destroy(row.id).then(res => {
@@ -237,9 +252,27 @@ export default {
     addModalHide() {
       this.addModal.show = false
     },
+    batchDestroyExcute(ids) {
+      if (!ids) {
+        this.$Notice.error({
+          title: '出错了',
+          desc: '请先选择要操作的项'
+        })
+        return false
+      }
+      let t = this
+      t.loadingBatchDestroy = true
+      batchDestroy(ids).then(res => {
+        t.getTableDataExcute(t.feeds.current_page)
+        t.loadingBatchDestroy = false
+      })
+    },
     tableButtonShowInfo(row, index) {
       this.showInfoModal.show = true
       this.showInfoModal.info = row
+    },
+    showModalClose() {
+      this.showInfoModal.show = false
     }
   },
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\AppMessage;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\Attachment;
@@ -64,6 +65,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('article', function ($value) {
             return Article::findOrFail($value);
+        });
+        Route::bind('app_message', function ($value) {
+            return AppMessage::findOrFail($value);
         });
     }
 

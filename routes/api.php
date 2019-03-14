@@ -108,5 +108,6 @@ Route::namespace('Admin')->group(function () {
 
     Route::get('admin/app_messages', 'AppMessagesController@list')->name('app_messages.list');
     Route::post('admin/app_messages/send_message_to_app_user', 'AppMessagesController@sendMessageToAppUser')->name('app_messages.send_message_to_app_user');
-    Route::delete('admin/app_messages/{article}', 'AppMessagesController@destroy')->name('app_messages.destroy');
+    Route::delete('admin/app_messages/{app_message}', 'AppMessagesController@destroy')->name('app_messages.destroy');
+    Route::delete('admin/app_messages/{ids}/batch', 'AppMessagesController@destroyBatch')->name('app_messages.destroy_batch');
 });

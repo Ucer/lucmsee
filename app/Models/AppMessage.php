@@ -9,9 +9,6 @@ class AppMessage extends Model
 {
     use SoftDeletes;
 
-    protected $casts = [
-        'content' => 'array',
-    ];
 
     protected $fillable = [
         'admin_id', 'user_id', 'title', 'message_type', 'content', 'url', 'is_read', 'is_alert_at_home'
@@ -20,12 +17,12 @@ class AppMessage extends Model
 
     public function adminUser()
     {
-        return $this->hasOne('App\Models\User', 'id', 'admin_id')->select('id,name');
+        return $this->hasOne('App\Models\User', 'id', 'admin_id')->select('id', 'real_name', 'mobile');
     }
 
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'id', 'user_id')->select('id', 'phone', 'name');
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->select('id', 'mobile', 'real_name');
     }
 
     public function oneMessage($user_id, $title, $content, $admin_id = 0, $url = '', $is_alert_at_home = 'F', $message_type = 'system')
@@ -46,7 +43,7 @@ class AppMessage extends Model
 
     public function manyMessage($user_ids = [], $title, $content, $admin_id = 0, $url = '', $is_alert_at_home = 'F', $message_type = 'system')
     {
-        if (count($user_ids < 1)) {
+        if (count($user_ids) < 1) {
             $user_ids = User::pluck('id');
         }
         $now = date('Y-m-d H:i:s');
