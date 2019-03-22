@@ -8,8 +8,8 @@
   <Row :gutter="20">
     <i-col span="4" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" style="height: 120px;">
       <infor-card shadow :color="infor.color" :icon="infor.icon" :icon-size="36">
-        <a :href="infor.url">
-          <count-to :end="infor.count" count-class="count-style" />
+        <a @click="quickToRouter(infor.routerName,{})">
+          <count-to :end=" infor.count" count-class="count-style" />
         </a>
         <p>{{ infor.title }}</p>
       </infor-card>
@@ -61,6 +61,12 @@ export default {
 
   },
   methods: {
+    quickToRouter(name, param) {
+      this.$router.push({
+        name: name,
+        params: param
+      });
+    },
     getStatisticsDataExcute() {
       let t = this
       getStatisticsData().then(res => {
@@ -72,13 +78,13 @@ export default {
           icon: 'ios-people',
           count: res_data.user_count,
           color: '#009688',
-          url: '#/administrator-list'
+          routerName: 'userList'
         }, {
           title: '文章数量',
           icon: 'ios-paper',
           count: res_data.article_count,
           color: '#2D8cF0',
-          url: '#/article-list'
+          routerName: 'articleList'
         }, ]
       })
     },

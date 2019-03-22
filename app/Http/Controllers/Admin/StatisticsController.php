@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\AdminMessage;
+use App\Models\Article;
 use App\Models\User;
+use Auth;
 
 class StatisticsController extends AdminController
 {
@@ -17,10 +20,13 @@ class StatisticsController extends AdminController
     public function base()
     {
         $model_user = new User();
+        $model_adminMessage = new AdminMessage();
+        $model_article = new Article();
+        $authId = Auth::id();
         $return = [
-            'unread_message' => 1,
+            'unread_message' => $model_adminMessage->columnInSearch('admin_id',[0,$authId])->columnEqualSearch('is_read','F')->count(),
             'user_count' => $model_user->count(),
-            'article_count' => 1,
+            'article_count' => $model_article->count(),
             'user_echart_data' => $this->getUserChartData($model_user)
         ];
         return $this->success($return);
