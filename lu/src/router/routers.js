@@ -183,6 +183,13 @@ export default[
           title: '文章列表'
         },
         component: () => import ('@/view/news-system/articles/list.vue')
+      },{
+        path: '/dashboard/carouselList',
+        name: 'carouselList',
+        meta: {
+          title: '轮播图'
+        },
+        component: () => import ('@/view/news-system/carousels/list.vue')
       }
     ]
   }, {

@@ -119,4 +119,11 @@ Route::namespace('Admin')->group(function () {
     Route::delete('admin/admin_messages/{ids}/batch', 'AdminMessagesController@destroyBatch')->name('admin_messages.destroy_batch');
     Route::patch('admin/admin_messages/read_all', 'AdminMessagesController@readAll')->name('admin_messages.read_all');
     Route::patch('admin/admin_messages/read/{admin_message}', 'AdminMessagesController@readOne')->name('admin_messages.read_one');
+
+
+    Route::get('admin/carousels', 'CarouselsController@list')->name('carousels.list');
+    Route::post('admin/carousels', 'CarouselsController@store')->name('carousels.store');
+    Route::patch('admin/carousels/{carousel}', 'CarouselsController@update')->name('carousels.update');
+    Route::get('admin/carousels/{carousel}', 'CarouselsController@show')->name('carousels.show');
+    Route::delete('admin/carousels/{carousel}', 'CarouselsController@destroy')->name('carousels.destroy');
 });

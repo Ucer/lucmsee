@@ -21,6 +21,7 @@ export default {
   messageCenter: '消息中心',
   appMessages: '站内信',
   adminMessages: '后台消息',
+  carouselList: '轮播图',
 
   edit: '修改',
   add: '添加',

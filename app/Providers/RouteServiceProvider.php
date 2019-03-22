@@ -7,6 +7,7 @@ use App\Models\AppMessage;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\Attachment;
+use App\Models\Carousel;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\StatusMap;
@@ -72,6 +73,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('admin_message', function ($value) {
             return AdminMessage::findOrFail($value);
+        });
+        Route::bind('carousel', function ($value) {
+            return Carousel::findOrFail($value);
         });
     }
 
