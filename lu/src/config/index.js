@@ -9,8 +9,9 @@ export default {
    * @description 配置显示在浏览器标签的title
    */
   title: 'Lucmsee',
+  systemTitle: 'Lucmsee', // 菜单栏上方的大标题
   /**
-   * @description token在Cookie中存储的天数，默认1天
+   * @description token在Cookie中存储的天数，默认1天 (最好与后端 oauth_token的有效时间保持一致)
    */
   cookieExpires: 1,
   /**
@@ -23,7 +24,7 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    proxy: 'http://localhost:8090', // 如果使用了代理，aioxs.js 中的 getInsideConfig baseURL修改为这个
+    proxy: 'http://localhost:8090', // 如果使用了代理，aioxs.js 中的 getInsideConfig baseURL修改为这个(开发环境统一使用代理)
     dev: 'http://lucmsee.test',
     pro: 'http://lucmsee.test'
   },

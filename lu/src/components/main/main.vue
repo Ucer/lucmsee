@@ -4,7 +4,7 @@
   <Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
     <side-menu accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
       <Row class="sidebar-title">
-        <Col span="12" class="title-text hidden-mobile">Lucmsee</Col>
+        <Col span="12" class="title-text hidden-mobile">{{ systemTitle }}</Col>
         <Col span="12" class="notify-text">
         <Badge :count="stateUnreadMessage">
           <a  @click="quickToRouter('adminMessages',{})" :title="stateUnreadMessage+' 条未读消息'" v-if="stateUnreadMessage > 0">
@@ -90,7 +90,8 @@ export default {
       collapsed: false,
       minLogo,
       maxLogo,
-      isFullscreen: false
+      isFullscreen: false,
+      systemTitle: window.systemConfigIndexFile.systemTitle
     }
   },
   computed: {

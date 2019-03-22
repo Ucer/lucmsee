@@ -27,6 +27,7 @@ require('./assets/vendor/fancybox/jquery.fancybox');
 
 const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
 window.baseUrl = baseUrl
+window.systemConfigIndexFile = config
 
 window.uploadUrl = {
   imageUploadToFileSystemUrl: config.domainForFileSystem + '/api/image_upload/' + config.platName,
