@@ -126,6 +126,22 @@ class  UserValidate extends Validate
         return $this->baseSucceed();
     }
 
+
+    public function resetPasswordValidate($request_data)
+    {
+        $rules = [
+            'password' => 'required|between:6,12|alpha_num|confirmed',
+        ];
+        $rest_validate = $this->validate($request_data, $rules);
+        if ($rest_validate === true) {
+            return $this->baseSucceed($request_data, $this->message);
+        } else {
+            $this->message = $rest_validate;
+            return $this->baseFailed($this->message);
+        }
+
+    }
+
     protected function validate($request_data, $rules)
     {
         $message = [

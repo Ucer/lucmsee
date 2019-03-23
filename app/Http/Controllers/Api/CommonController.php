@@ -70,6 +70,11 @@ class CommonController extends ApiController
                     return $this->failed('不允许修改此字段操作');
                 }
                 break;
+            case 'carousels':
+                if (!in_array($request->column, ['weight'])) {
+                    return $this->failed('不允许修改此字段操作');
+                }
+                break;
             default:
                 return $this->failed('不允许的操作');
                 break;

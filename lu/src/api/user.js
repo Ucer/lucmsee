@@ -88,12 +88,10 @@ export const giveUserRole = (userId, roles) => {
     method: 'post'
   })
 };
-export const updatePassword = (userId, roles) => {
+export const resetPassword = (formData) => {
   return axios.request({
-    url: '/api/admin/users/give/' + userId + '/roles',
-    data: {
-      role: roles
-    },
+    url: '/api/admin/users/reset_password',
+    data: formData,
     method: 'post'
   })
 };

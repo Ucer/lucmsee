@@ -28,6 +28,7 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/users/search_user_pass_mobile/{mobile}', 'UsersController@searchUserPassMobile')->name('users.search_user_pass_mobile');
     Route::get('admin/users/search_admin_user_pass_email/{email}', 'UsersController@searchAdminUserPassEmail')->name('users.search_admin_user_pass_email');
     Route::get('admin/statistics', 'StatisticsController@base')->name('statistics.base');
+    Route::post('admin/users/reset_password', 'UsersController@resetPassword')->name('users.reset_password');
 
 
     Route::get('admin/permissions', 'PermissionsController@list')->name('permissions.list');
@@ -54,6 +55,8 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/users/{user}/roles', 'UsersController@getUserRoles')->name('users.get_user_roles');
     Route::post('admin/users/give/{user}/roles', 'UsersController@giveUserRoles')->name('users.give_user_roles');
 
+
+    Route::get('admin/tables/get_all_tables/{table_name?}', 'TablesController@getAllTables')->name('tables.get_all_tables');
 
     Route::get('admin/tables', 'TablesController@list')->name('tables.list');
     Route::post('admin/tables', 'TablesController@store')->name('tables.store');
@@ -126,4 +129,9 @@ Route::namespace('Admin')->group(function () {
     Route::patch('admin/carousels/{carousel}', 'CarouselsController@update')->name('carousels.update');
     Route::get('admin/carousels/{carousel}', 'CarouselsController@show')->name('carousels.show');
     Route::delete('admin/carousels/{carousel}', 'CarouselsController@destroy')->name('carousels.destroy');
+
+
+    Route::get('admin/logs', 'LogsController@list')->name('logs.list');
+    Route::get('admin/logs/{log}', 'LogsController@show')->name('logs.show');
+    Route::delete('admin/logs/{log}', 'LogsController@destroy')->name('logs.destroy');
 });

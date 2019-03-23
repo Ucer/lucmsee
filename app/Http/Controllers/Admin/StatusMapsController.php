@@ -59,7 +59,7 @@ class StatusMapsController extends AdminController
         $new_request_data = $rest_validate['data'];
         $res = $model->storeAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'insert', 'status_map', '添加数据字典', $new_request_data);
+            admin_log_record(Auth::id(), 'insert', 'status_maps', '添加数据字典', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -90,7 +90,7 @@ class StatusMapsController extends AdminController
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $rest_destroy = $model->destroyAction();
         if ($rest_destroy['status'] === true) {
-            admin_log_record(Auth::id(), 'destroy', 'status_map', '删除数据字典', $model->toArray());
+            admin_log_record(Auth::id(), 'destroy', 'status_maps', '删除数据字典', $model->toArray());
             return $this->message($rest_destroy['message']);
         }
         return $this->failed($rest_destroy['message'], 500);

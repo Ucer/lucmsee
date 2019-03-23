@@ -25,7 +25,7 @@
     </Form>
     <div slot="footer">
       <Button type="text" @click="cancel">取消</Button>
-      <Button type="primary" @click="updatePasswordExcute" :loading='saveLoading'>修改 </Button>
+      <Button type="primary" @click="resetPasswordExcute" :loading='saveLoading'>修改 </Button>
     </div>
   </Modal>
 </div>
@@ -38,7 +38,7 @@ import {
   getUserInfo
 } from '@/api/user'
 import {
-  updatePassword
+  resetPassword
 } from '@/api/user'
 import {
   mapActions
@@ -137,12 +137,12 @@ export default {
         t.showInfoModal.show = true
       })
     },
-    updatePasswordExcute() {
+    resetPasswordExcute() {
       let t = this;
       t.$refs.editPasswordFormData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
-          updatePassword(t.formData).then(res => {
+          resetPassword(t.formData).then(res => {
             t.saveLoading = false
             t.modalShow = false
             t.$Notice.success({

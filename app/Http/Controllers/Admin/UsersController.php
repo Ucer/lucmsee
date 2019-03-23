@@ -110,7 +110,7 @@ class UsersController extends AdminController
         foreach ($authUser->roles as $role) {
             $return['roles'][] = $role['name'];
         }
-        $return['unread_message'] = AdminMessage::where('is_read', 'F')->whereIn('admin_id',[$authUser->id,0])->count();
+        $return['unread_message'] = AdminMessage::where('is_read', 'F')->whereIn('admin_id', [$authUser->id, 0])->count();
 
         return $this->success($return);
     }
@@ -157,6 +157,21 @@ class UsersController extends AdminController
     {
         $rest_user = $user->columnEqualSearch('is_admin', 'T')->columnLikeSearch('email', '%' . $email)->select('id', 'email', 'mobile')->get();
         return $this->success($rest_user);
+    }
+
+    public function resetPassword(Request $request, UserValidate $validate, User $model)
+    {
+        $request_data = $request->all();
+        $authUser = Auth::user();
+        $rest_validate = $validate->resetPasswordValidate($request_data);
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+        $new_request_data = $rest_validate['data'];
+        $res = $model->resetPasswordAction($new_request_data, $authUser);
+        if ($res['status'] === true) {
+            return $this->message($res['message']);
+        }
+        return $this->failed($res['message']);
+
     }
 
 }

@@ -183,7 +183,7 @@ export default[
           title: '文章列表'
         },
         component: () => import ('@/view/news-system/articles/list.vue')
-      },{
+      }, {
         path: '/dashboard/carouselList',
         name: 'carouselList',
         meta: {
@@ -210,13 +210,33 @@ export default[
           title: '站内信'
         },
         component: () => import ('@/view/message-center/app_messages/list.vue')
-      },{
+      }, {
         path: '/dashboard/adminMessages',
         name: 'adminMessages',
         meta: {
           title: '后台消息'
         },
         component: () => import ('@/view/message-center/admin_messages/list.vue')
+      }
+    ]
+  }, {
+    path: '/dashboard/systemSecurity',
+    name: 'systemSecurity',
+    component: Main,
+    meta: {
+      icon: 'ios-desktop',
+      title: '系统安全',
+      access: ['Founder'],
+      showAlways: true
+    },
+    children: [
+      {
+        path: '/dashboard/systemLogs',
+        name: 'systemLogs',
+        meta: {
+          title: '操作日志'
+        },
+        component: () => import ('@/view/system-security/logs/list.vue')
       }
     ]
   }, {

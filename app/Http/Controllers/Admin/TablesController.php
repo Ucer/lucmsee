@@ -23,7 +23,7 @@ class TablesController extends AdminController
 
         $table_name = isset_and_not_empty($search_data, 'table_name');
         if ($table_name) {
-            $model = $model->where('table_name','like', '%'.$table_name)->orWhere('table_name_cn','like','%'.$table_name.'%');
+            $model = $model->where('table_name', 'like', '%' . $table_name)->orWhere('table_name_cn', 'like', '%' . $table_name . '%');
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
@@ -32,10 +32,10 @@ class TablesController extends AdminController
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
         $list = $model->get();
-        if($list) {
+        if ($list) {
             $model_status_map = new StatusMap();
             $list->each(function ($item) use ($model_status_map) {
-                $item->map_count = $model_status_map->where('table_name',$item->table_name)->count();
+                $item->map_count = $model_status_map->where('table_name', $item->table_name)->count();
             });
         }
 
@@ -69,7 +69,7 @@ class TablesController extends AdminController
     {
         $request_data = $request->all();
 
-        $rest_validate = $validate->updateValidate($request_data,$model);
+        $rest_validate = $validate->updateValidate($request_data, $model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $new_request_data = $rest_validate['data'];
 
@@ -93,6 +93,16 @@ class TablesController extends AdminController
             return $this->message($rest_destroy['message']);
         }
         return $this->failed($rest_destroy['message'], 500);
+    }
+
+    public function getAllTables(Table $model, Request $request)
+    {
+        $table_name = $request->table_name;
+        if ($table_name) {
+            $model = $model->columnLikeSearch('table_name', '%' . $table_name);
+        }
+        $list = $model->select('id', 'table_name', 'table_name_cn')->get()->keyBy('table_name');
+        return $this->success($list);
     }
 
 

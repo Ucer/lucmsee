@@ -22,6 +22,9 @@ export default {
   appMessages: '站内信',
   adminMessages: '后台消息',
   carouselList: '轮播图',
+  systemSecurity: '系统安全',
+  systemLogs: '系统日志',
+
 
   edit: '修改',
   add: '添加',

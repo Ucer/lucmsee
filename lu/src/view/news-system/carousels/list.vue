@@ -13,11 +13,14 @@
         <div>{{ $t('table_loading') }}</div>
       </Spin>
     </div>
-    <Table border :columns="columns" :data="dataList" @on-sort-change='onSortChange'>
+    <Table editable border :columns="columns" :data="dataList" @on-sort-change='onSortChange'>
+      <template slot-scope="{ row, index }" slot="weight">
+        <table-edit table="carousels" column="weight" :id="row.id" :value="row.weight" :index="index"></table-edit>
+      </template>
 
       <template slot-scope="{ row, index }" slot="cover_image">
         <div class="text-center">
-          <img v-if="row.cover_image" class="fancybox"  :href="row.cover_image" :src="row.cover_image" alt="封面" style="max-height:100px">
+          <img v-if="row.cover_image" class="fancybox" :href="row.cover_image" :src="row.cover_image" alt="封面" style="max-height:100px">
           <span v-else></span>
         </div>
       </template>
@@ -38,6 +41,7 @@
 <script>
 import AddComponent from './components/add'
 import EditComponent from './components/edit'
+import TableEdit from '_c/common/table-edit.vue'
 
 import {
   getTableData,
@@ -47,7 +51,8 @@ import {
 export default {
   components: {
     AddComponent,
-    EditComponent
+    EditComponent,
+    TableEdit
   },
   data() {
     return {
@@ -85,8 +90,9 @@ export default {
         }, {
           title: '排序',
           key: 'weight',
-          minWidth: 100,
-          sortable: 'customer'
+          minWidth: 50,
+          sortable: 'customer',
+          slot: 'weight'
         },
         {
           title: '创建时间',

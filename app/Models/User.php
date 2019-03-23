@@ -98,5 +98,17 @@ class User extends Authenticatable
 
     }
 
+    public function resetPasswordAction($input, $auathUser)
+    {
+
+        try {
+            $auathUser->password = bcrypt($input['password']);
+            $auathUser->save();
+            return $this->baseSucceed([], '操作成功');
+        } catch (\Exception $e) {
+            return $this->baseFailed('内部错误');
+        }
+    }
+
 
 }

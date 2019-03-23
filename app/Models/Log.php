@@ -43,4 +43,11 @@ class Log extends Model
         }
     }
 
+    public function destroyAction()
+    {
+        $this->delete();
+        return $this->baseSucceed([], '日志删除成功');
+
+    }
+
 }

@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\Attachment;
 use App\Models\Carousel;
+use App\Models\Log;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\StatusMap;
@@ -76,6 +77,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('carousel', function ($value) {
             return Carousel::findOrFail($value);
+        });
+        Route::bind('log', function ($value) {
+            return Log::findOrFail($value);
         });
     }
 
