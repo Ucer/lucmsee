@@ -30,7 +30,7 @@ class HttpRequest {
 
     let requestBaseUrl = process.env.NODE_ENV === 'development'
       ? this.configIndex.baseUrl.proxy
-      : this.baseURL
+      : this.baseUrl
 
     const config = {
       baseURL: requestBaseUrl,
