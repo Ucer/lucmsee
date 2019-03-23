@@ -144,6 +144,7 @@ export default {
             t.$Notice.success({
               title: res.message
             })
+            t.saveLoading = false;
           }, function(error) {
             t.saveLoading = false;
           })
