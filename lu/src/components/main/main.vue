@@ -19,7 +19,7 @@
     </side-menu>
   </Sider>
   <Layout>
-    <Header class="header-con">
+    <Header class="header-con hidden-mobile">
       <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
         <user />
         <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px;" :lang="local" />
