@@ -2,6 +2,13 @@
 <template>
 <div>
   <Row :gutter="24">
+    <Col :xs="4" :lg="2" class="hidden-mobile">
+        <a :href='exportExcel' target="_blank"><Button icon="md-download">导出文件</Button></a>
+    </Col>
+    <Col :xs="6" :lg="6" class="hidden-mobile">
+    <DatePicker @on-change="searchTimeStart" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="开始时间"></DatePicker>-
+    <DatePicker @on-change="searchTimeEnd" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="结束时间"></DatePicker>
+    </Col>
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.type" placeholder="请选择日志类型">
       <Option value="" key="">全部</Option>
@@ -73,6 +80,9 @@ import {
 import {
   getAllTables,
 } from '@/api/table'
+import {
+  exportExcelLogUrl,
+} from '@/api/excel_url'
 
 import {
   getTableStatus,
@@ -88,9 +98,11 @@ export default {
         order_by: 'created_at,desc',
         table_name: '',
         type: '',
-        real_name:'',// 操作人真实姓名
+        real_name: '', // 操作人真实姓名
+        start_time: '',
+        end_time: ''
       },
-      allTableList:[],
+      allTableList: [],
       notRealySortKey: [],
       tableLoading: false,
       tableStatus: {
@@ -116,13 +128,13 @@ export default {
         {
           title: '操作人',
           minWidth: 100,
-          slot:'user_id'
+          slot: 'user_id'
         },
         {
           title: '日志类型',
           key: 'type',
           minWidth: 100,
-          slot:'type'
+          slot: 'type'
         },
         {
           title: '模型表',
@@ -154,6 +166,11 @@ export default {
     let t = this
     t.getTableStatusExcute('logs/type')
     t.getAllTablesExcute()
+  },
+  computed: {
+    exportExcel() {
+      return exportExcelLogUrl + '?search_data=' + JSON.stringify(this.searchForm)
+    }
   },
   methods: {
     handleOnPageChange: function(to_page) {
@@ -213,6 +230,12 @@ export default {
     },
     showModalClose() {
       this.showInfoModal.show = false
+    },
+    searchTimeStart: function(value, dateType) {
+      this.searchForm.start_time = value
+    },
+    searchTimeEnd: function(value, dateType) {
+      this.searchForm.end_time = value
     }
   },
 }

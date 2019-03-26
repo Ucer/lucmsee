@@ -1,25 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\CommonCollection;
+use App\Exports\LogsExport;
+use App\Handlers\FileuploadHandler;
 use App\Models\Log;
 use App\Models\User;
-use App\Validates\LogValidate;
 use Illuminate\Http\Request;
 use Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
-class LogsController extends AdminController
+class ExcelsController extends ApiController
 {
+
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('auth:api');
+//        $this->middleware('auth:api')->only(['importExcelAdvertisementPosition']);
     }
 
-    public function list(Request $request, Log $model)
+    public function exportExcelLogs(Request $request, Log $model)
     {
-        $per_page = $request->get('per_page', 10);
         $search_data = json_decode($request->get('search_data'), true);
 
         $real_name = isset_and_not_empty($search_data, 'real_name');
@@ -52,25 +53,28 @@ class LogsController extends AdminController
             $order_by = explode(',', $order_by);
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
+        $baseFileName = '系统日志-' . date('Y-m-d_H-i-s');
+        Excel::store(new LogsExport($model->get(), '系统日志'), $baseFileName . '.xls', 'excel');
 
-        return new CommonCollection($model->with('user')->paginate($per_page));
     }
 
-    public function show(Log $model)
+    public function importExcelDemo(Request $request, FileuploadHandler $fileuploadHandler)
     {
-        return $this->success($model);
-    }
+        $file = $request->file('file');
+        $rest_upload_file = $fileuploadHandler->uploadfile($file, Auth::id());
+        $file = $rest_upload_file['data']['storage_path'] . '/' . $rest_upload_file['data']['storage_name'];
 
-    public function destroy(Log $model, LogValidate $validate)
-    {
-        $rest_validate = $validate->destroyValidate($model);
-
-        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
-        $rest_destroy = $model->destroyAction();
-        if ($rest_destroy['status'] === true) {
-            admin_log_record(Auth::id(), 'destroy', 'logs', '删除日志', $model->toArray());
-            return $this->message($rest_destroy['message']);
+//        $file = '/srv/wwwroot/one_plus_one/bdxt/storage/app/public/files/e5ecc5e19bf9c3183ea2bebf4c9d2aea71634.xlsx';
+        if ($rest_upload_file['status'] === true) {
+            $import_rest = $this->importExcelDemo($file);
+            if ($import_rest) {
+                return $this->success($rest_upload_file['data']);
+            }
+            return $this->failed('出错了');
+        } else {
+            return $this->failed($rest_upload_file['message']);
         }
-        return $this->message('数据删除成功');
+
+
     }
 }

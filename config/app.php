@@ -167,6 +167,7 @@ return [
          */
         Mews\Captcha\CaptchaServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -230,6 +231,7 @@ return [
          * Package Service Aliases ...
          */
         'Captcha' => 'Mews\Captcha\Facades\Captcha',
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

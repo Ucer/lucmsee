@@ -2,6 +2,33 @@
 
 基于 Laravel5.7.* 与 iview3.2.1 开发的后台管理系统
 
+### 系统依赖
+
+运行系统必须要先满足以下的环境
+
+####  lucmsee
+
+- Laravel5.8.*
+- Php7.1.*
+- Mysql8.0.*
+- Nginx1.14.0
+- composer1.8.4
+- barryvdh/laravel-cors:^0.11.2
+- fideloper/proxy:^4.0
+- laravel/framewor:5.8.*
+- laravel/passport:^7.0
+- laravel/tinker: ^1.0
+
+```text 
+
+
+```
+
+#### lu 
+
+- node 11.0.0
+- node-sass 
+ 
 
 ## 功能模块
 
