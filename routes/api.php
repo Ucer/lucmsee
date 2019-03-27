@@ -19,7 +19,8 @@ Route::namespace('Api')->group(function () {
 
 
     /**       ==========================          Excel           ====================   */
-    Route::post('excels/export_excel_log', 'ExcelsController@exportExcelLogs')->name('excels.export_excel_log');
+    Route::post('excels/export_excel_log', 'ExcelsController@exportExcelLog')->name('excels.export_excel_log');
+    Route::post('excels/import_excel_tag', 'ExcelsController@importExcelTag')->name('excels.import_excel_tag');
 
 });
 

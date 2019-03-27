@@ -111,6 +111,7 @@ class FileUploadHandler
             $this->data = array_merge($inser_data, ['attachment_id' => $rest_insert_attachment_table->id]);
         } catch (\Exception $e) {
             $this->message = $e;
+            $this->status = false;
         }
         return ['status' => $this->status, 'data' => $this->data, 'message' => $this->message];
     }

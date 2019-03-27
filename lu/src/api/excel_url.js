@@ -1,6 +1,6 @@
 import axios from '@/libs/api.request'
 
-// export const exportExcelLogUrl = window.baseUrl+'/api/excels/export_excel_log'
+export const importExcelTagUrl = window.baseUrl+'/api/excels/import_excel_tag'
 
 export const exportExcelLog = () => {
   return axios.request({

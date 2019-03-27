@@ -34,6 +34,7 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'editor_article_content', 'status_description' => '富文本文章内容', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'markdown_editor_article_content', 'status_description' => 'markdown富文本文章内容', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'carousel', 'status_description' => '轮播图', 'remark' => ''],
+            ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'tmp', 'status_description' => '时临图片', 'remark' => ''],
             // logs_table
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'T', 'status_description' => '启用', 'remark' => ''],
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => ''],

@@ -1,8 +1,11 @@
 <template>
 <div>
   <Row :gutter="24">
-    <Col :xs="8" :lg="16">
+    <Col :xs="4" :lg="13">
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
+    </Col>
+    <Col :xs="4" :lg="2" class="hidden-mobile">
+    <upload-file :upload-config="fileuploadConfig" @on-upload-change='uploadfileChange'></upload-file>
     </Col>
     <Col :xs="12" :lg="4" class="hidden-mobile">
     <Input icon="search" placeholder="请输入标签名称..." v-model="searchForm.name" />
@@ -36,6 +39,11 @@
 <script>
 import AddComponent from './components/add'
 import EditComponent from './components/edit'
+import UploadFile from '_c/common/upload-file'
+
+import {
+  importExcelTagUrl
+} from '@/api/excel_url'
 
 import {
   getTableData,
@@ -45,14 +53,15 @@ import {
 export default {
   components: {
     AddComponent,
-    EditComponent
+    EditComponent,
+    UploadFile
   },
   data() {
     return {
       searchForm: {
         order_by: 'id,desc'
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableLoading: true,
       dataList: [],
       addModal: {
@@ -61,6 +70,21 @@ export default {
       editModal: {
         show: false,
         id: 0
+      },
+      fileuploadConfig: {
+        headers: {
+          'Authorization': window.access_token
+        },
+        format: ['xlsx', 'csv', 'xls'],
+        max_size: 1024 * 10, // 800KB
+        upload_url: importExcelTagUrl,
+        file_name: 'file',
+        multiple: false,
+        file_num: 1,
+        data: {},
+        button_text: '导入文件',
+        default_list: []
+
       },
       columns: [{
           title: 'ID',
@@ -136,7 +160,8 @@ export default {
     },
     editModalHide() {
       this.editModal.show = false
-    }
+    },
+    uploadfileChange(fileList, formatFileList) {}
   }
 }
 </script>

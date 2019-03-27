@@ -43,10 +43,14 @@
 .fancybox {
   max-width: 100%
 }
+
+.ivu-upload {
+  width: auto !important;
+}
 </style>
 <template>
 <div>
-  <div class="demo-upload-list" v-for="(item,key) in uploadList">
+  <div v-if="isPreviewUploadList" class="demo-upload-list" v-for="(item,key) in uploadList">
     <template v-if="item.status === 'finished'">
       <a :href="item.url">{{'附件'+(key+1)}}</a>
       <div class="demo-upload-list-cover">
@@ -58,13 +62,11 @@
     </template>
   </div>
   <Upload ref="upload" :data="uploadConfig.data" :show-upload-list="false" :default-file-list="uploadConfig.default_list" :on-success="handleSuccess" :on-error="handleError" :headers="uploadConfig.headers" :format="uploadConfig.format" :max-size="uploadConfig.max_size"
-    :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" :multiple="uploadConfig.multiple" :name="uploadConfig.file_name" type="drag" :action="uploadConfig.upload_url" style="display: inline-block;width:58px;">
-    <div style="width: 58px;height:58px;line-height: 58px;">
-      <Icon type="ios-camera" size="20"></Icon>
-    </div>
+    :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" :multiple="uploadConfig.multiple" :name="uploadConfig.file_name" type="drag" :action="uploadConfig.upload_url" style="display: inline-block;">
+    <Button icon="ios-cloud-upload-outline" :loading="loading">{{ uploadConfig.button_text}} </Button>
   </Upload>
-  <Divider orientation="left">已上传文件</Divider>
-  <div class="galley-image-list">
+  <Divider orientation="left" v-if="isPreviewUploadList">已上传文件</Divider>
+  <div class="galley-image-list" v-if="isPreviewUploadList">
     <ul class="pictures  row l-hide" ref="galley">
       <li v-for="(item,key) in formatFileList"><a v-if="item.url" :href="item.url" target="_blank">附件{{ key +1}}</a></li>
     </ul>
@@ -85,6 +87,7 @@ export default {
       type: Boolean,
       default: false
     },
+    isPreviewUploadList: true,
     uploadConfig: {
       type: Object,
       default: {
@@ -118,7 +121,8 @@ export default {
       imgName: '',
       visible: false,
       uploadList: [],
-      formatFileList: []
+      formatFileList: [],
+      loading: false,
     }
   },
   methods: {
@@ -151,16 +155,6 @@ export default {
         return false
       }
 
-      let errorInfo = {
-        status: 200,
-        statusText: '接口返回非success',
-        responseData: resData,
-        request: {
-          responseURL: response_url
-        }
-      }
-
-
       file.url = res.data.url
       file.name = res.data.original_name
       file.attachment_id = res.data.attachment_id
@@ -168,6 +162,7 @@ export default {
       let formatFileList = this.fomatFile()
       this.$emit('input', formatFileList)
       this.$emit('on-upload-change', this.uploadList, formatFileList)
+      this.loading = false
       this.ViewImage()
     },
     handleError(error, file) {
@@ -197,6 +192,8 @@ export default {
         title: '文件格式不正确',
         desc: '文件 ' + file.name + ' 格式不正确。'
       })
+
+      this.loading = false
       this.ViewImage()
     },
     handleMaxSize(file) {
@@ -204,10 +201,13 @@ export default {
         title: '超出文件大小限制',
         desc: '文件 ' + file.name + ' 太大，不能超过 ' + this.uploadConfig.max_size + 'kb'
       })
+
+      this.loading = false
       this.ViewImage()
     },
     handleBeforeUpload() {
       const check = this.uploadList.length < this.uploadConfig.file_num
+
       if (!check) {
 
         this.$Notice.warning({
@@ -215,7 +215,10 @@ export default {
           desc: '最多只能上传' + this.uploadConfig.file_num + '个文件'
         })
         this.ViewImage()
+      } else {
+        this.loading = true
       }
+
       return check
     },
     ViewImage() {

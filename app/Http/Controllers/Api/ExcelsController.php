@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exports\LogsExport;
-use App\Handlers\FileuploadHandler;
+use App\Handlers\FileUploadHandler;
 use App\Http\Controllers\Api\Traits\ExcelTrait;
+use App\Imports\TagsImport;
 use App\Models\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,10 +19,10 @@ class ExcelsController extends ApiController
     public function __construct()
     {
         parent::__construct();
-//        $this->middleware('auth:api')->only(['importExcelAdvertisementPosition']);
+        $this->middleware('auth:api')->only(['importExcelTag']);
     }
 
-    public function exportExcelLogs(Request $request, Log $model)
+    public function exportExcelLog(Request $request, Log $model)
     {
         $search_data = json_decode($request->get('search_data'), true);
 
@@ -61,23 +62,26 @@ class ExcelsController extends ApiController
 
     }
 
-    public function importExcelDemo(Request $request, FileuploadHandler $fileuploadHandler)
+    public function importExcelTag(Request $request)
     {
+        $fileuploadHandler = new FileuploadHandler();
         $file = $request->file('file');
-        $rest_upload_file = $fileuploadHandler->uploadfile($file, Auth::id());
-        $file = $rest_upload_file['data']['storage_path'] . '/' . $rest_upload_file['data']['storage_name'];
+        $min_type = $file->getClientMimeType();
+        $file_name = explode('.', $file->getClientOriginalName());
+        if (count($file_name) < 2) return $this->failed('无法识别文件类型', 200);
+        $real_file_type = array_pop($file_name);
+        if (!in_array($real_file_type, ['xlsx', 'xls', 'csv'])) {
+            return $this->failed('不支持的文件类型', 200);
+        }
+        $rest_upload_file = $fileuploadHandler->uploadFile($file, $min_type, 'file', Auth::id(), 'tmp', $real_file_type);
 
-//        $file = '/srv/wwwroot/one_plus_one/bdxt/storage/app/public/files/e5ecc5e19bf9c3183ea2bebf4c9d2aea71634.xlsx';
         if ($rest_upload_file['status'] === true) {
-            $import_rest = $this->importExcelDemo($file);
-            if ($import_rest) {
-                return $this->success($rest_upload_file['data']);
-            }
-            return $this->failed('出错了');
+            $file_path = $rest_upload_file['data']['storage_path'] . '/' . $rest_upload_file['data']['storage_name'];
+            Excel::import(new TagsImport(), $file_path);
+            return $this->success('导入成功');
         } else {
             return $this->failed($rest_upload_file['message']);
         }
-
-
     }
+
 }
