@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Exports\LogsExport;
 use App\Handlers\FileuploadHandler;
+use App\Http\Controllers\Api\Traits\ExcelTrait;
 use App\Models\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ExcelsController extends ApiController
 {
+    use ExcelTrait;
 
     public function __construct()
     {
@@ -53,8 +55,9 @@ class ExcelsController extends ApiController
             $order_by = explode(',', $order_by);
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
-        $baseFileName = '系统日志-' . date('Y-m-d_H-i-s');
-        Excel::store(new LogsExport($model->get(), '系统日志'), $baseFileName . '.xls', 'excel');
+        $rest_getFileName = $this->getFileName('系统日志');
+        Excel::store(new LogsExport($model->get(), '系统日志'), $rest_getFileName['filename'], 'excel');
+        return $this->success($rest_getFileName);
 
     }
 

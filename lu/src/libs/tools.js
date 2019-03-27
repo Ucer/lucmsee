@@ -303,3 +303,11 @@ export const getNowDateTimeWeek = (date_sign = "-", time_sign = ":") => {
 
   return [date, time, week];
 }
+
+// 根据 url下载文件
+export const downloadFilePassUrl = (url) => {
+  var $form = $('<form method="GET"></form>');
+  $form.attr('action', url);
+  $form.appendTo($('body'));
+  $form.submit();
+}

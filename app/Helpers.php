@@ -5,8 +5,10 @@ function flash($status = 'success', $msg = '操作成功', $key = 'toastrMsg')
     session()->flash($key, ['status' => $status, 'message' => $msg]);
 }
 
-function admin_log_record($user_id, $type, $table_name, $description, $content_message = '', $content_data = '')
+function admin_log_record($user_id, $type, $table_name, $description, $content_data = '', $content_message = '')
 {
+    if (!$content_message) $content_message = $description;
+
     return (new \App\Models\Log())->storeLog([
         'user_id' => $user_id,
         'type' => $type,

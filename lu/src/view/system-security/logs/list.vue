@@ -3,7 +3,8 @@
 <div>
   <Row :gutter="24">
     <Col :xs="4" :lg="2" class="hidden-mobile">
-        <a :href='exportExcel' target="_blank"><Button icon="md-download">导出文件</Button></a>
+    <!-- <a :href='exportExcel' target="_blank"><Button icon="md-download">导出文件</Button></a> -->
+    <Button @click="exportExcelLogExcute" icon="md-download">导出文件</Button>
     </Col>
     <Col :xs="6" :lg="6" class="hidden-mobile">
     <DatePicker @on-change="searchTimeStart" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="开始时间"></DatePicker>-
@@ -81,12 +82,14 @@ import {
   getAllTables,
 } from '@/api/table'
 import {
-  exportExcelLogUrl,
+  exportExcelLog,
 } from '@/api/excel_url'
 
 import {
   getTableStatus,
 } from '@/api/common'
+
+import { downloadfilepassurl} from '@/libs/tools'
 
 export default {
   components: {
@@ -168,9 +171,9 @@ export default {
     t.getAllTablesExcute()
   },
   computed: {
-    exportExcel() {
-      return exportExcelLogUrl + '?search_data=' + JSON.stringify(this.searchForm)
-    }
+    // exportExcel() {
+    //   return exportExcelLogUrl + '?search_data=' + JSON.stringify(this.searchForm)
+    // }
   },
   methods: {
     handleOnPageChange: function(to_page) {
@@ -236,7 +239,19 @@ export default {
     },
     searchTimeEnd: function(value, dateType) {
       this.searchForm.end_time = value
-    }
+    },
+    exportExcelLogExcute() {
+      let t = this
+      t.tableLoading = true
+      exportExcelLog().then(res => {
+        let resData = res.data
+        t.downloadFilePassUrl(resData.url)
+        t.tableLoading = false
+      }, function(error) {
+        t.tableLoading = false
+      })
+
+    },
   },
 }
 </script>

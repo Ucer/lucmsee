@@ -56,7 +56,8 @@ return [
         ],
         'excel' => [
             'driver' => 'local',
-            'root' => sys_get_temp_dir().'/laravle_excels'
+            'root' => storage_path('app/public') . '/laravel_excels',
+            'url' => env('APP_URL') . '/storage/laravel_excels',
         ],
 
         's3' => [
