@@ -24,7 +24,7 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    proxy: 'http://localhost:8090', // 如果使用了代理，aioxs.js 中的 getInsideConfig baseURL修改为这个(开发环境统一使用代理)
+    proxy: 'http://localhost:8089', // 如果使用了代理，aioxs.js 中的 getInsideConfig baseURL修改为这个(开发环境统一使用代理)
     dev: 'http://lucmsee.test',
     pro: 'http://lucmsee.test'
   },
