@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'current_version' => '1.1.1.01',
     'demo' => 'demo',
     'api_app_url' => env('API_APP_URL'),
     'system_config_group_list' => [
