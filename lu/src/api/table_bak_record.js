@@ -10,7 +10,7 @@ export const getTableData = (to_page, per_page, searchdata) => {
     },
     method: 'get'
   })
-};
+}
 
 export const tableBakSqlFileDownload = (id) => {
   return axios.request({
@@ -18,7 +18,7 @@ export const tableBakSqlFileDownload = (id) => {
     method: 'get',
     responseType: 'blob'
   })
-};
+}
 export const destroyManyTableBakRecord = (selectes, isOpAll) => {
   return axios.request({
     url: '/api/admin/databases/destroy_many_table_bak_record',
@@ -28,4 +28,4 @@ export const destroyManyTableBakRecord = (selectes, isOpAll) => {
     },
     method: 'delete'
   })
-};
+}

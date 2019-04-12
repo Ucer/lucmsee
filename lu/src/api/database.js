@@ -10,23 +10,23 @@ export const getTableData = (to_page, per_page, searchdata) => {
     },
     method: 'get'
   })
-};
+}
 export const add = (formData) => {
-  return axios.request({url: '/api/admin/databases', data: formData, method: 'post'})
-};
+  return axios.request({ url: '/api/admin/databases', data: formData, method: 'post' })
+}
 export const edit = (formData, id) => {
   return axios.request({
     url: '/api/admin/databases/' + id,
     data: formData,
     method: 'patch'
   })
-};
+}
 export const getInfoById = (id) => {
   return axios.request({
     url: '/api/admin/databases/' + id,
     method: 'get'
   })
-};
+}
 
 export const bakUpTable = (selectes, isOpAll) => {
   return axios.request({
@@ -37,7 +37,7 @@ export const bakUpTable = (selectes, isOpAll) => {
     },
     method: 'post'
   })
-};
+}
 export const optimizeTable = (selectes, isOpAll) => {
   return axios.request({
     url: '/api/admin/databases/optimize_table',
@@ -47,7 +47,7 @@ export const optimizeTable = (selectes, isOpAll) => {
     },
     method: 'post'
   })
-};
+}
 export const repairTable = (selectes, isOpAll) => {
   return axios.request({
     url: '/api/admin/databases/repair_table',
@@ -57,4 +57,4 @@ export const repairTable = (selectes, isOpAll) => {
     },
     method: 'post'
   })
-};
+}

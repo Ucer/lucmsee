@@ -10,16 +10,16 @@ export const getTableData = (to_page, per_page, searchdata) => {
     },
     method: 'get'
   })
-};
+}
 export const getInfoById = (id) => {
   return axios.request({
     url: '/api/admin/logs/' + id,
     method: 'get'
   })
-};
+}
 export const destroy = (id) => {
   return axios.request({
     url: '/api/admin/logs/' + id,
     method: 'delete'
   })
-};
+}

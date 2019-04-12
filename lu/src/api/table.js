@@ -10,33 +10,33 @@ export const getTableData = (to_page, per_page, searchdata) => {
     },
     method: 'get'
   })
-};
+}
 export const add = (formData) => {
-  return axios.request({url: '/api/admin/tables', data: formData, method: 'post'})
-};
+  return axios.request({ url: '/api/admin/tables', data: formData, method: 'post' })
+}
 export const edit = (formData, id) => {
   return axios.request({
     url: '/api/admin/tables/' + id,
     data: formData,
     method: 'patch'
   })
-};
+}
 export const getInfoById = (id) => {
   return axios.request({
     url: '/api/admin/tables/' + id,
     method: 'get'
   })
-};
+}
 export const destroy = (id) => {
   return axios.request({
     url: '/api/admin/tables/' + id,
     method: 'delete'
   })
-};
+}
 
 export const getAllTables = (tableName) => {
   return axios.request({
     url: '/api/admin/tables/get_all_tables/' + tableName,
     method: 'get'
   })
-};
+}

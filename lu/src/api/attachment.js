@@ -10,10 +10,10 @@ export const getTableData = (to_page, per_page, searchdata) => {
     },
     method: 'get'
   })
-};
+}
 export const destroy = (id) => {
   return axios.request({
     url: '/api/admin/attachments/' + id,
     method: 'delete'
   })
-};
+}
