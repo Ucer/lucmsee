@@ -54,7 +54,7 @@ export default {
     EditComponent,
     TableEdit
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'id,desc'
@@ -70,54 +70,54 @@ export default {
         id: 0
       },
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '标题',
-          key: 'title',
-          minWidth: 100,
-        }, {
-          title: '图片',
-          minWidth: 100,
-          slot: 'cover_image'
-        }, {
-          title: '描述',
-          key: 'description',
-          minWidth: 100,
-        }, {
-          title: '排序',
-          key: 'weight',
-          minWidth: 50,
-          sortable: 'customer',
-          slot: 'weight'
-        },
-        {
-          title: '创建时间',
-          key: 'created_at',
-          minWidth: 150,
-        },
-        {
-          title: '更新时间',
-          key: 'created_at',
-          minWidth: 150,
-        },
-        {
-          title: '操作',
-          minWidth: 200,
-          slot: 'action',
-        }
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '标题',
+        key: 'title',
+        minWidth: 100
+      }, {
+        title: '图片',
+        minWidth: 100,
+        slot: 'cover_image'
+      }, {
+        title: '描述',
+        key: 'description',
+        minWidth: 100
+      }, {
+        title: '排序',
+        key: 'weight',
+        minWidth: 50,
+        sortable: 'customer',
+        slot: 'weight'
+      },
+      {
+        title: '创建时间',
+        key: 'created_at',
+        minWidth: 150
+      },
+      {
+        title: '更新时间',
+        key: 'created_at',
+        minWidth: 150
+      },
+      {
+        title: '操作',
+        minWidth: 200,
+        slot: 'action'
+      }
       ]
     }
   },
-  created() {
+  created () {
     let t = this
     t.getTableDataExcute()
   },
   methods: {
-    getTableDataExcute() {
+    getTableDataExcute () {
       let t = this
       t.tableLoading = true
       getTableData(t.searchForm).then(res => {
@@ -125,15 +125,15 @@ export default {
         t.dataList = response_data
         t.tableLoading = false
         t.globalFancybox()
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.$Notice.success({
@@ -141,7 +141,7 @@ export default {
         })
       })
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -150,13 +150,13 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    addBtn() {
+    addBtn () {
       this.addModal.show = true
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    editModalHide() {
+    editModalHide () {
       this.editModal.show = false
     }
   }

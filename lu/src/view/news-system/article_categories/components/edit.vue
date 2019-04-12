@@ -6,7 +6,7 @@
       <FormItem label="上级分类：">
         <Select v-model="formData.pid" filterable placeholder="请选择上级分类">
             <Option :value="0">顶级分类 </Option>
-            <Option v-for="(item,key) in articleCategories" :value="item.id">{{ item.name }} </Option>
+            <Option v-for="(item,key) in articleCategories" :key="key" :value="item.id">{{ item.name }} </Option>
         </Select>
       </FormItem>
       <FormItem label="分类名称">
@@ -14,7 +14,7 @@
       </FormItem>
       <FormItem label="启用状态：">
         <RadioGroup v-model="formData.enable">
-          <Radio v-for="(item,key) in tableStatus_enable" :label="key">{{ item }}</Radio>
+          <Radio v-for="(item,key) in tableStatus_enable" :key="key" :label="key">{{ item }}</Radio>
         </RadioGroup>
       </FormItem>
       <FormItem label="分类描述" prop="description">
@@ -23,7 +23,6 @@
       <FormItem label="排序：">
         <Input v-model="formData.weight" placeholder="请输入序号"></Input>
       </FormItem>
-    </Form>
     </Form>
     <div slot="footer">
       <Button type="text" @click="cancel">{{ $t('cancel') }}</Button>
@@ -53,18 +52,18 @@ export default {
     },
     tableStatus_enable: {}
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
       spinLoading: true,
-      articleCategories:[],
+      articleCategories: [],
       formData: {
         name: '',
         enable: 'T',
         pid: 0,
         description: '',
-        weight: 50,
+        weight: 50
       },
       tableStatus: {
         enable: ''
@@ -74,18 +73,18 @@ export default {
           required: true,
           message: '请填写分类名称',
           trigger: 'blur'
-        }],
-      },
+        }]
+      }
     }
   },
-  mounted() {
+  mounted () {
     if (this.modalId > 0) {
       this.getAllCategoriesExcute()
     }
   },
   methods: {
-    getInfoByIdExcute() {
-      let t = this;
+    getInfoByIdExcute () {
+      let t = this
       getInfoById(t.modalId).then(res => {
         let res_data = res.data
         t.formData = {
@@ -96,11 +95,10 @@ export default {
           weight: res_data.weight,
           description: res_data.description
         }
-        t.spinLoading = false;
+        t.spinLoading = false
       })
-
     },
-    editExcute() {
+    editExcute () {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
@@ -113,23 +111,23 @@ export default {
             t.$Notice.success({
               title: res.message
             })
-          }, function(error) {
-            t.saveLoading = false;
+          }, function (error) {
+            t.saveLoading = false
           })
         }
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-edit-modal-hide')
     },
-    getAllCategoriesExcute() {
+    getAllCategoriesExcute () {
       let t = this
       getAllCategories().then(res => {
         t.articleCategories = res.data
         this.getInfoByIdExcute()
       })
-    },
+    }
   }
 }
 </script>

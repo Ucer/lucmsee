@@ -1,15 +1,14 @@
 import axios from '@/libs/api.request'
 
 export const getCaptcha = (token) => {
-  return axios.request({url: 'api/get_captcha', method: 'get'})
-};
-
+  return axios.request({ url: 'api/get_captcha', method: 'get' })
+}
 export const getTableStatus = (param) => {
   return axios.request({
     url: '/api/common_get_table_status/' + param,
     method: 'get'
   })
-};
+}
 
 export const switchEnable = (id, table, value) => {
   return axios.request({
@@ -21,7 +20,7 @@ export const switchEnable = (id, table, value) => {
     },
     method: 'post'
   })
-};
+}
 
 export const commonEditTableColumn = (id, table, column, value) => {
   return axios.request({
@@ -34,4 +33,4 @@ export const commonEditTableColumn = (id, table, column, value) => {
     },
     method: 'post'
   })
-};
+}

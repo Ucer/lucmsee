@@ -36,7 +36,7 @@ export default {
   components: {
     Upload
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
@@ -48,7 +48,7 @@ export default {
         },
         description: '',
         weight: 50,
-        url:''
+        url: ''
       },
       imguploadConfig: {
         headers: {
@@ -63,11 +63,11 @@ export default {
         data: {},
         default_list: []
       },
-      rules: {},
+      rules: {}
     }
   },
   methods: {
-    addExcute() {
+    addExcute () {
       let t = this
       t.saveLoading = true
       add(t.formData).then(res => {
@@ -78,15 +78,15 @@ export default {
         t.$Notice.success({
           title: res.message
         })
-      }, function(error) {
-        t.saveLoading = false;
+      }, function (error) {
+        t.saveLoading = false
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-add-modal-hide')
     },
-    uploadChange(fileList, formatFileList) {}
+    uploadChange (fileList, formatFileList) {}
   }
 }
 </script>

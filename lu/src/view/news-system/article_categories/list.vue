@@ -38,7 +38,6 @@
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
-
   </Row>
 
   <add-component v-if='addModal.show' :tableStatus_enable="tableStatus.enable" @on-add-modal-success='getTableDataExcute' @on-add-modal-hide="addModalHide"></add-component>
@@ -57,7 +56,6 @@ import {
   destroy
 } from '@/api/article_category'
 
-
 import {
   getTableStatus
 } from '@/api/common'
@@ -68,12 +66,12 @@ export default {
     AddComponent,
     EditComponent
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'weight,asc'
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableStatus: {
         enable: []
       },
@@ -90,7 +88,7 @@ export default {
         title: 'ID',
         key: 'id',
         sortable: 'customer',
-        minWidth: 100,
+        minWidth: 100
       }, {
         title: '分类名称',
         minWidth: 150,
@@ -98,11 +96,11 @@ export default {
       }, {
         title: 'pid',
         key: 'pid',
-        minWidth: 100,
+        minWidth: 100
       }, {
         title: '分类描述',
         key: 'description',
-        minWidth: 150,
+        minWidth: 150
       }, {
         title: '排序',
         key: 'weight',
@@ -112,7 +110,7 @@ export default {
       }, {
         title: '创建时间',
         key: 'created_at',
-        minWidth: 150,
+        minWidth: 150
       }, {
         title: '更新时间',
         key: 'created_at',
@@ -124,34 +122,34 @@ export default {
       }]
     }
   },
-  created() {
+  created () {
     let t = this
     t.getTableStatusExcute('article_categories/enable')
   },
   methods: {
-    getTableStatusExcute(params) {
+    getTableStatusExcute (params) {
       let t = this
       getTableStatus(params).then(res => {
         t.tableStatus.enable = res.data
         t.getTableDataExcute()
       })
     },
-    getTableDataExcute() {
+    getTableDataExcute () {
       let t = this
       t.loading = true
       getTableData(t.searchForm).then(res => {
         const response_data = res.data
         t.dataList = response_data
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -160,7 +158,7 @@ export default {
         })
       })
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -169,23 +167,23 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    addBtn() {
+    addBtn () {
       this.addModal.show = true
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    editModalHide() {
+    editModalHide () {
       this.editModal.show = false
     },
-    rowClassName(row, index) {
+    rowClassName (row, index) {
       if (row.pid < 1) {
-        return 'first_node';
+        return 'first_node'
       } else {
-        return 'children_node';
+        return 'children_node'
       }
-      return '';
-    },
+      return ''
+    }
   }
 }
 </script>

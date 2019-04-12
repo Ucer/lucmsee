@@ -49,7 +49,7 @@ export default {
       default: 0
     }
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
@@ -78,17 +78,17 @@ export default {
         data: {},
         default_list: []
       },
-      rules: {},
+      rules: {}
     }
   },
-  mounted() {
+  mounted () {
     if (this.modalId > 0) {
       this.getInfoByIdExcute()
     }
   },
   methods: {
-    getInfoByIdExcute() {
-      let t = this;
+    getInfoByIdExcute () {
+      let t = this
       getInfoById(t.modalId).then(res => {
         let res_data = res.data
         t.formData = {
@@ -103,12 +103,11 @@ export default {
           }
         }
         t.imguploadConfig.default_list = [t.formData.cover_image]
-        t.spinLoading = false;
+        t.spinLoading = false
         t.formdataFinished = true
       })
-
     },
-    editExcute() {
+    editExcute () {
       let t = this
       t.saveLoading = true
       edit(t.formData, t.formData.id).then(res => {
@@ -119,15 +118,15 @@ export default {
         t.$Notice.success({
           title: res.message
         })
-      }, function(error) {
-        t.saveLoading = false;
+      }, function (error) {
+        t.saveLoading = false
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-edit-modal-hide')
     },
-    uploadChange(fileList, formatFileList) {}
+    uploadChange (fileList, formatFileList) {}
   }
 }
 </script>

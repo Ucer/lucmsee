@@ -6,7 +6,7 @@
       <FormItem label="上级分类：">
         <Select v-model="formData.pid" filterable placeholder="请选择上级分类">
             <Option :value="0">顶级分类 </Option>
-            <Option v-for="(item,key) in articleCategories" :value="item.id">{{ item.name }} </Option>
+            <Option v-for="(item,key) in articleCategories" :key="key" :value="item.id">{{ item.name }} </Option>
         </Select>
       </FormItem>
       <FormItem label="分类名称">
@@ -14,7 +14,7 @@
       </FormItem>
       <FormItem label="启用状态：">
         <RadioGroup v-model="formData.enable">
-          <Radio v-for="(item,key) in tableStatus_enable" :label="key">{{ item }}</Radio>
+          <Radio v-for="(item,key) in tableStatus_enable" :key="key" :label="key">{{ item }}</Radio>
         </RadioGroup>
       </FormItem>
       <FormItem label="分类描述" prop="description">
@@ -45,10 +45,9 @@ import {
 
 export default {
   props: ['tableStatus_enable'],
-  data() {
+  data () {
     return {
       modalShow: true,
-      saveLoading: false,
       articleCategories: [],
       saveLoading: false,
       spinLoading: true,
@@ -57,22 +56,22 @@ export default {
         enable: 'T',
         pid: 0,
         description: '',
-        weight: 50,
+        weight: 50
       },
       rules: {
         name: [{
           required: true,
           message: '请填写权限名称',
           trigger: 'blur'
-        }],
-      },
+        }]
+      }
     }
   },
-  mounted() {
+  mounted () {
     this.getAllCategoriesExcute()
   },
   methods: {
-    addExcute() {
+    addExcute () {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
@@ -85,23 +84,23 @@ export default {
             t.$Notice.success({
               title: res.message
             })
-          }, function(error) {
-            t.saveLoading = false;
+          }, function (error) {
+            t.saveLoading = false
           })
         }
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-add-modal-hide')
     },
-    getAllCategoriesExcute() {
+    getAllCategoriesExcute () {
       let t = this
       getAllCategories().then(res => {
         t.articleCategories = res.data
         t.spinLoading = false
       })
-    },
+    }
   }
 }
 </script>
