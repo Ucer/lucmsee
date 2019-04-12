@@ -24,6 +24,7 @@ class TableSeeder extends Seeder
             ['table_name' => 'system_configs', 'table_name_cn' => '系统配置表'],
             ['table_name' => 'article_categories', 'table_name_cn' => '文章分类表'],
             ['table_name' => 'articles', 'table_name_cn' => '文章表'],
+            ['table_name' => 'tags', 'table_name_cn' => '标签表'],
         ];
         \App\Models\Table::insert($data);
     }

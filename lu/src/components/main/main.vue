@@ -48,6 +48,7 @@
         </Content>
       </Layout>
     </Content>
+    <Footer class="text-center"><span class="blod-font">{{title}}{{stateSystemVersion}}</span> - 2019 &copy; Ucer</Footer>
   </Layout>
 </Layout>
 </template>
@@ -85,44 +86,48 @@ export default {
     User,
     ABackTop
   },
-  data() {
+  data () {
     return {
       collapsed: false,
       minLogo,
       maxLogo,
       isFullscreen: false,
-      systemTitle: window.systemConfigIndexFile.systemTitle
+      systemTitle: window.systemConfigIndexFile.systemTitle,
+      title: window.systemConfigIndexFile.title
     }
   },
   computed: {
     ...mapGetters([
       'errorCount'
     ]),
-    tagNavList() {
+    tagNavList () {
       return this.$store.state.app.tagNavList
     },
-    tagRouter() {
+    tagRouter () {
       return this.$store.state.app.tagRouter
     },
-    userAvator() {
+    userAvator () {
       return this.$store.state.user.avatorImgPath
     },
-    cacheList() {
+    cacheList () {
       const list = ['ParentView', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
       return list
     },
-    menuList() {
+    menuList () {
       return this.$store.getters.menuList
     },
-    local() {
+    local () {
       return this.$store.state.app.local
     },
-    hasReadErrorPage() {
+    hasReadErrorPage () {
       return this.$store.state.app.hasReadErrorPage
     },
-    stateUnreadMessage() {
+    stateUnreadMessage () {
       return this.$store.state.user.unread_message
     },
+    stateSystemVersion () {
+      return 'V' + this.$store.state.user.system_version
+    }
   },
   methods: {
     ...mapMutations([
@@ -134,9 +139,9 @@ export default {
       'closeTag'
     ]),
     ...mapActions([
-      'handleLogin',
+      'handleLogin'
     ]),
-    turnToPage(route) {
+    turnToPage (route) {
       let {
         name,
         params,
@@ -159,10 +164,10 @@ export default {
         query
       })
     },
-    handleCollapsedChange(state) {
+    handleCollapsedChange (state) {
       this.collapsed = state
     },
-    handleCloseTag(res, type, route) {
+    handleCloseTag (res, type, route) {
       if (type !== 'others') {
         if (type === 'all') {
           this.turnToPage(this.$config.homeName)
@@ -174,27 +179,26 @@ export default {
       }
       this.setTagNavList(res)
     },
-    handleClick(item) {
+    handleClick (item) {
       this.turnToPage(item)
     },
-    useTools(key) {
+    useTools (key) {
       switch (key) {
         case 'photo_editor':
-          window.open(window.baseUrl + '/' + key);
-          break;
+          window.open(window.baseUrl + '/' + key)
+          break
         default:
-
       }
     },
-    quickToRouter(name, param) {
+    quickToRouter (name, param) {
       this.$router.push({
         name: name,
         params: param
-      });
+      })
     }
   },
   watch: {
-    '$route'(newRoute) {
+    '$route' (newRoute) {
       const {
         name,
         query,
@@ -215,7 +219,7 @@ export default {
       this.$refs.sideMenu.updateOpenName(newRoute.name)
     }
   },
-  mounted() {
+  mounted () {
     /**
      * @description 初始化设置面包屑导航和标签导航
      */

@@ -67,7 +67,7 @@ export default {
     EditComponent,
     InputHelper
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'created_at,desc',
@@ -75,10 +75,10 @@ export default {
         enable: '',
         group: ''
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableStatus: {
         enable: [],
-        config_group: [],
+        config_group: []
       },
       tableLoading: false,
       feeds: {
@@ -87,7 +87,7 @@ export default {
         current_page: 1,
         per_page: 10
       },
-      addBtn() {
+      addBtn () {
         this.addModal.show = true
       },
       addModal: {
@@ -98,56 +98,56 @@ export default {
         id: 0
       },
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '配置分组',
-          minWidth: 60,
-          slot: 'config_group'
-        },
-        {
-          title: '配置标识',
-          key: 'flag',
-          minWidth: 100,
-        },
-        {
-          title: '配置标题',
-          key: 'title',
-          minWidth: 100,
-        }, {
-          title: '配置值',
-          key: 'value',
-          minWidth: 150,
-        },
-        {
-          title: '创建时间',
-          key: 'created_at',
-          sortable: true,
-          minWidth: 150,
-        }, {
-          title: '修改时间',
-          key: 'updated_at',
-          sortable: true,
-          minWidth: 150,
-        }, {
-          title: '操作',
-          key: '',
-          minWidth: 100,
-          slot: 'action'
-        }
-      ],
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '配置分组',
+        minWidth: 60,
+        slot: 'config_group'
+      },
+      {
+        title: '配置标识',
+        key: 'flag',
+        minWidth: 100
+      },
+      {
+        title: '配置标题',
+        key: 'title',
+        minWidth: 100
+      }, {
+        title: '配置值',
+        key: 'value',
+        minWidth: 150
+      },
+      {
+        title: '创建时间',
+        key: 'created_at',
+        sortable: true,
+        minWidth: 150
+      }, {
+        title: '修改时间',
+        key: 'updated_at',
+        sortable: true,
+        minWidth: 150
+      }, {
+        title: '操作',
+        key: '',
+        minWidth: 100,
+        slot: 'action'
+      }
+      ]
 
     }
   },
-  created() {
+  created () {
     let t = this
     t.getGroupExcute()
   },
   methods: {
-    getGroupExcute() {
+    getGroupExcute () {
       let t = this
       getGroup(t.searchForm).then(res => {
         const response_data = res.data
@@ -155,9 +155,9 @@ export default {
         t.tableStatus.enable = response_data.enable
 
         t.getTableDataExcute(t.feeds.current_page)
-      }, function(error) {})
+      }, function (error) {})
     },
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -165,18 +165,17 @@ export default {
         t.feeds.data = res.data
         t.feeds.total = 0
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    editModalHide() {
+    editModalHide () {
       this.editModal.show = false
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -185,11 +184,11 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -197,7 +196,7 @@ export default {
           title: res.message
         })
       })
-    },
+    }
   }
 }
 </script>

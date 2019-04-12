@@ -1,5 +1,5 @@
-import {login, logout, getUserInfo} from '@/api/user'
-import {setTokenToCookies, getTokenFromCookies} from '@/libs/util'
+import { login, logout, getUserInfo } from '@/api/user'
+import { setTokenToCookies, getTokenFromCookies } from '@/libs/util'
 
 export default {
   state: {
@@ -10,14 +10,15 @@ export default {
     avator: '',
     access: '',
     accessToken: getTokenFromCookies(),
-    accessTokenType:'',
-    unread_message: 0
+    accessTokenType: '',
+    unread_message: 0,
+    system_version: '0'
   },
   mutations: {
-    setAnyState(state,array) {
+    setAnyState (state, array) {
       state[array[0]] = array[1]
     },
-    setAccessToken(state, data) {
+    setAccessToken (state, data) {
       let token = ''
       if (data.token) {
         state.accessTokenType = data.token.token_type
@@ -29,12 +30,12 @@ export default {
   },
   actions: {
     // 登录
-    handleLogin({
+    handleLogin ({
       commit
-    }, {email, password, captcha, captcha_key}) {
+    }, { email, password, captcha, captcha_key }) {
       email = email.trim()
       return new Promise((resolve, reject) => {
-        login({email, password, captcha, captcha_key}).then(res => {
+        login({ email, password, captcha, captcha_key }).then(res => {
           const data = res.data
           commit('setAccessToken', data)
           resolve(res)
@@ -44,7 +45,7 @@ export default {
       })
     },
     // 退出登录
-    handleLogOut({state, commit}) {
+    handleLogOut ({ state, commit }) {
       return new Promise((resolve, reject) => {
         logout(state.accessToken).then(() => {
           commit('setAccessToken', '')
@@ -55,17 +56,18 @@ export default {
       })
     },
     // 获取用户相关信息
-    getUserInfoExcute({state, commit}) {
+    getUserInfoExcute ({ state, commit }) {
       return new Promise((resolve, reject) => {
         getUserInfo().then(res => {
           const data = res.data
-          commit('setAnyState',['avator',data.avatar])
-          commit('setAnyState',['email',data.email])
-          commit('setAnyState',['user_id',data.user_id])
-          commit('setAnyState',['access',data.roles])
-          commit('setAnyState',['nickname',data.nickname])
-          commit('setAnyState',['real_name',data.real_name])
-          commit('setAnyState',['unread_message',data.unread_message])
+          commit('setAnyState', ['avator', data.avatar])
+          commit('setAnyState', ['email', data.email])
+          commit('setAnyState', ['user_id', data.user_id])
+          commit('setAnyState', ['access', data.roles])
+          commit('setAnyState', ['nickname', data.nickname])
+          commit('setAnyState', ['real_name', data.real_name])
+          commit('setAnyState', ['unread_message', data.unread_message])
+          commit('setAnyState', ['system_version', data.system_version])
           resolve(data)
         }).catch(err => {
           reject(err)

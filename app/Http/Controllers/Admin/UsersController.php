@@ -9,6 +9,7 @@ use App\Validates\UserValidate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\Config;
 
 class UsersController extends AdminController
 {
@@ -111,6 +112,7 @@ class UsersController extends AdminController
             $return['roles'][] = $role['name'];
         }
         $return['unread_message'] = AdminMessage::where('is_read', 'F')->whereIn('admin_id', [$authUser->id, 0])->count();
+        $return['system_version'] = Config::get('lu.current_version');
 
         return $this->success($return);
     }

@@ -138,6 +138,7 @@ export default {
     tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
+        t.dataList.splice(index, 1)
         t.$Notice.success({
           title: res.message
         })

@@ -43,6 +43,6 @@ export default {
   },
   domainForFileSystem: 'https://filesystem.codehaoshi.com', // 文件管理系统域名，[图片文件传到文件服务器上]
   platName: 'lucmsee', // 平台名称  plat，文件上传时用到
-  noSuccessUrlArray:['table_bak_sql_file_download'], // 如果 api url 中包含此数组中的字符串，则无需有 status 返回值，如文件上传接口
+  noSuccessUrlArray: ['table_bak_sql_file_download'] // 如果 api url 中包含此数组中的字符串，则无需有 status 返回值，如文件上传接口
 
 }
