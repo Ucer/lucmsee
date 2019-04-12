@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
 
         // 生成数据集合
         $users = factory(\App\Models\User::class)
-            ->times(5)
+            ->times(3)
             ->make();
 
         // 让隐藏字段可见，并将数据集合转换为数组
@@ -33,5 +33,25 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         $user->assignRole('Founder');
+
+        $user = \App\Models\User::find(2);
+        $user->nickname = '小管家';
+        $user->real_name = '管理员';
+        $user->email = 'xgj@lucms.com';
+        $user->enable = 'T';
+        $user->is_admin = 'T';
+        $user->save();
+
+        $user->assignRole('Maintainer');
+
+        $user = \App\Models\User::find(3);
+        $user->nickname = '小编辑';
+        $user->real_name = '网站编辑';
+        $user->email = 'xbj@lucms.com';
+        $user->enable = 'T';
+        $user->is_admin = 'T';
+        $user->save();
+
+        $user->assignRole('WebsiteEditor');
     }
 }

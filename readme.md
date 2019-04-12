@@ -34,7 +34,7 @@
 
 ### 菜单
 
-#### 系统管理
+#### 系统管理 ['Founder']
 - 数据库监控
     - 表备份
     - 查看备份记录(table_bak_records)
@@ -52,30 +52,30 @@
         - 删除状态
 - 系统配置 （可以在后台修改的配置项:CURD）
 
-#### 资源管理
+#### 资源管理 ['Founder', 'Maintainer']
 - 附件管理(attachments)
     - 上传(图片、文件、视频)
     - 删除
 - 图片管理(attachments中的图片)
 
-#### 权限管理
-- 权限管理(permissions)
+#### 权限管理 ['Founder', 'Maintainer', 'WebsiteEditor']
+- 权限管理(permissions) ['Founder']
     - 添加
     - 修改
     - 删除
-- 角色管理(roles)
+- 角色管理(roles) ['Founder', 'Maintainer']
     - 添加
     - 修改
     - 删除
     - 启用禁用
     - 分配权限(model_has_permissions)
-- 用户管理(users)
-    - 添加
-    - 修改
-    - 删除
-    - 分配角色(model_has_roles)
+- 用户管理(users) ['Founder', 'Maintainer', 'WebsiteEditor']
+    - 添加  ['Founder', 'Maintainer']
+    - 修改  ['Founder', 'Maintainer']
+    - 删除  ['Founder', 'Maintainer']
+    - 分配角色(model_has_roles) ['Founder', 'Maintainer']
 
-#### 新闻系统
+#### 新闻系统 ['Founder', 'Maintainer', 'WebsiteEditor']
 - 标签管理(tags)
     - 添加
     - 修改
@@ -100,7 +100,7 @@
     - 删除
     - 快速排序
 
-#### 消息中心
+#### 消息中心 ['Founder', 'Maintainer']
 - 站内信(app_messages)
     - 发消息给 user (发给指定用户或群发)
     - 详细
@@ -114,7 +114,7 @@
     - 批量删除
     
 
-#### 系统安全
+#### 系统安全 ['Founder', 'Maintainer', 'WebsiteEditor']
 -系统日志(logs)
     - 详细
     - 删除

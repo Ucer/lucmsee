@@ -1,13 +1,13 @@
 import axios from 'axios'
 import store from '@/store'
-import {Notice, Message} from 'iview'
-import {getTokenFromCookies} from '@/libs/util'
+import { Notice, Message } from 'iview'
+import { getTokenFromCookies } from '@/libs/util'
 import config from '@/config'
 
 const addErrorLog = errorInfo => {
-  const {statusText, status, responseData, request: {
-      responseURL
-    }} = errorInfo
+  const { statusText, status, responseData, request: {
+    responseURL
+  } } = errorInfo
   let info = {
     type: 'ajax',
     code: status, // http 状态码
@@ -20,12 +20,12 @@ const addErrorLog = errorInfo => {
 }
 
 class HttpRequest {
-  constructor(baseUrl = baseURL) {
+  constructor (baseUrl = baseURL) {
     this.baseUrl = baseUrl
     this.queue = {}
     this.configIndex = config
   }
-  getInsideConfig() {
+  getInsideConfig () {
     window.access_token = getTokenFromCookies()
 
     let requestBaseUrl = process.env.NODE_ENV === 'development'
@@ -40,13 +40,13 @@ class HttpRequest {
     }
     return config
   }
-  destroy(url) {
+  destroy (url) {
     delete this.queue[url]
     if (!Object.keys(this.queue).length) {
       // Spin.hide()
     }
   }
-  interceptors(instance, url) {
+  interceptors (instance, url) {
     // 请求拦截
     instance.interceptors.request.use(config => {
       // this.queue[url] = true
@@ -60,7 +60,7 @@ class HttpRequest {
       let resData = res.data
       if (!resData.hasOwnProperty('status') || (resData.status != 'success')) {
         let response_url = res.config.url
-        var noSuccessUrlArray = config.noSuccessUrlArray;
+        var noSuccessUrlArray = config.noSuccessUrlArray
         for (var i = 0; i < noSuccessUrlArray.length; i++) {
           if (response_url.indexOf(noSuccessUrlArray[i]) != -1) {
             return res.data
@@ -81,11 +81,10 @@ class HttpRequest {
         Message.error({
           content: '接口返回非success:' + resData,
           duration: 0,
-          closable:true
+          closable: true
         })
 
         return Promise.reject(res)
-
       } else {
         return res.data
       }
@@ -125,7 +124,7 @@ class HttpRequest {
       return Promise.reject(response)
     })
   }
-  request(options) {
+  request (options) {
     const instance = axios.create()
     options = Object.assign(this.getInsideConfig(), options)
     this.interceptors(instance, options.url)

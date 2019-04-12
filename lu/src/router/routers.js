@@ -25,7 +25,7 @@ export default[
       title: '登录',
       hideInMenu: true
     },
-    component: () => import ('@/view/login/login.vue')
+    component: () => import('@/view/login/login.vue')
   }, {
     path: '/dashboard',
     name: '_home',
@@ -45,7 +45,7 @@ export default[
           // notCache: true,
           icon: 'md-home'
         },
-        component: () => import ('@/view/single-page/home')
+        component: () => import('@/view/single-page/home')
       }
     ]
   }, {
@@ -65,7 +65,7 @@ export default[
         meta: {
           title: '数据库监控'
         },
-        component: () => import ('@/view/system-configs/databases/list.vue')
+        component: () => import('@/view/system-configs/databases/list.vue')
       }, {
         path: '/dashboard/table_bak_record',
         name: 'tableBakRecord',
@@ -74,21 +74,21 @@ export default[
           hideInMenu: true,
           hideInTag: true
         },
-        component: () => import ('@/view/system-configs/table_bak_records/list.vue')
+        component: () => import('@/view/system-configs/table_bak_records/list.vue')
       }, {
         path: '/dashboard/tables',
         name: 'statusMap',
         meta: {
           title: '数据字典'
         },
-        component: () => import ('@/view/system-configs/status_maps/list.vue')
+        component: () => import('@/view/system-configs/status_maps/list.vue')
       }, {
         path: '/dashboard/system_config',
         name: 'systemConfig',
         meta: {
           title: '系统配置项'
         },
-        component: () => import ('@/view/system-configs/configs/list.vue')
+        component: () => import('@/view/system-configs/configs/list.vue')
       }
     ]
   }, {
@@ -98,7 +98,7 @@ export default[
     meta: {
       icon: 'ios-link',
       title: '资源管理',
-      access: ['Founder'],
+      access: ['Founder', 'Maintainer'],
       showAlways: true
     },
     children: [
@@ -106,16 +106,18 @@ export default[
         path: '/dashboard/attachments',
         name: 'attachmentsManage',
         meta: {
-          title: '系统附件'
+          title: '系统附件',
+          access: ['Founder']
         },
-        component: () => import ('@/view/resources/attachments/list.vue')
+        component: () => import('@/view/resources/attachments/list.vue')
       }, {
         path: '/dashboard/images',
         name: 'imageList',
         meta: {
-          title: '图片列表'
+          title: '图片列表',
+          access: ['Founder', 'Maintainer']
         },
-        component: () => import ('@/view/resources/images/list.vue')
+        component: () => import('@/view/resources/images/list.vue')
       }
     ]
   }, {
@@ -125,7 +127,7 @@ export default[
     meta: {
       icon: 'ios-lock',
       title: '权限管理',
-      access: ['Founder'],
+      access: ['Founder', 'Maintainer', 'WebsiteEditor'],
       showAlways: true
     },
     children: [
@@ -133,23 +135,26 @@ export default[
         path: '/dashboard/permissionList',
         name: 'permissionList',
         meta: {
-          title: '权限列表'
+          title: '权限列表',
+          access: ['Founder', 'Maintainer']
         },
-        component: () => import ('@/view/privileges/permissions/list.vue')
+        component: () => import('@/view/privileges/permissions/list.vue')
       }, {
         path: '/dashboard/roleList',
         name: 'roleList',
         meta: {
-          title: '角色列表'
+          title: '角色列表',
+          access: ['Founder', 'Maintainer']
         },
-        component: () => import ('@/view/privileges/roles/list.vue')
+        component: () => import('@/view/privileges/roles/list.vue')
       }, {
         path: '/dashboard/userList',
         name: 'userList',
         meta: {
-          title: '用户列表'
+          title: '用户列表',
+          access: ['Founder', 'Maintainer', 'WebsiteEditor']
         },
-        component: () => import ('@/view/privileges/users/list.vue')
+        component: () => import('@/view/privileges/users/list.vue')
       }
     ]
   }, {
@@ -159,6 +164,7 @@ export default[
     meta: {
       icon: 'ios-paper',
       title: '新闻系统',
+      access: ['Founder', 'Maintainer', 'WebsiteEditor'],
       showAlways: true
     },
     children: [
@@ -168,28 +174,28 @@ export default[
         meta: {
           title: '标签管理'
         },
-        component: () => import ('@/view/news-system/tags/list.vue')
+        component: () => import('@/view/news-system/tags/list.vue')
       }, {
         path: '/dashboard/articleCategories',
         name: 'articleCategory',
         meta: {
           title: '文章分类'
         },
-        component: () => import ('@/view/news-system/article_categories/list.vue')
+        component: () => import('@/view/news-system/article_categories/list.vue')
       }, {
         path: '/dashboard/articleList',
         name: 'articleList',
         meta: {
           title: '文章列表'
         },
-        component: () => import ('@/view/news-system/articles/list.vue')
+        component: () => import('@/view/news-system/articles/list.vue')
       }, {
         path: '/dashboard/carouselList',
         name: 'carouselList',
         meta: {
           title: '轮播图'
         },
-        component: () => import ('@/view/news-system/carousels/list.vue')
+        component: () => import('@/view/news-system/carousels/list.vue')
       }
     ]
   }, {
@@ -199,7 +205,7 @@ export default[
     meta: {
       icon: 'ios-notifications',
       title: '消息中心',
-      access: ['Founder'],
+      access: ['Founder', 'Maintainer'],
       showAlways: true
     },
     children: [
@@ -209,14 +215,14 @@ export default[
         meta: {
           title: '站内信'
         },
-        component: () => import ('@/view/message-center/app_messages/list.vue')
+        component: () => import('@/view/message-center/app_messages/list.vue')
       }, {
         path: '/dashboard/adminMessages',
         name: 'adminMessages',
         meta: {
           title: '后台消息'
         },
-        component: () => import ('@/view/message-center/admin_messages/list.vue')
+        component: () => import('@/view/message-center/admin_messages/list.vue')
       }
     ]
   }, {
@@ -226,7 +232,7 @@ export default[
     meta: {
       icon: 'ios-desktop',
       title: '系统安全',
-      access: ['Founder'],
+      access: ['Founder', 'Maintainer', 'WebsiteEditor'],
       showAlways: true
     },
     children: [
@@ -236,7 +242,7 @@ export default[
         meta: {
           title: '操作日志'
         },
-        component: () => import ('@/view/system-security/logs/list.vue')
+        component: () => import('@/view/system-security/logs/list.vue')
       }
     ]
   }, {
@@ -245,20 +251,20 @@ export default[
     meta: {
       hideInMenu: true
     },
-    component: () => import ('@/view/error-page/401.vue')
+    component: () => import('@/view/error-page/401.vue')
   }, {
     path: '/500',
     name: 'error_500',
     meta: {
       hideInMenu: true
     },
-    component: () => import ('@/view/error-page/500.vue')
+    component: () => import('@/view/error-page/500.vue')
   }, {
     path: '*',
     name: 'error_404',
     meta: {
       hideInMenu: true
     },
-    component: () => import ('@/view/error-page/404.vue')
+    component: () => import('@/view/error-page/404.vue')
   }
 ]

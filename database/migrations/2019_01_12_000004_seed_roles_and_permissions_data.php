@@ -27,7 +27,11 @@ class SeedRolesAndPermissionsData extends Migration
         $founder->givePermissionTo('edit_settings');
 
         // 创建管理员角色，并赋予权限
-        $maintainer = Role::create(['name' => 'Maintainer', 'description' => '维护员']);
+        $maintainer = Role::create(['name' => 'Maintainer', 'description' => '管理员']);
+        $maintainer->givePermissionTo('manage_contents');
+
+        // 创建网站编辑角色，并赋予权限
+        $maintainer = Role::create(['name' => 'WebsiteEditor', 'description' => '网站编辑']);
         $maintainer->givePermissionTo('manage_contents');
     }
 

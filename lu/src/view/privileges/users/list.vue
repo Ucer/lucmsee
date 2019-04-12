@@ -3,7 +3,7 @@
 <div>
   <Row :gutter="24">
     <Col :xs="7" :lg="11">
-    <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
+    <Button v-if="isHasRoleToAccess(['Founder', 'Maintainer'])" type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="3" :lg="3">
     <Select v-model="searchForm.enable" placeholder="请选择状态">
@@ -52,9 +52,9 @@
       </template>
 
       <template slot-scope="{ row, index }" slot="action">
-        <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Button type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('role') }}</Button>
-        <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
+        <Button v-if="isHasRoleToAccess(['Founder', 'Maintainer'])" type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
+        <Button v-if="isHasRoleToAccess(['Founder', 'Maintainer'])" type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('role') }}</Button>
+        <Poptip v-if="isHasRoleToAccess(['Founder', 'Maintainer'])" confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
     <div style="margin: 10px;overflow: hidden">
@@ -95,6 +95,10 @@ import {
 } from '@/api/role'
 
 import {
+  hasOneOf
+} from '@/libs/tools'
+
+import {
   getTableStatus,
   switchEnable
 } from '@/api/common'
@@ -104,18 +108,18 @@ export default {
     AddComponent,
     EditComponent
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'created_at,desc',
-        is_admin:'',
-        enable:''
+        is_admin: '',
+        enable: ''
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableLoading: false,
       tableStatus: {
         enable: [],
-        is_admin: [],
+        is_admin: []
       },
       feeds: {
         data: [],
@@ -142,78 +146,84 @@ export default {
         id: 0
       },
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '姓名',
-          key: 'real_name',
-          minWidth: 100,
-        },
-        {
-          title: '昵称',
-          key: 'nickname',
-          minWidth: 100,
-        },
-        {
-          title: '头像',
-          key: '',
-          width: 80,
-          slot: 'avatar'
-        },
-        {
-          title: '邮箱',
-          key: 'email',
-          minWidth: 150,
-        },
-        {
-          title: '后台权限',
-          minWidth: 80,
-          slot: 'is_admin',
-        },
-        {
-          title: '启用状态',
-          key: 'enable',
-          minWidth: 80,
-          slot: 'enable'
-        },
-        {
-          title: '创建时间',
-          key: 'created_at',
-          minWidth: 150,
-        },
-        {
-          title: '最近登录时间',
-          key: 'last_login_at',
-          sortable: 'customer',
-          minWidth: 150,
-        },
-        {
-          title: '操作',
-          key: '',
-          minWidth: 200,
-          slot: 'action'
-        }
-      ],
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '姓名',
+        key: 'real_name',
+        minWidth: 100
+      },
+      {
+        title: '昵称',
+        key: 'nickname',
+        minWidth: 100
+      },
+      {
+        title: '头像',
+        key: '',
+        width: 80,
+        slot: 'avatar'
+      },
+      {
+        title: '邮箱',
+        key: 'email',
+        minWidth: 150
+      },
+      {
+        title: '后台权限',
+        minWidth: 80,
+        slot: 'is_admin'
+      },
+      {
+        title: '启用状态',
+        key: 'enable',
+        minWidth: 80,
+        slot: 'enable'
+      },
+      {
+        title: '创建时间',
+        key: 'created_at',
+        minWidth: 150
+      },
+      {
+        title: '最近登录时间',
+        key: 'last_login_at',
+        sortable: 'customer',
+        minWidth: 150
+      },
+      {
+        title: '操作',
+        key: '',
+        minWidth: 200,
+        slot: 'action'
+      }
+      ]
 
     }
   },
-  created() {
+  created () {
     let t = this
     t.getTableStatusExcute('users')
     t.getAllRoleExcute()
   },
+  computed: {
+    // isHasRoleToAccess (roleArray) {
+    //   // ['Founder', 'Maintainer']
+    //   return !!hasOneOf(roleArray, this.$store.state.user.access)
+    // }
+  },
   methods: {
-    handleOnPageChange: function(to_page) {
+    handleOnPageChange: function (to_page) {
       this.getTableDataExcute(to_page)
     },
-    onPageSizeChange: function(per_page) {
+    onPageSizeChange: function (per_page) {
       this.feeds.per_page = per_page
       this.getTableDataExcute(this.feeds.current_page)
     },
-    getTableStatusExcute(params) {
+    getTableStatusExcute (params) {
       let t = this
       getTableStatus(params).then(res => {
         t.tableStatus.enable = res.data.enable
@@ -221,7 +231,7 @@ export default {
         t.getTableDataExcute(t.feeds.current_page)
       })
     },
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -230,12 +240,11 @@ export default {
         t.feeds.total = res.meta.total
         t.tableLoading = false
         t.globalFancybox()
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -244,11 +253,11 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -257,7 +266,7 @@ export default {
         })
       })
     },
-    tableButtonGiveUserRoles(row, index) {
+    tableButtonGiveUserRoles (row, index) {
       let t = this
       getUserRoles(row.id).then(res => {
         this.roleModal.hasRoles = res.data
@@ -265,7 +274,7 @@ export default {
       t.roleModal.show = true
       t.roleModal.id = row.id
     },
-    switchChange: function(row, index) {
+    switchChange: function (row, index) {
       let t = this
       let new_status = 'T'
       if (t.feeds.data[index].enable === 'T') {
@@ -280,28 +289,28 @@ export default {
         t.getTableDataExcute(t.feeds.current_page)
       })
     },
-    addBtn() {
+    addBtn () {
       this.addModal.show = true
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    editModalHide() {
+    editModalHide () {
       this.editModal.show = false
     },
-    getAllRoleExcute() {
+    getAllRoleExcute () {
       let t = this
       getAllRole().then(res => {
         t.roleModal.allRoles = res.data
       })
     },
-    handleTransferChange(newTargetKeys) {
+    handleTransferChange (newTargetKeys) {
       this.roleModal.hasRoles = newTargetKeys
     },
-    renderFormat(item) {
+    renderFormat (item) {
       return item.label + '「' + item.description + '」'
     },
-    giveUserRoleExcute() {
+    giveUserRoleExcute () {
       let t = this
       giveUserRole(t.roleModal.id, t.roleModal.hasRoles).then((res) => {
         t.$Notice.success({
@@ -311,11 +320,16 @@ export default {
         t.roleModal.show = false
       })
     },
-    cancelRoleModal() {
+    cancelRoleModal () {
       let t = this
       t.roleModal.show = false
       t.roleModal.saveLoading = false
     },
-  },
+    isHasRoleToAccess (roleArray) {
+      // ['Founder', 'Maintainer']
+      return !!hasOneOf(roleArray, this.$store.state.user.access)
+    }
+
+  }
 }
 </script>

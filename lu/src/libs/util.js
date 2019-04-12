@@ -171,11 +171,13 @@ export const getNewTagList = (list, newRoute) => {
   } = newRoute
   let newList = [...list]
   if (newList.findIndex(item => item.name === name) >= 0) return newList
-  else newList.push({
-    name,
-    path,
-    meta
-  })
+  else {
+    newList.push({
+      name,
+      path,
+      meta
+    })
+  }
   return newList
 }
 
@@ -262,7 +264,7 @@ export const getArrayFromFile = (file) => {
     let reader = new FileReader()
     reader.readAsText(file) // 以文本格式读取
     let arr = []
-    reader.onload = function(evt) {
+    reader.onload = function (evt) {
       let data = evt.target.result // 读到的数据
       let pasteData = data.trim()
       arr = pasteData.split((/[\n\u0085\u2028\u2029]|\r\n?/g)).map(row => {
@@ -385,7 +387,7 @@ export const scrollTop = (el, from = 0, to, duration = 500, endCallback) => {
       window.webkitRequestAnimationFrame ||
       window.mozRequestAnimationFrame ||
       window.msRequestAnimationFrame ||
-      function(callback) {
+      function (callback) {
         return window.setTimeout(callback, 1000 / 60)
       }
     )
