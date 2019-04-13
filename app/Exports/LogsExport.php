@@ -39,18 +39,26 @@ class LogsExport implements FromCollection, WithTitle, WithHeadings, WithEvents,
 
     public function registerEvents(): array
     {
+        // 更多示例参考 ： https://phpspreadsheet.readthedocs.io
         return [
             AfterSheet::class => function (AfterSheet $event) { // php
                 $sheetGetDelegate = $event->sheet->getDelegate();
                 $sheet = $event->sheet;
 
 
-                $sheet->getDelegate()->setMergeCells(['A1:G1']);
-                $sheetGetDelegate->getStyle('A1:A10')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheetGetDelegate->getStyle('A1')->getFont()->setBold(true)->setSize('30');
-                $sheetGetDelegate->getStyle('A4')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-                $sheetGetDelegate->getColumnDimension('B')->setWidth(300);
+                $sheet->getDelegate()->setMergeCells(['A1:G1']); // 合并
+                $sheetGetDelegate->getStyle('A1:A10')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER); //
+                $sheetGetDelegate->getStyle('A1')->getFont()->setBold(true)->setSize('30'); // 字体大小
+                $sheetGetDelegate->getStyle('A4')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED); // 字体颜色
+                $sheetGetDelegate->getColumnDimension('B')->setWidth(300); // 单元格宽度
 //                $sheetGetDelegate->getDefaultColumnDimension()->setAutoSize(true);
+
+                $sheetGetDelegate->getRowDimension(1)->setRowHeight(50); // 将第一行行高设置为50
+
+                // 设置 A1:D4 范围内文本自动换行
+                $sheetGetDelegate->getStyle('A1:D4')
+                    ->getAlignment()->setWrapText(true);
+
 
 
                 $styleArray = [
@@ -58,7 +66,7 @@ class LogsExport implements FromCollection, WithTitle, WithHeadings, WithEvents,
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                         'vertical_center' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
                     ],
-                    'borders' => [
+                    'borders' => [ // 边框
                         'outline' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
                             'color' => ['argb' => 'FFFF0000'],

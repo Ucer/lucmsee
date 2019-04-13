@@ -79,23 +79,23 @@ import {
 } from '@/api/log'
 
 import {
-  getAllTables,
+  getAllTables
 } from '@/api/table'
 import {
-  exportExcelLog,
+  exportExcelLog
 } from '@/api/excel_url'
 
 import {
-  getTableStatus,
+  getTableStatus
 } from '@/api/common'
 
-import { downloadfilepassurl} from '@/libs/tools'
+import { downloadFilePassUrl } from '@/libs/tools'
 
 export default {
   components: {
-    ShowInfo,
+    ShowInfo
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'created_at,desc',
@@ -110,7 +110,7 @@ export default {
       tableLoading: false,
       tableStatus: {
         enable: [],
-        is_admin: [],
+        is_admin: []
       },
       feeds: {
         data: [],
@@ -123,49 +123,49 @@ export default {
         info: ''
       },
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '操作人',
-          minWidth: 100,
-          slot: 'user_id'
-        },
-        {
-          title: '日志类型',
-          key: 'type',
-          minWidth: 100,
-          slot: 'type'
-        },
-        {
-          title: '模型表',
-          key: '',
-          width: 80,
-          slot: 'table_name'
-        },
-        {
-          title: '操作人ip',
-          key: 'ip',
-          minWidth: 150,
-        },
-        {
-          title: '创建时间',
-          key: 'created_at',
-          minWidth: 150,
-        },
-        {
-          title: '操作',
-          key: '',
-          minWidth: 200,
-          slot: 'action'
-        }
-      ],
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '操作人',
+        minWidth: 100,
+        slot: 'user_id'
+      },
+      {
+        title: '日志类型',
+        key: 'type',
+        minWidth: 100,
+        slot: 'type'
+      },
+      {
+        title: '模型表',
+        key: '',
+        width: 80,
+        slot: 'table_name'
+      },
+      {
+        title: '操作人ip',
+        key: 'ip',
+        minWidth: 150
+      },
+      {
+        title: '创建时间',
+        key: 'created_at',
+        minWidth: 150
+      },
+      {
+        title: '操作',
+        key: '',
+        minWidth: 200,
+        slot: 'action'
+      }
+      ]
 
     }
   },
-  created() {
+  created () {
     let t = this
     t.getTableStatusExcute('logs/type')
     t.getAllTablesExcute()
@@ -176,27 +176,27 @@ export default {
     // }
   },
   methods: {
-    handleOnPageChange: function(to_page) {
+    handleOnPageChange: function (to_page) {
       this.getTableDataExcute(to_page)
     },
-    onPageSizeChange: function(per_page) {
+    onPageSizeChange: function (per_page) {
       this.feeds.per_page = per_page
       this.getTableDataExcute(this.feeds.current_page)
     },
-    getTableStatusExcute(params) {
+    getTableStatusExcute (params) {
       let t = this
       getTableStatus(params).then(res => {
         t.tableStatus.type = res.data
         t.getTableDataExcute(t.feeds.current_page)
       })
     },
-    getAllTablesExcute(params) {
+    getAllTablesExcute (params) {
       let t = this
       getAllTables('').then(res => {
         t.allTableList = res.data
       })
     },
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -204,12 +204,11 @@ export default {
         t.feeds.data = res.data
         t.feeds.total = res.meta.total
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -218,7 +217,7 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -227,31 +226,30 @@ export default {
         })
       })
     },
-    tableButtonShowInfo(row, index) {
+    tableButtonShowInfo (row, index) {
       this.showInfoModal.show = true
       this.showInfoModal.info = row
     },
-    showModalClose() {
+    showModalClose () {
       this.showInfoModal.show = false
     },
-    searchTimeStart: function(value, dateType) {
+    searchTimeStart: function (value, dateType) {
       this.searchForm.start_time = value
     },
-    searchTimeEnd: function(value, dateType) {
+    searchTimeEnd: function (value, dateType) {
       this.searchForm.end_time = value
     },
-    exportExcelLogExcute() {
+    exportExcelLogExcute () {
       let t = this
       t.tableLoading = true
       exportExcelLog().then(res => {
         let resData = res.data
-        t.downloadFilePassUrl(resData.url)
+        downloadFilePassUrl(resData.url)
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
-    },
-  },
+    }
+  }
 }
 </script>

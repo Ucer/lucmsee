@@ -19,10 +19,6 @@
 - laravel/passport:^7.0
 - laravel/tinker: ^1.0
 
-```text 
-
-
-```
 
 #### lu 
 

@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;    // 在工作表流程结束时�
 
     public function registerEvents(): array
     {
+        // 更多示例参考 ： https://phpspreadsheet.readthedocs.io
         return [
             AfterSheet::class => function (AfterSheet $event) { // php
                 $sheetGetDelegate = $event->sheet->getDelegate();
@@ -29,6 +30,11 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;    // 在工作表流程结束时�
                 $sheetGetDelegate->getDefaultColumnDimension()->setAutoSize(true);
                 $sheetGetDelegate->getColumnDimension('B')->setAutoSize(true);
                 $sheetGetDelegate->getColumnDimension('B')->setWidth(300);
+                
+                // 设置 A1:D4 范围内文本自动换行
+                $sheetGetDelegate->getStyle('A1:D4')
+                    ->getAlignment()->setWrapText(true);
+                
                 // 位置与边框
                 $styleArray = [
                     'alignment' => [
