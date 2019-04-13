@@ -21,12 +21,12 @@ class IndexController extends WebController
         return view('dashboard');
     }
 
-    /*
     public function docs()
     {
         return view('docs');
     }
 
+    /*
     public function changeLocale($locale)
     {
         if (in_array($locale, ['en', 'zh-cn'])) {
