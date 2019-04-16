@@ -118,12 +118,13 @@ class  ArticleValidate extends Validate
             }
 
 
-            if ($request_data['access_type'] === 'pwd' ) {
-                if(($model->access_type === 'pwd') && $model->access_value) {
-                    if($request_data['access_value']) {
+            if ($request_data['access_type'] === 'pwd') {
+                if (($model->access_type === 'pwd')) {
+                    if ($request_data['access_value']) {
                         $request_data['access_value'] = AesEncryptHandler::securedEncrypt($request_data['access_value']);
+                    } else {
+                        unset($request_data['access_value']);
                     }
-                    unset($request_data['access_value']);
                 } else {
                     if (!$request_data['access_value']) return $this->baseFailed('密码访问方式必须要输入密码');
                     $request_data['access_value'] = AesEncryptHandler::securedEncrypt($request_data['access_value']);
