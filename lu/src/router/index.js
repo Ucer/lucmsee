@@ -6,7 +6,8 @@ import iView from 'iview'
 import {
   getTokenFromCookies,
   canTurnTo,
-  setTitle
+  setTitle,
+  setTokenToCookies
 } from '@/libs/util'
 import config from '@/config'
 const {
