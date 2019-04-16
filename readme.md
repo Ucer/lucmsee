@@ -19,6 +19,8 @@
 - laravel/passport:^7.0
 - laravel/tinker: ^1.0
 
+`storage` 和 `bootstrap/cache` 要有写的权限
+
 
 #### lu 
 
