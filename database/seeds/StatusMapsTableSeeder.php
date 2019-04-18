@@ -35,6 +35,7 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'markdown_editor_article_content', 'status_description' => 'markdown富文本文章内容', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'carousel', 'status_description' => '轮播图', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'tmp', 'status_description' => '时临图片', 'remark' => ''],
+            ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'api_img', 'status_description' => 'api上传的图片', 'remark' => ''],
             // logs_table
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'T', 'status_description' => '启用', 'remark' => ''],
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => ''],
@@ -68,6 +69,8 @@ class StatusMapsTableSeeder extends Seeder
 
             ['table_name' => 'app_messages', 'column' => 'is_alert_at_home', 'status_code' => 'T', 'status_description' => '是', 'remark' => '是否在首页弹出'],
             ['table_name' => 'app_messages', 'column' => 'is_alert_at_home', 'status_code' => 'F', 'status_description' => '否', 'remark' => '是否在首页弹出'],
+            // smses_table
+            ['table_name' => 'smses', 'column' => 'type', 'status_code' => 'test', 'status_description' => '测试短信', 'remark' => ''],
         ];
         \App\Models\StatusMap::insert($data);
     }

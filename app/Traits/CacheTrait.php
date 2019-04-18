@@ -14,20 +14,21 @@ trait CacheTrait
         ],
     ];
 
-    protected function cachePut($cacheKeyType, $key, $value, $expireAt)
+    protected function cachePut($cacheKeyType, $key, $value, $expireAt = '')
     {
-        $cacheKey = $this->cacheKeyType[$cacheKeyType] . $key;
+        $cacheKey = $this->cacheKeyType[$cacheKeyType];
+        $finalKey = $cacheKey['name'] . $key;
         if ($expireAt) {
-            Cache::put($cacheKey['name'], $value, $expireAt);
+            Cache::put($finalKey, $value, $expireAt);
         } else {
             if ($cacheKey['expiry_time'] > 0) {
-                Cache::put($cacheKey['name'], $value, $cacheKey['expiry_time']);
+                Cache::put($finalKey, $value, $cacheKey['expiry_time']);
             } else {
-                Cache::put($cacheKey['name'], $value);
+                Cache::put($finalKey, $value);
             }
         }
 
-        return $cacheKey;
+        return $finalKey;
     }
 
     protected function cacheGet($cacheKey)
