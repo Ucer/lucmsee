@@ -16,6 +16,7 @@ class  TagValidate extends Validate
     {
         $rules = [
             'name' => [
+                'bail',
                 'required',
                 'between:2,20',
                 'unique:tags'
@@ -34,6 +35,7 @@ class  TagValidate extends Validate
     {
         $rules = [
             'name' => [
+                'bail',
                 'required',
                 'between:2,20',
                 Rule::unique('tags')->ignore($model->id),

@@ -25,6 +25,16 @@ Route::namespace('Api')->group(function () {
 });
 
 
+
+/**       ==========================          其它域名来访Api           ====================   */
+Route::namespace('Api')->prefix('accept')->group(function () {
+    Route::post('lucmsee_api/get_config_data', 'AcceptLucmseeApiAccessController@getConfigData')->name('accept.lucmsee_api.get_config_data');
+    Route::post('lucmsee_api/upload_image_use_base64', 'AcceptLucmseeApiAccessController@uploadImageUseBase64')->name('accept.lucmsee_api.upload_image_use_base64');
+});
+
+
+
+
 /**       ==========================          后台APi           ====================   */
 Route::namespace('Admin')->group(function () {
 
@@ -139,4 +149,11 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/logs', 'LogsController@list')->name('logs.list');
     Route::get('admin/logs/{log}', 'LogsController@show')->name('logs.show');
     Route::delete('admin/logs/{log}', 'LogsController@destroy')->name('logs.destroy');
+
+
+    Route::get('admin/app_versions', 'AppVersionsController@list')->name('app_versions.list');
+    Route::post('admin/app_versions', 'AppVersionsController@store')->name('app_versions.store');
+    Route::patch('admin/app_versions/{app_version}', 'AppVersionsController@update')->name('app_versions.update');
+    Route::get('admin/app_versions/{app_version}', 'AppVersionsController@show')->name('app_versions.show');
+    Route::delete('admin/app_versions/{app_version}', 'AppVersionsController@destroy')->name('app_versions.destroy');
 });

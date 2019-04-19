@@ -43,6 +43,10 @@ class CommonController extends ApiController
                 $table = 'articles';
                 $column = 'recommend';
                 break;
+            case 'article_categories_column_enable':
+                $table = 'article_categories';
+                $column = 'enable';
+                break;
             default:
                 return $this->failed('不允许的操作');
                 break;

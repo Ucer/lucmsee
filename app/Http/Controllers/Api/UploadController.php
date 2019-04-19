@@ -36,16 +36,16 @@ class UploadController extends ApiController
                 $rest_upload_image = $fileuploadHandler->uploadImage($file, $min_type, $file_type, Auth::id(), $request->post('max_width'), $category);
                 break;
             case 'file':
-                if (!in_array($real_file_type, ['xlsx', 'doc', 'docx', 'txt', 'sql'])) {
+                if (!in_array($real_file_type, ['xlsx', 'doc', 'docx', 'txt', 'sql', 'apk'])) {
                     return $this->failed('不支持的文件类型', 200);
                 }
-                $rest_upload_image = $fileuploadHandler->uploadFile($file, $min_type, $file_type, Auth::id(), $category);
+                $rest_upload_image = $fileuploadHandler->uploadFile($file, $min_type, $file_type, Auth::id(), $category, $real_file_type);
                 break;
             case 'video':
                 if (!in_array($real_file_type, ['mp4', 'avi'])) {
                     return $this->failed('不支持的视频类型', 200);
                 }
-                $rest_upload_image = $fileuploadHandler->uploadFile($file, $min_type, $file_type, Auth::id(), $category);
+                $rest_upload_image = $fileuploadHandler->uploadFile($file, $min_type, $file_type, Auth::id(), $category, $real_file_type);
                 break;
             default:
                 return $this->failed('错误的文件类型', 200);

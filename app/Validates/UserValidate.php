@@ -19,7 +19,7 @@ class  UserValidate extends Validate
     {
         $rules = [
             'real_name' => 'required|between:3,50',
-            'password' => 'required|between:6,12|alpha_num|confirmed',
+            'password' => 'bail|required|between:6,12|alpha_num|confirmed',
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {

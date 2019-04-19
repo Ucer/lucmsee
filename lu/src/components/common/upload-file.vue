@@ -50,7 +50,7 @@
 </style>
 <template>
 <div>
-  <div v-if="isPreviewUploadList" class="demo-upload-list" v-for="(item,key) in uploadList">
+  <div v-if="isPreviewUploadList" class="demo-upload-list" v-for="(item,key) in uploadList" :key="key">
     <template v-if="item.status === 'finished'">
       <a :href="item.url">{{'附件'+(key+1)}}</a>
       <div class="demo-upload-list-cover">
@@ -68,18 +68,19 @@
   <Divider orientation="left" v-if="isPreviewUploadList">已上传文件</Divider>
   <div class="galley-image-list" v-if="isPreviewUploadList">
     <ul class="pictures  row l-hide" ref="galley">
-      <li v-for="(item,key) in formatFileList"><a v-if="item.url" :href="item.url" target="_blank">附件{{ key +1}}</a></li>
+      <li v-for="(item,key) in formatFileList" :key="key"><a v-if="item.url" :href="item.url" target="_blank">附件{{ key +1}}</a></li>
     </ul>
   </div>
 
 </div>
 </template>
 <script>
-import {
-  deleteAttachment
-} from '@/api/common'
-import Viewer from 'viewerjs';
-import 'viewerjs/dist/viewer.css';
+// import {
+// deleteAttachment
+// } from '@/api/common'
+
+import Viewer from 'viewerjs'
+import 'viewerjs/dist/viewer.css'
 
 export default {
   props: {
@@ -102,31 +103,31 @@ export default {
         file_num: 0,
         data: [],
         default_list: [{
-            name: '',
-            attachment_id: 0,
-            url: ''
-          },
-          {
-            name: '',
-            attachment_id: 0,
-            url: ''
-          }
+          name: '',
+          attachment_id: 0,
+          url: ''
+        },
+        {
+          name: '',
+          attachment_id: 0,
+          url: ''
+        }
         ]
 
       }
     }
   },
-  data() {
+  data () {
     return {
       imgName: '',
       visible: false,
       uploadList: [],
       formatFileList: [],
-      loading: false,
+      loading: false
     }
   },
   methods: {
-    handleRemove(file) {
+    handleRemove (file) {
       const fileList = this.$refs.upload.fileList
 
       // if (file.attachment_id > 0 && (this.isDelete === true)) {
@@ -145,9 +146,9 @@ export default {
       this.$emit('on-upload-change', this.uploadList, formatFileList)
       this.ViewImage()
     },
-    handleSuccess(res, file) {
-
-      if (!res.hasOwnProperty('status') || (res.status != 'success')) {
+    handleSuccess (res, file) {
+      this.loading = false
+      if (!res.hasOwnProperty('status') || (res.status !== 'success')) {
         this.$Notice.error({
           title: '出错了，请删除后重新上传',
           desc: res.message
@@ -165,16 +166,17 @@ export default {
       this.loading = false
       this.ViewImage()
     },
-    handleError(error, file) {
+    handleError (error, file) {
+      this.loading = false
       this.$Notice.error({
         title: '出错了',
         desc: '服务内部错误'
       })
     },
 
-    fomatFile() {
+    fomatFile () {
       let formatFileList = []
-      this.uploadList.forEach(function(value, index, array) {
+      this.uploadList.forEach(function (value, index, array) {
         formatFileList.push({
           attachment_id: value.attachment_id,
           url: value.url
@@ -187,7 +189,7 @@ export default {
       }
       return formatFileList
     },
-    handleFormatError(file) {
+    handleFormatError (file) {
       this.$Notice.warning({
         title: '文件格式不正确',
         desc: '文件 ' + file.name + ' 格式不正确。'
@@ -196,7 +198,7 @@ export default {
       this.loading = false
       this.ViewImage()
     },
-    handleMaxSize(file) {
+    handleMaxSize (file) {
       this.$Notice.warning({
         title: '超出文件大小限制',
         desc: '文件 ' + file.name + ' 太大，不能超过 ' + this.uploadConfig.max_size + 'kb'
@@ -205,11 +207,10 @@ export default {
       this.loading = false
       this.ViewImage()
     },
-    handleBeforeUpload() {
+    handleBeforeUpload () {
       const check = this.uploadList.length < this.uploadConfig.file_num
 
       if (!check) {
-
         this.$Notice.warning({
           title: '数量限制',
           desc: '最多只能上传' + this.uploadConfig.file_num + '个文件'
@@ -221,54 +222,54 @@ export default {
 
       return check
     },
-    ViewImage() {
+    ViewImage () {
       this.$nextTick(() => {
-        $(function() {
-          $('.l-hide').click(function() {
-            $('.l-show').removeAttr('id').addClass('l-hide').removeClass('l-show');
-            $(this).attr('id', 'galley');
-            $(this).addClass('l-show');
-            $(this).removeClass('l-hide');
-            var galley = document.getElementById('galley');
+        $(function () {
+          $('.l-hide').click(function () {
+            $('.l-show').removeAttr('id').addClass('l-hide').removeClass('l-show')
+            $(this).attr('id', 'galley')
+            $(this).addClass('l-show')
+            $(this).removeClass('l-hide')
+            var galley = document.getElementById('galley')
             var viewer = new Viewer(galley, {
               url: 'data-original',
               toolbar: {
                 oneToOne: true,
-                prev: function() {
-                  viewer.prev(true);
+                prev: function () {
+                  viewer.prev(true)
                 },
                 play: true,
-                next: function() {
-                  viewer.next(true);
+                next: function () {
+                  viewer.next(true)
                 },
-                update: function() {
+                update: function () {
 
                 },
-                download: function() {
-                  const a = document.createElement('a');
+                download: function () {
+                  const a = document.createElement('a')
 
-                  a.href = viewer.image.src;
-                  a.download = viewer.image.alt;
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-                },
-              },
-            });
-          });
-        });
-      });
-    },
+                  a.href = viewer.image.src
+                  a.download = viewer.image.alt
+                  document.body.appendChild(a)
+                  a.click()
+                  document.body.removeChild(a)
+                }
+              }
+            })
+          })
+        })
+      })
+    }
   },
-  mounted() {
+  mounted () {
     this.uploadList = this.$refs.upload.fileList
 
     let formatFileList = this.fomatFile()
-    if (formatFileList != 'undefined') {
+    if (formatFileList !== 'undefined') {
       this.$emit('input', formatFileList)
       this.$emit('on-upload-change', this.uploadList, formatFileList)
     }
     this.ViewImage()
-  },
+  }
 }
 </script>

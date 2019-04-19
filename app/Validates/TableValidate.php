@@ -15,8 +15,8 @@ class  TableValidate extends Validate
     public function storeValidate($request_data)
     {
         $rules = [
-            'table_name' => 'required|between:2,255|alpha_dash|unique:tables',
-            'table_name_cn' => 'required|between:2,255|unique:tables',
+            'table_name' => 'bail|required|between:2,255|alpha_dash|unique:tables',
+            'table_name_cn' => 'bail|required|between:2,255|unique:tables',
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
@@ -34,12 +34,14 @@ class  TableValidate extends Validate
         $rules = [
             'table_name' =>
                 [
+                    'bail',
                     'required',
                     'between:2,255',
                     'alpha_dash',
                     Rule::unique('tables')->ignore($model->id),
                 ],
             'table_name_cn' => [
+                'bail',
                 'required',
                 'between:2,255',
                 Rule::unique('tables')->ignore($model->id),

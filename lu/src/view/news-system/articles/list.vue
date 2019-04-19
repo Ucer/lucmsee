@@ -94,23 +94,23 @@ import {
 import AddComponent from './components/markdown_add'
 import EditComponent from './components/markdown_edit'
 
-
 import {
   getAllCategories
 } from '@/api/article_category'
 import {
   getTableStatus,
-  switchEnable,
-  commonEditTableColumn
+  switchEnable
 } from '@/api/common'
-
+import {
+  oneOf
+} from '@/libs/tools'
 
 export default {
   components: {
     AddComponent,
     EditComponent
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'created_at,desc',
@@ -118,9 +118,9 @@ export default {
         title: '',
         enable: '',
         top: '',
-        recommend: '',
+        recommend: ''
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableLoading: false,
       tableStatus: {
         access_type: [],
@@ -134,7 +134,7 @@ export default {
         current_page: 1,
         per_page: 10
       },
-      addBtn() {
+      addBtn () {
         this.addModal.show = true
       },
       addModal: {
@@ -146,74 +146,74 @@ export default {
       },
       articleCategories: [],
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '标题',
-          key: 'title',
-          minWidth: 80
-        },
-        {
-          title: '分类',
-          minWidth: 90,
-          slot: 'article_category'
-        },
-        {
-          title: '启用状态',
-          key: 'enable',
-          minWidth: 50,
-          slot: 'enable'
-        },
-        {
-          title: '置顶',
-          key: 'top',
-          minWidth: 50,
-          slot: 'top'
-        },
-        {
-          title: '推荐',
-          key: 'recommend',
-          minWidth: 50,
-          slot: 'recommend'
-        },
-        {
-          title: '创建时间',
-          key: 'created_at',
-          sortable: 'customer',
-          minWidth: 150,
-        }, {
-          title: '修改时间',
-          key: 'updated_at',
-          sortable: true,
-          minWidth: 150,
-        },
-        {
-          title: '操作',
-          minWidth: 50,
-          slot: 'action'
-        }
-      ],
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '标题',
+        key: 'title',
+        minWidth: 80
+      },
+      {
+        title: '分类',
+        minWidth: 90,
+        slot: 'article_category'
+      },
+      {
+        title: '启用状态',
+        key: 'enable',
+        minWidth: 50,
+        slot: 'enable'
+      },
+      {
+        title: '置顶',
+        key: 'top',
+        minWidth: 50,
+        slot: 'top'
+      },
+      {
+        title: '推荐',
+        key: 'recommend',
+        minWidth: 50,
+        slot: 'recommend'
+      },
+      {
+        title: '创建时间',
+        key: 'created_at',
+        sortable: 'customer',
+        minWidth: 150
+      }, {
+        title: '修改时间',
+        key: 'updated_at',
+        sortable: true,
+        minWidth: 150
+      },
+      {
+        title: '操作',
+        minWidth: 50,
+        slot: 'action'
+      }
+      ]
 
     }
   },
-  created() {
+  created () {
     let t = this
     t.getAllCategoriesExcute()
     t.getTableStatusExcute('articles')
   },
   computed: {},
   methods: {
-    handleOnPageChange: function(to_page) {
+    handleOnPageChange: function (to_page) {
       this.getTableDataExcute(to_page)
     },
-    onPageSizeChange: function(per_page) {
+    onPageSizeChange: function (per_page) {
       this.feeds.per_page = per_page
       this.getTableDataExcute(this.feeds.current_page)
     },
-    getTableStatusExcute(params) {
+    getTableStatusExcute (params) {
       let t = this
       getTableStatus(params).then(res => {
         t.tableStatus.access_type = res.data.access_type
@@ -223,7 +223,7 @@ export default {
         t.getTableDataExcute(t.feeds.current_page)
       })
     },
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -232,12 +232,11 @@ export default {
         t.feeds.total = res.meta.total
         t.tableLoading = false
         t.globalFancybox()
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -246,17 +245,17 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    editModalHide() {
+    editModalHide () {
       this.editModal.show = false
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -265,7 +264,7 @@ export default {
         })
       })
     },
-    switchChange: function(row, index, column) {
+    switchChange: function (row, index, column) {
       let t = this
       let new_status = 'T'
       if (t.feeds.data[index][column] === 'T') {
@@ -280,12 +279,12 @@ export default {
         t.getTableDataExcute(t.feeds.current_page)
       })
     },
-    getAllCategoriesExcute() {
+    getAllCategoriesExcute () {
       let t = this
       getAllCategories().then(res => {
         t.articleCategories = res.data
       })
-    },
+    }
   }
 }
 </script>

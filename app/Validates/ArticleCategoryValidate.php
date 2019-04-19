@@ -18,7 +18,7 @@ class  ArticleCategoryValidate extends Validate
     public function storeValidate($request_data)
     {
         $rules = [
-            'name' => 'required|between:2,100|unique:article_categories',
+            'name' => 'bail|required|between:2,100|unique:article_categories',
             'pid' => 'required',
             'enable' => [
                 'required',
@@ -44,6 +44,7 @@ class  ArticleCategoryValidate extends Validate
     {
         $rules = [
             'name' => [
+                'bail',
                 'required',
                 'between:2,100',
                 Rule::unique('article_categories')->ignore($model->id)

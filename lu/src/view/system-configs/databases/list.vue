@@ -56,23 +56,25 @@
 
 <script>
 
-
 import {
   getTableData,
   bakUpTable,
   optimizeTable,
-  repairTable,
+  repairTable
 } from '@/api/database'
+import {
+  oneOf
+} from '@/libs/tools'
 
 export default {
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'created_at,desc',
         table_name: '',
         column: ''
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableLoading: false,
       feeds: {
         data: [],
@@ -86,63 +88,63 @@ export default {
       loadingBakBtn: false,
       loadingOptimizeBtn: false,
       loadingRepairBtn: false,
-      bak_data_rows:0,
+      bak_data_rows: 0,
       columns: [{
-          type: 'selection',
-          width: 60,
-          align: 'center'
-        },
-        {
-          title: '表名',
-          key: 'Name',
-          minWidth: 100,
-        },
-        {
-          title: '存储引擎',
-          key: 'Engine',
-          minWidth: 60,
-        }, {
-          title: '行数',
-          key: 'Rows',
-          minWidth: 60,
-          sortable: true
-        }, {
-          title: '数据',
-          key: 'Data_length',
-          minWidth: 60,
-          sortable: true
-        }, {
-          title: '索引',
-          key: 'Index_length',
-          minWidth: 60,
-          sortable: true
-        }, {
-          title: '全部',
-          key: 'Total_length',
-          minWidth: 60,
-          sortable: true
-        },
-        {
-          title: '创建时间',
-          key: 'Create_time',
-          sortable: true,
-          minWidth: 150,
-        }, {
-          title: '修改时间',
-          key: 'Update_time',
-          sortable: true,
-          minWidth: 150,
-        }
-      ],
+        type: 'selection',
+        width: 60,
+        align: 'center'
+      },
+      {
+        title: '表名',
+        key: 'Name',
+        minWidth: 100
+      },
+      {
+        title: '存储引擎',
+        key: 'Engine',
+        minWidth: 60
+      }, {
+        title: '行数',
+        key: 'Rows',
+        minWidth: 60,
+        sortable: true
+      }, {
+        title: '数据',
+        key: 'Data_length',
+        minWidth: 60,
+        sortable: true
+      }, {
+        title: '索引',
+        key: 'Index_length',
+        minWidth: 60,
+        sortable: true
+      }, {
+        title: '全部',
+        key: 'Total_length',
+        minWidth: 60,
+        sortable: true
+      },
+      {
+        title: '创建时间',
+        key: 'Create_time',
+        sortable: true,
+        minWidth: 150
+      }, {
+        title: '修改时间',
+        key: 'Update_time',
+        sortable: true,
+        minWidth: 150
+      }
+      ]
 
     }
   },
-  created() {
+  created () {
     let t = this
     t.getTableDataExcute(t.feeds.current_page)
   },
   methods: {
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -153,12 +155,11 @@ export default {
         t.bak_data_rows = res.data.bak_data_rows
         t.feeds.total = 0
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -167,11 +168,11 @@ export default {
         // this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -180,17 +181,17 @@ export default {
         })
       })
     },
-    tableButtonShowInfo(row, index) {
+    tableButtonShowInfo (row, index) {
       this.showInfoModal.show = true
       this.showInfoModal.info = row
     },
-    onSelectionChange: function(selection) {
+    onSelectionChange: function (selection) {
       this.selectIds = ''
       for (let index in selection) {
         this.selectIds += ',' + selection[index].Name
       }
     },
-    bakUpTableExcute(selectes, isOpAll) {
+    bakUpTableExcute (selectes, isOpAll) {
       if (isOpAll === false && !selectes) {
         this.$Notice.error({
           title: '出错了',
@@ -211,7 +212,7 @@ export default {
         this.loadingBakBtn = false
       })
     },
-    optimizeTableExcute(selectes, isOpAll) {
+    optimizeTableExcute (selectes, isOpAll) {
       if (isOpAll === false && !selectes) {
         this.$Notice.error({
           title: '出错了',
@@ -232,7 +233,7 @@ export default {
         this.loadingOptimizeBtn = false
       })
     },
-    repairTableExcute(selectes, isOpAll) {
+    repairTableExcute (selectes, isOpAll) {
       if (isOpAll === false && !selectes) {
         this.$Notice.error({
           title: '出错了',
@@ -245,13 +246,13 @@ export default {
       repairTable(selectes, isOpAll).then(res => {
         this.$Notice.success({
           title: '操作成功',
-          desc: res.message,
+          desc: res.message
         })
         this.loadingRepairBtn = false
       }).catch((err) => {
         this.loadingRepairBtn = false
       })
-    },
-  },
+    }
+  }
 }
 </script>

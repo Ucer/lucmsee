@@ -89,7 +89,7 @@ import {
   getTableStatus
 } from '@/api/common'
 
-import { downloadFilePassUrl } from '@/libs/tools'
+import { downloadFilePassUrl, oneOf } from '@/libs/tools'
 
 export default {
   components: {

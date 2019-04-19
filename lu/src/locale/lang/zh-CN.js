@@ -13,7 +13,6 @@ export default {
   resourcesManage: '资源管理',
   attachmentsManage: '系统附件',
   imageList: '图片列表',
-  imageList: '图片列表',
   newsSystem: '新闻系统',
   tagsManage: '标签管理',
   articleCategory: '文章分类',
@@ -24,6 +23,7 @@ export default {
   carouselList: '轮播图',
   systemSecurity: '系统安全',
   systemLogs: '系统日志',
+  appVersion: 'App版本管理',
 
 
   edit: '修改',

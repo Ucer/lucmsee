@@ -19,6 +19,8 @@
 - laravel/passport:^7.0
 - laravel/tinker: ^1.0
 
+`storage` 和 `bootstrap/cache` 要有写的权限
+
 
 #### lu 
 
@@ -49,7 +51,15 @@
         - 添加状态
         - 修改状态
         - 删除状态
-- 系统配置 （可以在后台修改的配置项:CURD）
+- 系统配置
+    - 列表
+    - 添加
+    - 修改
+    - 删除
+- App版本管理
+    - 列表
+    - 发布新版本
+    - 修改
 
 #### 资源管理 ['Founder', 'Maintainer']
 - 附件管理(attachments)
@@ -85,6 +95,7 @@
     - 修改
     - 删除
     - 快速排序
+    - 启用禁用
 - 文章列表(articles)
     - 添加
         - 新建标签(tags)

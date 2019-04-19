@@ -18,6 +18,13 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        // 实现单点登录
+        'Laravel\Passport\Events\AccessTokenCreated' => [
+            'App\Listeners\PassportAccessTokenCreated',
+        ],
+        'Laravel\Passport\Events\RefreshTokenCreated' => [
+            'App\Listeners\PassportAccessTokenRefreshed',
+        ],
     ];
 
     /**
