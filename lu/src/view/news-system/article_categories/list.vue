@@ -33,6 +33,9 @@
       <template slot-scope="{ row, index }" slot="weight">
         <table-edit table="article_categories" column="weight" :id="row.id" :value="row.weight" :index="index"></table-edit>
       </template>
+      <template slot-scope="{ row, index }" slot="enable">
+        <iSwitch  type='primary' :value="row.enable === 'T'" @on-change="switchChange(row,index,'enable')"></iSwitch>
+      </template>
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
@@ -56,7 +59,8 @@ import {
   destroy
 } from '@/api/article_category'
 import {
-  getTableStatus
+  getTableStatus,
+  switchEnable
 } from '@/api/common'
 import {
   oneOf
@@ -110,6 +114,10 @@ export default {
         sortable: 'customer',
         slot: 'weight'
       }, {
+        title: '状态',
+        minWidth: 150,
+        slot: 'enable'
+      }, {
         title: '创建时间',
         key: 'created_at',
         minWidth: 150
@@ -154,7 +162,7 @@ export default {
     tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
-        t.feeds.data.splice(index, 1)
+        t.dataList.splice(index, 1)
         t.$Notice.success({
           title: res.message
         })
@@ -166,7 +174,7 @@ export default {
 
       } else {
         this.searchForm.order_by = order
-        this.getTableDataExcute(this.feeds.current_page)
+        this.getTableDataExcute()
       }
     },
     addBtn () {
@@ -184,7 +192,21 @@ export default {
       } else {
         return 'children_node'
       }
-      return ''
+    },
+    switchChange: function (row, index, column) {
+      let t = this
+      let new_status = 'T'
+      if (t.dataList[index][column] === 'T') {
+        new_status = 'F'
+      }
+      switchEnable(t.dataList[index].id, 'article_categories_column_' + column, new_status).then(res => {
+        t.dataList[index][column] = new_status
+        t.$Notice.success({
+          title: res.message
+        })
+      }).catch((err) => {
+        t.getTableDataExcute()
+      })
     }
   }
 }
