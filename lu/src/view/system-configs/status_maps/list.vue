@@ -5,7 +5,7 @@
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="6" :lg="3" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入字段名搜索..." v-model="searchForm.table_name"></Input>
+    <Input icon="search" placeholder="请输入表名搜索..." v-model="searchForm.table_name"></Input>
     </Col>
     <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
@@ -34,7 +34,6 @@
     </div> -->
   </Row>
 
-
   <show-info v-if='showInfoModal.show' :info='showInfoModal.info' @show-modal-close="showModalClose"></show-info>
   <add-component v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
   <edit-component v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component>
@@ -50,10 +49,10 @@ import ShowInfo from './components/show-info'
 
 import {
   getTableData,
-  destroy,
+  destroy
 } from '@/api/table'
 import {
-  oneOf,
+  oneOf
 } from '@/libs/tools'
 
 export default {
@@ -62,7 +61,7 @@ export default {
     EditComponent,
     ShowInfo
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'created_at,desc',
@@ -89,54 +88,54 @@ export default {
         info: ''
       },
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '表名',
-          key: 'table_name',
-          minWidth: 100,
-          className: 'table-column-style-table-name',
-        },
-        {
-          title: '表中文名',
-          key: 'table_name_cn',
-          className: 'table-column-style-table-name-cn',
-          minWidth: 150,
-        }, {
-          title: '字典数量',
-          key: 'map_count',
-          sortable: true,
-          minWidth: 50,
-        },
-        {
-          title: '操作',
-          key: '',
-          minWidth: 200,
-          slot: 'action'
-        }, {
-          title: '备注',
-          key: 'remark',
-          minWidth: 150,
-        },
-        {
-          title: '修改时间',
-          key: 'updated_at',
-          sortable: 'customer',
-          minWidth: 150,
-        }
-      ],
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '表名',
+        key: 'table_name',
+        minWidth: 100,
+        className: 'table-column-style-table-name'
+      },
+      {
+        title: '表中文名',
+        key: 'table_name_cn',
+        className: 'table-column-style-table-name-cn',
+        minWidth: 150
+      }, {
+        title: '字典数量',
+        key: 'map_count',
+        sortable: true,
+        minWidth: 50
+      },
+      {
+        title: '操作',
+        key: '',
+        minWidth: 200,
+        slot: 'action'
+      }, {
+        title: '备注',
+        key: 'remark',
+        minWidth: 150
+      },
+      {
+        title: '修改时间',
+        key: 'updated_at',
+        sortable: 'customer',
+        minWidth: 150
+      }
+      ]
 
     }
   },
-  created() {
+  created () {
     let t = this
     t.getTableDataExcute(t.feeds.current_page)
   },
   methods: {
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -144,12 +143,11 @@ export default {
         t.feeds.data = res.data
         t.feeds.total = 0
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -158,11 +156,11 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -171,22 +169,22 @@ export default {
         })
       })
     },
-    tableButtonShowInfo(row, index) {
+    tableButtonShowInfo (row, index) {
       this.showInfoModal.show = true
       this.showInfoModal.info = row
     },
-    addBtn() {
+    addBtn () {
       this.addModal.show = true
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    editModalHide() {
+    editModalHide () {
       this.editModal.show = false
     },
-    showModalClose() {
+    showModalClose () {
       this.showInfoModal.show = false
     }
-  },
+  }
 }
 </script>

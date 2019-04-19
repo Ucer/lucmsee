@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\AdminMessage;
 use App\Models\AppMessage;
+use App\Models\AppVersion;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\Attachment;
@@ -80,6 +81,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('log', function ($value) {
             return Log::findOrFail($value);
+        });
+        Route::bind('app_version', function ($value) {
+            return AppVersion::findOrFail($value);
         });
     }
 

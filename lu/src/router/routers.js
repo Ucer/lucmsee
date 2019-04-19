@@ -89,6 +89,13 @@ export default[
           title: '系统配置项'
         },
         component: () => import('@/view/system-configs/configs/list.vue')
+      }, {
+        path: '/dashboard/app_versions',
+        name: 'appVersion',
+        meta: {
+          title: 'App版本管理'
+        },
+        component: () => import('@/view/system-configs/app_versions/list.vue')
       }
     ]
   }, {

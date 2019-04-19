@@ -149,4 +149,11 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/logs', 'LogsController@list')->name('logs.list');
     Route::get('admin/logs/{log}', 'LogsController@show')->name('logs.show');
     Route::delete('admin/logs/{log}', 'LogsController@destroy')->name('logs.destroy');
+
+
+    Route::get('admin/app_versions', 'AppVersionsController@list')->name('app_versions.list');
+    Route::post('admin/app_versions', 'AppVersionsController@store')->name('app_versions.store');
+    Route::patch('admin/app_versions/{app_version}', 'AppVersionsController@update')->name('app_versions.update');
+    Route::get('admin/app_versions/{app_version}', 'AppVersionsController@show')->name('app_versions.show');
+    Route::delete('admin/app_versions/{app_version}', 'AppVersionsController@destroy')->name('app_versions.destroy');
 });

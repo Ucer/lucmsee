@@ -93,21 +93,24 @@ import {
   batchDestroy
 } from '@/api/admin_message'
 import {
-  getTableStatus,
+  getTableStatus
 } from '@/api/common'
+import {
+  oneOf
+} from '@/libs/tools'
 
 export default {
   components: {
     AddComponent,
     ShowInfo
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'created_at,desc',
         sendByMyself_or_beloneMe: 'belone_me',
         message_type: '',
-        is_read: '',
+        is_read: ''
       },
       notRealySortKey: [],
       tableLoading: false,
@@ -116,7 +119,7 @@ export default {
       tableStatus: {
         message_type: [],
         is_read: [],
-        is_alert_at_home: [],
+        is_alert_at_home: []
       },
       feeds: {
         data: [],
@@ -132,75 +135,75 @@ export default {
         info: ''
       },
       columns: [{
-          type: 'selection',
-          width: 60,
-          align: 'center'
-        }, {
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '标题',
-          key: 'title',
-          minWidth: 100,
-        }, {
-          title: '接收人',
-          minWidth: 80,
-          slot: 'recive_user'
-        }, {
-          title: '发送人',
-          minWidth: 80,
-          slot: 'send_user'
-        },
-        {
-          title: '消息类型',
-          minWidth: 100,
-          slot: 'message_type'
-        }, {
-          title: '是否已读',
-          minWidth: 40,
-          slot: 'is_read'
-        }, {
-          title: '创建时间',
-          key: 'created_at',
-          minWidth: 150,
-        },
-        {
-          title: '更新录时间',
-          key: 'updated_at',
-          sortable: 'customer',
-          minWidth: 150,
-        },
-        {
-          title: '操作',
-          key: '',
-          minWidth: 200,
-          slot: 'action'
-        }
-      ],
+        type: 'selection',
+        width: 60,
+        align: 'center'
+      }, {
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '标题',
+        key: 'title',
+        minWidth: 100
+      }, {
+        title: '接收人',
+        minWidth: 80,
+        slot: 'recive_user'
+      }, {
+        title: '发送人',
+        minWidth: 80,
+        slot: 'send_user'
+      },
+      {
+        title: '消息类型',
+        minWidth: 100,
+        slot: 'message_type'
+      }, {
+        title: '是否已读',
+        minWidth: 40,
+        slot: 'is_read'
+      }, {
+        title: '创建时间',
+        key: 'created_at',
+        minWidth: 150
+      },
+      {
+        title: '更新录时间',
+        key: 'updated_at',
+        sortable: 'customer',
+        minWidth: 150
+      },
+      {
+        title: '操作',
+        key: '',
+        minWidth: 200,
+        slot: 'action'
+      }
+      ]
 
     }
   },
   computed: {
-    canOpMessage() {
-      return this.searchForm.sendByMyself_or_beloneMe == 'belone_me';
+    canOpMessage () {
+      return this.searchForm.sendByMyself_or_beloneMe === 'belone_me'
     }
   },
-  created() {
+  created () {
     let t = this
     t.getTableStatusExcute('admin_messages')
   },
   methods: {
-    handleOnPageChange: function(to_page) {
+    handleOnPageChange: function (to_page) {
       this.getTableDataExcute(to_page)
     },
-    onPageSizeChange: function(per_page) {
+    onPageSizeChange: function (per_page) {
       this.feeds.per_page = per_page
       this.getTableDataExcute(this.feeds.current_page)
     },
-    getTableStatusExcute(params) {
+    getTableStatusExcute (params) {
       let t = this
       getTableStatus(params).then(res => {
         t.tableStatus.message_type = res.data.message_type
@@ -209,7 +212,7 @@ export default {
         t.getTableDataExcute(t.feeds.current_page)
       })
     },
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -217,12 +220,11 @@ export default {
         t.feeds.data = res.data
         t.feeds.total = res.meta.total
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -231,13 +233,13 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    onSelectionChange: function(selection) {
+    onSelectionChange: function (selection) {
       this.selectIds = ''
       for (let index in selection) {
         this.selectIds += ',' + selection[index].id
       }
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -246,13 +248,13 @@ export default {
         })
       })
     },
-    addBtn() {
+    addBtn () {
       this.addModal.show = true
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    batchDestroyExcute(ids) {
+    batchDestroyExcute (ids) {
       if (!ids) {
         this.$Notice.error({
           title: '出错了',
@@ -267,14 +269,14 @@ export default {
         t.loadingBatchDestroy = false
       })
     },
-    tableButtonShowInfo(row, index) {
+    tableButtonShowInfo (row, index) {
       this.showInfoModal.show = true
       this.showInfoModal.info = row
     },
-    showModalClose() {
+    showModalClose () {
       this.showInfoModal.show = false
     },
-    readAllExcute() {
+    readAllExcute () {
       let t = this
       if (t.feeds.data.length < 1) {
         this.$Notice.error({
@@ -287,14 +289,13 @@ export default {
       readAll().then(res => {
         t.getTableDataExcute(t.feeds.current_page)
       })
-
     },
-    readOneExcute(row,index) {
+    readOneExcute (row, index) {
       let t = this
       readOne(row.id).then(res => {
         t.getTableDataExcute(t.feeds.current_page)
       })
-    },
+    }
   }
 }
 </script>

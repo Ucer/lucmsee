@@ -16,10 +16,11 @@ class  SystemConfigValidate extends Validate
     {
         $rules = [
             'flag' => [
+                'bail',
                 'regex:/^[a-z][a-zA-Z0-9_]{2,100}$/',
                 'unique:system_configs'
             ],
-            'title' => 'between:2,100|unique:system_configs',
+            'title' => 'bail|between:2,100|unique:system_configs',
             'config_group' => 'required'
         ];
         $rest_validate = $this->validate($request_data, $rules);
@@ -40,10 +41,12 @@ class  SystemConfigValidate extends Validate
     {
         $rules = [
             'flag' => [
+                'bail',
                 'regex:/^[a-z][a-zA-Z0-9_]{2,100}$/',
                 Rule::unique('system_configs')->ignore($model->id)
             ],
             'title' => [
+                'bail',
                 'between:2,100',
                 Rule::unique('system_configs')->ignore($model->id)
             ],

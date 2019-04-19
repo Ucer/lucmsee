@@ -16,6 +16,7 @@ class  PermissionValidate extends Validate
     {
         $rules = [
             'name' => [
+                'bail',
                 'required',
                 'between:3,50',
                 'regex: /^\w+$/',
@@ -37,6 +38,7 @@ class  PermissionValidate extends Validate
     {
         $rules = [
             'name' => [
+                'bail',
                 'required',
                 'between:3,50',
                 'regex: /^\w+$/',

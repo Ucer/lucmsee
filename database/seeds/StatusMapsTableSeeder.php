@@ -36,6 +36,7 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'carousel', 'status_description' => '轮播图', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'tmp', 'status_description' => '时临图片', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'api_img', 'status_description' => 'api上传的图片', 'remark' => ''],
+            ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'apk', 'status_description' => '安装包', 'remark' => ''],
             // logs_table
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'T', 'status_description' => '启用', 'remark' => ''],
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => ''],
@@ -69,6 +70,15 @@ class StatusMapsTableSeeder extends Seeder
 
             ['table_name' => 'app_messages', 'column' => 'is_alert_at_home', 'status_code' => 'T', 'status_description' => '是', 'remark' => '是否在首页弹出'],
             ['table_name' => 'app_messages', 'column' => 'is_alert_at_home', 'status_code' => 'F', 'status_description' => '否', 'remark' => '是否在首页弹出'],
+            // app_versions_table
+            ['table_name' => 'app_versions', 'column' => 'name', 'status_code' => 'lucmsee', 'status_description' => 'lucmsee', 'remark' => ''],
+
+            ['table_name' => 'app_versions', 'column' => 'mobile_os', 'status_code' => 'android', 'status_description' => 'Android', 'remark' => 'android用户'],
+            ['table_name' => 'app_versions', 'column' => 'mobile_os', 'status_code' => 'ios', 'status_description' => 'Ios', 'remark' => 'ios用户'],
+            ['table_name' => 'app_versions', 'column' => 'mobile_os', 'status_code' => 'all', 'status_description' => 'All', 'remark' => 'ios与android共用一个包'],
+
+            ['table_name' => 'app_versions', 'column' => 'is_force_update', 'status_code' => 'T', 'status_description' => '是', 'remark' => '强制更新'],
+            ['table_name' => 'app_versions', 'column' => 'is_force_update', 'status_code' => 'F', 'status_description' => '否', 'remark' => '非强制更新'],
             // smses_table
             ['table_name' => 'smses', 'column' => 'type', 'status_code' => 'test', 'status_description' => '测试短信', 'remark' => ''],
         ];

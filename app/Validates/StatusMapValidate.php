@@ -17,7 +17,7 @@ class  StatusMapValidate extends Validate
         $rules = [
             'table_name' => 'required',
             'column' => 'required|between:1,255|alpha_dash',
-            'status_code' => 'required|between:1,255,alpha_dash',
+            'status_code' => 'required|between:1,255|alpha_dash',
             'status_description' => 'required|between:1,255'
         ];
         $rest_validate = $this->validate($request_data, $rules);
@@ -38,7 +38,7 @@ class  StatusMapValidate extends Validate
         $rules = [
             'table_name' => 'required',
             'column' => 'required|between:1,255|alpha_dash',
-            'status_code' => 'required|between:1,255,alpha_dash',
+            'status_code' => 'required|between:1,255|alpha_dash',
             'status_description' => 'required|between:1,255'
         ];
         $rest_validate = $this->validate($request_data, $rules);
