@@ -208,7 +208,7 @@ export default {
         const content = res
         const blob = new Blob([content])
         let now_data_time_week = getNowDateTimeWeek('-', '')
-        const fileName = now_data_time_week[0] + '' + now_data_time_week[1] + '.sql'
+        const fileName = now_data_time_week[0] + '' + now_data_time_week[1] + '.zip'
         if ('download' in document.createElement('a')) { // 非IE下载
           const elink = document.createElement('a')
           elink.download = fileName

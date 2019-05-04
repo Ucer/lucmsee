@@ -22,15 +22,17 @@ class CommonController extends ApiController
     {
         $table = $request->table;
         $column = 'enable';
+        $authUser = Auth::user();
         switch ($request->table) {
             case 'users':
-                if (Auth::id() == $request->id) return $this->failed('操作对象不能是你自己');
+                if ($authUser->id == $request->id) return $this->failed('操作对象不能是你自己');
                 break;
             case 'attachments':
                 break;
             case 'advertisements':
                 break;
             case 'system_configs':
+                if (!$authUser->hasRole('Founder')) return $this->failed('抱歉，您没有操作权限');
                 break;
             case 'articles_column_enable':
                 $table = 'articles';

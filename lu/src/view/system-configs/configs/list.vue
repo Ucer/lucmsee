@@ -1,53 +1,64 @@
-
 <template>
-<div>
-  <Row :gutter="24">
-    <Col :xs="2" :lg="2">
-    <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
-    </Col>
-    <Col :xs="3" :lg="3">
-    <Select v-model="searchForm.enable" placeholder="请选择状态">
-      <Option value="" key="">全部</Option>
-      <Option v-for="(item,key) in tableStatus.enable" :value="key" :key="key">{{ item }}</Option>
-    </Select>
-    </Col>
-    <Col :xs="3" :lg="3">
-    <Select v-model="searchForm.group" placeholder="请选择配置分组">
-      <Option value="" key="">全部</Option>
-      <Option v-for="(item,key) in tableStatus.config_group" :value="key" :key="key">{{ item.title }}</Option>
-    </Select>
-    </Col>
-    <Col :xs="6" :lg="3" class="hidden-mobile">
-    <Input icon="search" placeholder="请输入标识或标题搜索..." v-model="searchForm.table_name_or_flag"></Input>
-    </Col>
-    <Col :xs="3" :lg="3">
-    <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
-    </Col>
-  </Row>
-  <br>
+  <div>
+    <Row :gutter="24">
+      <Col :xs="2" :lg="2">
+        <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
+      </Col>
+      <Col :xs="3" :lg="3">
+        <Select v-model="searchForm.enable" placeholder="请选择状态">
+          <Option value="" key="">全部</Option>
+          <Option v-for="(item,key) in tableStatus.enable" :value="key" :key="key">{{ item }}</Option>
+        </Select>
+      </Col>
+      <Col :xs="3" :lg="3">
+        <Select v-model="searchForm.group" placeholder="请选择配置分组">
+          <Option value="" key="">全部</Option>
+          <Option v-for="(item,key) in tableStatus.config_group" :value="key" :key="key">{{ item.title }}</Option>
+        </Select>
+      </Col>
+      <Col :xs="6" :lg="3" class="hidden-mobile">
+        <Input icon="search" placeholder="请输入标识或标题搜索..." v-model="searchForm.table_name_or_flag"></Input>
+      </Col>
+      <Col :xs="3" :lg="3">
+        <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}
+        </Button>
+      </Col>
+    </Row>
+    <br>
 
-  <Row>
-    <div class="demo-spin-container" v-if="tableLoading">
-      <Spin fix>
-        <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
-        <div>{{ $t('table_loading') }}</div>
-      </Spin>
-    </div>
+    <Row>
+      <div class="demo-spin-container" v-if="tableLoading">
+        <Spin fix>
+          <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
+          <div>{{ $t('table_loading') }}</div>
+        </Spin>
+      </div>
 
-    <Table size='small' :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
-      <template slot-scope="{ row, index }" slot="config_group">
-        {{ tableStatus.config_group[row.config_group]['title'] }}
-      </template>
-      <template slot-scope="{ row, index }" slot="action">
-        <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
-      </template>
-    </Table>
-  </Row>
+      <Table size='small' :columns="columns" :data="feeds.data" @on-sort-change='onSortChange'>
+        <template slot-scope="{ row, index }" slot="config_group">
+          {{ tableStatus.config_group[row.config_group]['title'] }}
+        </template>
+        <template slot-scope="{ row, index }" slot="enable">
+          <iSwitch :slot="'open'" type='primary' :value="row.enable === 'T'" @on-change="switchChange(row,index)"></iSwitch>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{
+            $t('edit') }}
+          </Button>
+          <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)">
+            <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button>
+          </Poptip>
+        </template>
+      </Table>
+    </Row>
 
-  <add-component :config_group="tableStatus.config_group" v-if='addModal.show' @on-add-modal-success='getTableDataExcute(feeds.current_page)' @on-add-modal-hide="addModalHide"></add-component>
-  <edit-component :config_group="tableStatus.config_group" v-if='editModal.show' :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)' @on-edit-modal-hide="editModalHide"> </edit-component>
-</div>
+    <add-component :config_group="tableStatus.config_group" v-if='addModal.show'
+                   @on-add-modal-success='getTableDataExcute(feeds.current_page)'
+                   @on-add-modal-hide="addModalHide"></add-component>
+    <edit-component :config_group="tableStatus.config_group" v-if='editModal.show' :modal-id='editModal.id'
+                    @on-edit-modal-success='getTableDataExcute(feeds.current_page)'
+                    @on-edit-modal-hide="editModalHide"></edit-component>
+  </div>
 </template>
 
 <script>
@@ -59,6 +70,10 @@ import {
 import {
   oneOf
 } from '@/libs/tools'
+
+import {
+  switchEnable
+} from '@/api/common'
 
 import AddComponent from './components/add'
 import EditComponent from './components/edit'
@@ -124,6 +139,11 @@ export default {
         title: '配置值',
         key: 'value',
         minWidth: 150
+      }, {
+        title: '启用状态',
+        key: 'enable',
+        minWidth: 80,
+        slot: 'enable'
       },
       {
         title: '创建时间',
@@ -158,7 +178,8 @@ export default {
         t.tableStatus.enable = response_data.enable
 
         t.getTableDataExcute(t.feeds.current_page)
-      }, function (error) {})
+      }, function (error) {
+      })
     },
     getTableDataExcute (to_page) {
       let t = this
@@ -198,6 +219,21 @@ export default {
         t.$Notice.success({
           title: res.message
         })
+      })
+    },
+    switchChange: function (row, index) {
+      let t = this
+      let new_status = 'T'
+      if (t.feeds.data[index].enable === 'T') {
+        new_status = 'F'
+      }
+      switchEnable(t.feeds.data[index].id, 'system_configs', new_status).then(res => {
+        t.feeds.data[index].enable = new_status
+        t.$Notice.success({
+          title: res.message
+        })
+      }).catch((err) => {
+        t.getTableDataExcute(t.feeds.current_page)
       })
     }
   }

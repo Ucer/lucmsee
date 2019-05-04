@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Config;
 
 class DatabaseHandler
 {
-    use BaseResponseTrait,SystemConfigTrait;
+    use BaseResponseTrait, SystemConfigTrait;
 
     protected $data_table_bak_dir = '';
     protected $status = true;
@@ -32,6 +32,9 @@ class DatabaseHandler
     public function dataTableBak($tables)
     {
         $systemConfig = $this->getSystemConfigFunction(['max_bak_sql_file_size']);
+        if (!$systemConfig['max_bak_sql_file_size']) {
+            return $this->baseFailed("管理员未设置备份文件最大大小");
+        }
         if (!file_exists($this->data_table_bak_dir)) {
             return $this->baseFailed('备份目录：' . $this->data_table_bak_dir . '不存在');
 //            mkdir($this->data_table_bak_dir);
@@ -75,11 +78,11 @@ class DatabaseHandler
                     unset($one_row_for_table['deleted_at']);
                 }
                 $table_columns = '';
-                foreach(array_keys($one_row_for_table) as $key => $table_column) {
-                    if($key < 1) {
-                       $table_columns = "`{$table_column}`";
+                foreach (array_keys($one_row_for_table) as $key => $table_column) {
+                    if ($key < 1) {
+                        $table_columns = "`{$table_column}`";
                     } else {
-                        $table_columns .=",`{$table_column}`";;
+                        $table_columns .= ",`{$table_column}`";;
                     }
                 }
 //                $table_columns = implode(',', array_keys($one_row_for_table));
@@ -88,7 +91,7 @@ class DatabaseHandler
                     $tem_sql .= $table_name == '' ? "''" : "'{$value}'";
                     $tn++;
                 }
-                $tem_sql = "INSERT INTO `{$table_name}` (".$table_columns.") VALUES ({$tem_sql});\n";
+                $tem_sql = "INSERT INTO `{$table_name}` (" . $table_columns . ") VALUES ({$tem_sql});\n";
                 $sql_no = "\n/* Time: " . date("Y-m-d H:i:s", time()) . "*/\n" .
                     "/* -----------------------------------------------------------*/\n" .
                     "/* SQLFile Label：#{$file_n}*/\n/* -----------------------------------------------------------*/\n\n\n";
@@ -98,7 +101,7 @@ class DatabaseHandler
                 } else {//如果不是第一个文件
                     $sql_no = "/* Description:备份的数据表[数据]：" . implode(",", $backed_table) . '*/' . $sql_no;
                 }
-                if (strlen($pre) + strlen($sql_no) + strlen($sqlTable) + strlen($outstr) + strlen($tem_sql) > (1024 * 1024 *$systemConfig['max_bak_sql_file_size'] )) {//如果超出了每个sql文件的限制
+                if (strlen($pre) + strlen($sql_no) + strlen($sqlTable) + strlen($outstr) + strlen($tem_sql) > (1024 * 1024 * $systemConfig['max_bak_sql_file_size'])) {//如果超出了每个sql文件的限制
                     $file = $full_filename . "=" . $file_n . ".sql";
                     if ($file_n == 1) {
                         $outstr = $pre . $sql_no . $sqlTable . $outstr;
@@ -142,7 +145,7 @@ class DatabaseHandler
         $insert_tableBakRecord = [
             'user_id' => Auth::id(),
             'bak_tables_name' => implode(',', $tables),
-            'file_num' => $file_n-1
+            'file_num' => $file_n - 1
         ];
 
         $filesize = 0;

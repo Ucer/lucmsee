@@ -8,7 +8,7 @@ trait SystemConfigTrait
 {
     public function getSystemConfigFunction(array $flagList)
     {
-        $m_systemconfig = SystemConfig::whereIn('flag', $flagList)->enableSearch('T')->select('id', 'flag', 'title', 'value')->get();
+        $m_systemconfig = SystemConfig::whereIn('flag', $flagList)->enableSearch('T')->select('id', 'flag', 'title', 'value', 'enable')->get();
         foreach ($flagList as $flag) {
             $return[$flag] = '';
         }

@@ -23,7 +23,7 @@ class TablesController extends AdminController
 
         $table_name = isset_and_not_empty($search_data, 'table_name');
         if ($table_name) {
-            $model = $model->where('table_name', 'like', '%' . $table_name)->orWhere('table_name_cn', 'like', '%' . $table_name . '%');
+            $model = $model->where('table_name', 'like', '%' . $table_name . '%')->orWhere('table_name_cn', 'like', '%' . $table_name . '%');
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');

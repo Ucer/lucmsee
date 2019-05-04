@@ -9,6 +9,7 @@ use App\Validates\DatabaseValidate;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
+use Illuminate\Support\Facades\Config;
 
 class DatabasesController extends AdminController
 {
@@ -122,6 +123,8 @@ class DatabasesController extends AdminController
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
 
         $model = $model->findOrFail($table_bak_record_id);
+
+        /*
         foreach ($model->files as $key => $file) {
             if (!file_exists($file)) return $this->failed($file . '文件缺失');
             $filename = basename($file);
@@ -129,8 +132,27 @@ class DatabasesController extends AdminController
             header('Content-Disposition: attachment; filename="' . $filename . '"');
             header("Content-Length: " . filesize($file));
             readfile($file);
-            if ($key > 0) sleep(3);
         }
+        */
+
+        $zip_name = Config::get("set_file_path.data_table_bak_dir") . "/tmp_file.zip";
+        if (file_exists($zip_name)) {
+            unlink($zip_name);
+        }
+        $zip = new \ZipArchive();
+        if ($zip->open($zip_name, \ZipArchive::CREATE)) {
+            foreach ($model->files as $key => $file) {
+                if (file_exists($file)) {
+                    $zip->addFile($file, basename($file));
+                }
+            }
+        }
+        $zip->close();
+        header("Content-Type: application/zip");// zip
+        header("Content-Transfer-Encoding: binary"); // 二进制
+        header('Content-Disposition: attachment; filename="' . basename($zip_name) . '"');
+        header("Content - Length: " . filesize($zip_name));
+        @readfile($zip_name);
     }
 
     /*删除备份*/
