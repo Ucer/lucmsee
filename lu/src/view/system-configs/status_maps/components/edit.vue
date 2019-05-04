@@ -39,7 +39,7 @@ export default {
       default: 0
     }
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
@@ -59,18 +59,18 @@ export default {
           required: true,
           message: '请填写表中文名称',
           trigger: 'blur'
-        }],
-      },
+        }]
+      }
     }
   },
-  mounted() {
+  mounted () {
     if (this.modalId > 0) {
       this.getInfoByIdExcute()
     }
   },
   methods: {
-    getInfoByIdExcute() {
-      let t = this;
+    getInfoByIdExcute () {
+      let t = this
       getInfoById(t.modalId).then(res => {
         let res_data = res.data
         t.formData = {
@@ -79,11 +79,10 @@ export default {
           table_name_cn: res_data.table_name_cn,
           remark: res_data.remark
         }
-        t.spinLoading = false;
+        t.spinLoading = false
       })
-
     },
-    editExcute() {
+    editExcute () {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
@@ -96,13 +95,13 @@ export default {
             t.$Notice.success({
               title: res.message
             })
-          }, function(error) {
-            t.saveLoading = false;
+          }, function (error) {
+            t.saveLoading = false
           })
         }
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-edit-modal-hide')
     }

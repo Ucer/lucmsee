@@ -57,7 +57,7 @@ import EditComponent from './edit-status_map'
 
 import {
   getTableData,
-  destroy,
+  destroy
 } from '@/api/status_map'
 export default {
   props: {
@@ -69,7 +69,7 @@ export default {
     AddComponent,
     EditComponent
   },
-  data() {
+  data () {
     return {
       show: true,
       agreement: '',
@@ -93,71 +93,71 @@ export default {
         id: 0
       },
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '字段名',
-          key: 'column',
-          minWidth: 100,
-        },
-        {
-          title: '状态码',
-          key: 'status_code',
-          minWidth: 80,
-          className: 'table-column-style-status-code',
-        },
-        {
-          title: '状态描述',
-          key: 'status_description',
-          minWidth: 100,
-          className: 'table-column-style-status-description',
-        },
-        {
-          title: '备注',
-          key: 'remark',
-          minWidth: 100,
-        },
-        {
-          title: '创建时间',
-          key: 'created_at',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '修改时间',
-          key: 'updated_at',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          key: '',
-          minWidth: 100,
-          slot: 'action'
-        }
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '字段名',
+        key: 'column',
+        minWidth: 100
+      },
+      {
+        title: '状态码',
+        key: 'status_code',
+        minWidth: 80,
+        className: 'table-column-style-status-code'
+      },
+      {
+        title: '状态描述',
+        key: 'status_description',
+        minWidth: 100,
+        className: 'table-column-style-status-description'
+      },
+      {
+        title: '备注',
+        key: 'remark',
+        minWidth: 100
+      },
+      {
+        title: '创建时间',
+        key: 'created_at',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '修改时间',
+        key: 'updated_at',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '操作',
+        key: '',
+        minWidth: 100,
+        slot: 'action'
+      }
       ]
     }
   },
-  created() {
+  created () {
     let t = this
     console.log(t.info.table_name)
     t.searchForm.table_name = t.info.table_name
     t.getTableDataExcute(t.feeds.current_page)
   },
   computed: {
-    platformIsPc: function() {
-      return this.globalPlatformType() == 'pc' ? true : false
+    platformIsPc: function () {
+      return this.globalPlatformType() == 'pc'
     }
   },
   methods: {
-    closed() {
+    closed () {
       this.show = false
       this.$emit('show-modal-close')
     },
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -165,21 +165,20 @@ export default {
         t.feeds.data = res.data
         t.feeds.total = 0
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       this.searchForm.order_by = order
       this.getTableDataExcute(this.feeds.current_page)
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -188,20 +187,20 @@ export default {
         })
       })
     },
-    addBtn() {
+    addBtn () {
       this.addModal.show = true
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    editModalHide() {
+    editModalHide () {
       this.editModal.show = false
     },
-    cancelRoleModal() {
+    cancelRoleModal () {
       let t = this
       t.roleModal.show = false
       t.roleModal.saveLoading = false
-    },
+    }
   }
 }
 </script>
