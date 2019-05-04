@@ -124,23 +124,13 @@ class DatabasesController extends AdminController
 
         $model = $model->findOrFail($table_bak_record_id);
 
-        /*
-        foreach ($model->files as $key => $file) {
-            if (!file_exists($file)) return $this->failed($file . '文件缺失');
-            $filename = basename($file);
-            header("Content-type: application/octet-stream");
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
-            header("Content-Length: " . filesize($file));
-            readfile($file);
-        }
-        */
-
-        $zip_name = Config::get("set_file_path.data_table_bak_dir") . "/tmp_file.zip";
-        if (file_exists($zip_name)) {
-            unlink($zip_name);
+        $zip_file = Config::get("set_file_path.data_table_bak_dir") . "/tmp_file.zip";
+        $filename = basename($zip_file);
+        if (file_exists($zip_file)) {
+            unlink($zip_file);
         }
         $zip = new \ZipArchive();
-        if ($zip->open($zip_name, \ZipArchive::CREATE)) {
+        if ($zip->open($zip_file, \ZipArchive::CREATE)) {
             foreach ($model->files as $key => $file) {
                 if (file_exists($file)) {
                     $zip->addFile($file, basename($file));
@@ -148,11 +138,15 @@ class DatabasesController extends AdminController
             }
         }
         $zip->close();
-        header("Content-Type: application/zip");// zip
-        header("Content-Transfer-Encoding: binary"); // 二进制
-        header('Content-Disposition: attachment; filename="' . basename($zip_name) . '"');
-        header("Content - Length: " . filesize($zip_name));
-        @readfile($zip_name);
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header('Content-disposition: attachment; filename=' . basename($filename)); //文件名
+        header("Content-Type: application/zip"); //zip格式的
+        header("Content-Transfer-Encoding: binary"); //告诉浏览器，这是二进制文件
+        header('Content-Length: ' . filesize($zip_file)); //告诉浏览器，文件大小
+        @readfile($zip_file);
+
+        unlink($zip_file);
     }
 
     /*删除备份*/
