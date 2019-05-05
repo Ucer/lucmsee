@@ -14,7 +14,7 @@ class CreateArticlesTable extends Migration
     public function up()
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
+            $table->bigIncrements('id')->unsigned();
             $table->string('title')->default('')->comment('文章标题');
             $table->string('slug')->default('')->comment('slug');
             $table->string('keywords')->default('')->comment('关键词,以英文逗号隔开');

@@ -41,7 +41,7 @@ class Article extends Model
     {
         /***
          * wangeditor
-        $value = Purifier::clean($value, 'article_content');
+        $value = Purifier::clean($value, 'purifier_article_content');
         $data = [
             'raw' => '',
             'html' => $value,

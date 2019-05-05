@@ -14,7 +14,7 @@ class CreateModelHasTagsTable extends Migration
     public function up()
     {
         Schema::create('model_has_tags', function (Blueprint $table) {
-            $table->unsignedInteger('tag_id');
+            $table->bigIncrements('tag_id');
             $table->morphs('model');
 
             $table->foreign('tag_id')

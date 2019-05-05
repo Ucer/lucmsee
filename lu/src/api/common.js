@@ -9,6 +9,13 @@ export const getTableStatus = (param) => {
     method: 'get'
   })
 }
+export const getConfigFileData = (param) => {
+  return axios.request({
+    url: '/api/common_get_config_file_data',
+    data: { config_item: param },
+    method: 'post'
+  })
+}
 
 export const switchEnable = (id, table, value) => {
   return axios.request({

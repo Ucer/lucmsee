@@ -19,7 +19,7 @@
         <Input type="textarea" v-model="formData.keywords" placeholder="以英文逗号隔开"></Input>
       </FormItem>
       <FormItem label="描述" prop="description">
-        <Input type="textarea" v-model="formData.descriptions" placeholder="请输入"></Input>
+        <Input type="textarea" v-model="formData.description" placeholder="请输入"></Input>
       </FormItem>
       <FormItem label="状态">
         <RadioGroup v-model="formData.enable">
@@ -96,7 +96,7 @@ export default {
     WangEditor,
     InputHelper
   },
-  data() {
+  data () {
     const validatePassword = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入登录密码'))
@@ -128,7 +128,7 @@ export default {
         title: '',
         cover_image: {
           attachment_id: 0,
-          url: '',
+          url: ''
         },
         enable: 'F',
         keywords: '',
@@ -140,7 +140,7 @@ export default {
         recommend: 'F',
         access_type: 'pub',
         access_value: '',
-        tags: 0,
+        tags: 0
       },
       imguploadConfig: {
         headers: {
@@ -169,16 +169,16 @@ export default {
       },
       rules: {
         title: [{
-            required: true,
-            message: '请填写文章标题',
-            trigger: 'blur'
-          },
-          {
-            type: 'string',
-            min: 2,
-            message: '文章标题至少要 2 个字符',
-            trigger: 'blur'
-          }
+          required: true,
+          message: '请填写文章标题',
+          trigger: 'blur'
+        },
+        {
+          type: 'string',
+          min: 2,
+          message: '文章标题至少要 2 个字符',
+          trigger: 'blur'
+        }
         ],
         article_category_id: [{
           required: true,
@@ -190,15 +190,15 @@ export default {
           message: '请填写文章内容',
           trigger: 'blur'
         }]
-      },
+      }
     }
   },
-  created() {
+  created () {
     this.getTagListExcute()
   },
   methods: {
-    addExcute() {
-      let t = this;
+    addExcute () {
+      let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
@@ -210,56 +210,55 @@ export default {
             t.$Notice.success({
               title: res.message
             })
-          }, function(error) {
-            t.saveLoading = false;
+          }, function (error) {
+            t.saveLoading = false
           })
         } else {
           t.saveLoading = false
         }
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-add-modal-hide')
     },
-    editContentChange(html, text) {
+    editContentChange (html, text) {
       // console.log(this.formData.content)
     },
-    uploadChange(fileList, formatFileList) {},
-    handleEditOpenness() {
-      this.editOpenness = !this.editOpenness;
+    uploadChange (fileList, formatFileList) {},
+    handleEditOpenness () {
+      this.editOpenness = !this.editOpenness
     },
-    handleSaveOpenness() {
-      var access_type = this.formData.access_type;
+    handleSaveOpenness () {
+      var access_type = this.formData.access_type
       if (this.passwordValidate()) {
-        this.Openness = (access_type === 'pub') ? '公开' : (access_type === 'pwd') ? '密码' : '私密';
-        this.editOpenness = false;
+        this.Openness = (access_type === 'pub') ? '公开' : (access_type === 'pwd') ? '密码' : '私密'
+        this.editOpenness = false
       }
     },
-    passwordValidate() {
-      var access_type = this.formData.access_type;
-      var access_value = this.formData.access_value;
+    passwordValidate () {
+      var access_type = this.formData.access_type
+      var access_value = this.formData.access_value
       if (access_type === 'pwd') {
-        var patt = /^[a-zA-Z0-9]{4,8}$/;
+        var patt = /^[a-zA-Z0-9]{4,8}$/
         if (!patt.test(access_value)) {
           this.$Notice.error({
             title: '出错了',
             desc: '密码只能是4到8位的数字与字母'
-          });
-          return false;
+          })
+          return false
         }
-
       }
-      return true;
+      return true
     },
-    getTagListExcute() {
-      let t = this;
+    getTagListExcute () {
+      let t = this
       getTagList([]).then(res => {
-        t.articleTags = res.data;
+        t.articleTags = res.data
       })
     },
-    addTagExcute() {
-      let t = this;
+    addTagExcute () {
+      let t = this
       addTag({
         name: t.newTagName
       }).then(res => {

@@ -14,7 +14,7 @@ class CreateAppVersionsTable extends Migration
     public function up()
     {
         Schema::create('app_versions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->enum('name', ['lucmsee'])->default('lucmsee')->comment('app名称');
             $table->enum('mobile_os', ['android', 'ios', 'all'])->default('all');
             $table->string('version_sn')->default('1.0.0');

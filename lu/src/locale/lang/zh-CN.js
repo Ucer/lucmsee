@@ -24,6 +24,7 @@ export default {
   systemSecurity: '系统安全',
   systemLogs: '系统日志',
   appVersion: 'App版本管理',
+  userAgreements: '协议管理',
 
 
   edit: '修改',

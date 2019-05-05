@@ -24,11 +24,11 @@ class SystemConfigsController extends AdminController
         $search_data = json_decode($request->get('search_data'), true);
         $table_name_or_flag = isset_and_not_empty($search_data, 'table_name_or_flag');
         if ($table_name_or_flag) {
-            $model = $model->columnLikeSearch('title', '%'.$table_name_or_flag)->orWhere('flag','like','%'.$table_name_or_flag.'%');
+            $model = $model->columnLikeSearch('title', '%' . $table_name_or_flag)->orWhere('flag', 'like', '%' . $table_name_or_flag . '%');
         }
         $enable = isset_and_not_empty($search_data, 'enable');
         if ($enable) {
-            $model = $model->columnEqualSearch('enable',$enable);
+            $model = $model->columnEqualSearch('enable', $enable);
         }
         $group = isset_and_not_empty($search_data, 'group');
         if ($group) {
@@ -69,25 +69,32 @@ class SystemConfigsController extends AdminController
         $new_request_data = $rest_validate['data'];
 
         $res = $model->storeAction($new_request_data);
-        if ($res['status'] === true) return $this->message($res['message']);
+        if ($res['status'] === true) {
+            admin_log_record(Auth::id(), 'insert', 'system_configs', '新增系统配置项', $new_request_data);
+            return $this->message($res['message']);
+        }
         return $this->failed($res['message']);
     }
 
 
     public function update(Request $request, SystemConfig $model, SystemConfigValidate $validate)
     {
+        $old_data = $model->toArray();
         $request_data = $request->all();
         $request_data['description'] = strval($request_data['description']);
         $rest_validate = $validate->updateValidate($request_data, $model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $new_request_data = $rest_validate['data'];
 
-        $res = $model->storeAction($new_request_data);
-        if ($res['status'] === true) return $this->message($res['message']);
+        $res = $model->updateAction($new_request_data);
+        if ($res['status'] === true) {
+            admin_log_record(Auth::id(), 'update', 'system_configs', '更新系统配置项', ['old_data' => $old_data, 'new_data' => $new_request_data]);
+            return $this->message($res['message']);
+        }
         return $this->failed($res['message']);
     }
 
-    public function destroy(SystemConfig $model,SystemConfigValidate $validate)
+    public function destroy(SystemConfig $model, SystemConfigValidate $validate)
     {
 
         $rest_validate = $validate->destroyValidate($model);

@@ -37,6 +37,7 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'tmp', 'status_description' => '时临图片', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'api_img', 'status_description' => 'api上传的图片', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'apk', 'status_description' => '安装包', 'remark' => ''],
+            ['table_name' => 'attachments', 'column' => 'category', 'status_code' => 'editor_agreement_content', 'status_description' => 'markdown富文本用户协议内容', 'remark' => ''],
             // logs_table
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'T', 'status_description' => '启用', 'remark' => ''],
             ['table_name' => 'system_configs', 'column' => 'enable', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => ''],
@@ -81,6 +82,9 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'app_versions', 'column' => 'is_force_update', 'status_code' => 'F', 'status_description' => '否', 'remark' => '非强制更新'],
             // smses_table
             ['table_name' => 'smses', 'column' => 'type', 'status_code' => 'test', 'status_description' => '测试短信', 'remark' => ''],
+            // user_agreements
+            ['table_name' => 'user_agreements', 'column' => 'enable', 'status_code' => 'T', 'status_description' => '启用', 'remark' => '是否启用'],
+            ['table_name' => 'user_agreements', 'column' => 'enable', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => '是否启用'],
         ];
         \App\Models\StatusMap::insert($data);
     }

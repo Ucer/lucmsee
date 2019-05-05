@@ -17,6 +17,7 @@ use App\Models\SystemConfig;
 use App\Models\Table;
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\UserAgreement;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -84,6 +85,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('app_version', function ($value) {
             return AppVersion::findOrFail($value);
+        });
+        Route::bind('user_agreement', function ($value) {
+            return UserAgreement::findOrFail($value);
         });
     }
 

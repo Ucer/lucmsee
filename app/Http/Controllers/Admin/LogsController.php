@@ -68,7 +68,6 @@ class LogsController extends AdminController
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $rest_destroy = $model->destroyAction();
         if ($rest_destroy['status'] === true) {
-            admin_log_record(Auth::id(), 'destroy', 'logs', '删除日志', $model->toArray());
             return $this->message($rest_destroy['message']);
         }
         return $this->message('数据删除成功');

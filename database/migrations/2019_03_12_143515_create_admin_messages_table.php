@@ -14,7 +14,7 @@ class CreateAdminMessagesTable extends Migration
     public function up()
     {
         Schema::create('admin_messages', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('user_id')->default(0)->comment('哪个用户发的消息，对应 app 用户表');
             $table->integer('admin_id')->default(0)->comment('发给哪个管理员的消息,0为所有管理员');
             $table->string('title')->default('');

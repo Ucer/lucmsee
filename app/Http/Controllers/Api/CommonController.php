@@ -7,6 +7,7 @@ use App\Traits\TableStatusTrait;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
+use Illuminate\Support\Facades\Config;
 
 class CommonController extends ApiController
 {
@@ -18,6 +19,11 @@ class CommonController extends ApiController
         $this->middleware('auth:api');
     }
 
+    /**
+     * 通用启用禁用操作
+     * @param Request $request
+     * @return mixed
+     */
     public function switchEnable(Request $request)
     {
         $table = $request->table;
@@ -61,7 +67,11 @@ class CommonController extends ApiController
         return $this->failed('出错了');
     }
 
-
+    /**
+     * 更新某一张表的某个字段值
+     * @param Request $request
+     * @return mixed
+     */
     public function editTalbleColumn(Request $request)
     {
         switch ($request->table) {
@@ -93,14 +103,43 @@ class CommonController extends ApiController
         return $this->failed('出错了');
     }
 
+    /**
+     * 读取数据字典
+     * @param $table_name
+     * @param string $column_name
+     * @return mixed
+     */
     public function getTableStatus($table_name, $column_name = '')
     {
         return $this->success($this->getBaseStatus($table_name, $column_name));
     }
 
 
+    /**
+     * 获取 system_config 表中的配置值
+     * @param string $search_data
+     * @return mixed
+     */
     public function getSystemConfig(string $search_data)
     {
         return $this->success($this->getSystemConfigFunction(json_decode($search_data, true)));
+    }
+
+    /**
+     * 提供读取配置信息的方法
+     * @param Request $request
+     * @return mixed
+     */
+    public function getConfigData(Request $request)
+    {
+        $configItem = $request->config_item;
+        if (is_array($configItem)) {
+            foreach ($configItem as $item) {
+                $returnData[$item] = Config::get($item);
+            }
+        } else {
+            $returnData = Config::get($configItem);
+        }
+        return $this->success($returnData);
     }
 }

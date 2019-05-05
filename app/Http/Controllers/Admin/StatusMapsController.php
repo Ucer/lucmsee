@@ -27,18 +27,18 @@ class StatusMapsController extends AdminController
 
         $table_name = isset_and_not_empty($search_data, 'table_name');
         if ($table_name) {
-            $model = $model->columnEqualSearch('table_name',$table_name);
+            $model = $model->columnEqualSearch('table_name', $table_name);
         }
 
         $column = isset_and_not_empty($search_data, 'column');
         if ($column) {
-            $model = $model->columnLikeSearch('column','%'.$column);
+            $model = $model->columnLikeSearch('column', '%' . $column);
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
         if ($order_by) {
             $order_by = explode(',', $order_by);
-            $model = $model->orderBy($order_by[0], $order_by[1])->orderBy('id','desc');
+            $model = $model->orderBy($order_by[0], $order_by[1])->orderBy('id', 'desc');
         }
 
         return $this->success($model->get());
@@ -68,6 +68,7 @@ class StatusMapsController extends AdminController
 
     public function update(StatusMap $model, Request $request, StatusMapValidate $validate)
     {
+        $old_data = $model->toArray();
         $request_data = $request->all();
 
         $rest_validate = $validate->updateValidate($request_data);
@@ -76,7 +77,7 @@ class StatusMapsController extends AdminController
 
         $res = $model->updateAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'update', 'status_maps', '修改数据字典', $new_request_data);
+            admin_log_record(Auth::id(), 'update', 'status_maps', '修改数据字典', ['old_data' => $old_data, 'new_data' => $new_request_data]);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -90,7 +91,6 @@ class StatusMapsController extends AdminController
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $rest_destroy = $model->destroyAction();
         if ($rest_destroy['status'] === true) {
-            admin_log_record(Auth::id(), 'destroy', 'status_maps', '删除数据字典', $model->toArray());
             return $this->message($rest_destroy['message']);
         }
         return $this->failed($rest_destroy['message'], 500);

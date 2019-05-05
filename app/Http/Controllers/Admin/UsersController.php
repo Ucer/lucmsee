@@ -65,7 +65,6 @@ class UsersController extends AdminController
 
         $res = $model->storeAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'insert', 'users', '添加用户', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -82,7 +81,6 @@ class UsersController extends AdminController
 
         $res = $model->updateAction($new_request_data);
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'update', 'users', '修改用户', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
@@ -97,7 +95,6 @@ class UsersController extends AdminController
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $rest_destroy = $model->destroyAction();
         if ($rest_destroy['status'] === true) {
-            admin_log_record(Auth::id(), 'destroy', 'users', '删除用户', $model->toArray());
             return $this->message($rest_destroy['message']);
         }
         return $this->failed($rest_destroy['message'], 500);

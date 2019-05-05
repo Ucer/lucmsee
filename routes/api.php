@@ -8,10 +8,11 @@ Route::namespace('Api')->group(function () {
     Route::post('login', 'LoginController@login')->name('login');
     Route::post('logout', 'LoginController@logout')->name('logout');
 
-    Route::post('common_switch_enable', 'CommonController@switchEnable');
+    Route::post('common_switch_enable', 'CommonController@switchEnable')->name('common.switch_enable');
     Route::post('common_edit_talbe_column', 'CommonController@editTalbleColumn')->name('common.edit_table_column');
-    Route::get('common_get_table_status/{table_name}/{column_name?}', 'CommonController@getTableStatus');
+    Route::get('common_get_table_status/{table_name}/{column_name?}', 'CommonController@getTableStatus')->name('common.get_table_status');
     Route::get('common_get_system_config/{search_data}', 'CommonController@getSystemConfig')->name('common.get_system_config');
+    Route::post('common_get_config_file_data', 'CommonController@getConfigData')->name('common.get_config_file_data');
 
 
     /**       ==========================          文件上传           ====================   */
@@ -25,14 +26,11 @@ Route::namespace('Api')->group(function () {
 });
 
 
-
 /**       ==========================          其它域名来访Api           ====================   */
 Route::namespace('Api')->prefix('accept')->group(function () {
     Route::post('lucmsee_api/get_config_data', 'AcceptLucmseeApiAccessController@getConfigData')->name('accept.lucmsee_api.get_config_data');
     Route::post('lucmsee_api/upload_image_use_base64', 'AcceptLucmseeApiAccessController@uploadImageUseBase64')->name('accept.lucmsee_api.upload_image_use_base64');
 });
-
-
 
 
 /**       ==========================          后台APi           ====================   */
@@ -86,7 +84,7 @@ Route::namespace('Admin')->group(function () {
     Route::delete('admin/status_maps/{status_map}', 'StatusMapsController@destroy')->name('status_maps.destroy');
 
 
-    Route::get('admin/databases/bak_table', 'DatabasesController@bakTable')->name('databases.bak_table');
+    Route::post('admin/databases/bak_table', 'DatabasesController@bakTable')->name('databases.bak_table');
     Route::post('admin/databases/optimize_table', 'DatabasesController@optimizeTable')->name('databases.optimize_table');
     Route::post('admin/databases/repair_table', 'DatabasesController@repairTable')->name('databases.repair_table');
     Route::get('admin/databases/table_bak_records', 'DatabasesController@tableBakRecords')->name('databases.table_bak_records');
@@ -156,4 +154,12 @@ Route::namespace('Admin')->group(function () {
     Route::patch('admin/app_versions/{app_version}', 'AppVersionsController@update')->name('app_versions.update');
     Route::get('admin/app_versions/{app_version}', 'AppVersionsController@show')->name('app_versions.show');
     Route::delete('admin/app_versions/{app_version}', 'AppVersionsController@destroy')->name('app_versions.destroy');
+
+
+    Route::patch('admin/user_agreements/enable_or_disable/{user_agreement}', 'UserAgreementsController@enableOrDisable')->name('user_agreements.enable_or_disable');
+    Route::get('admin/user_agreements', 'UserAgreementsController@list')->name('user_agreements.list');
+    Route::post('admin/user_agreements', 'UserAgreementsController@store')->name('user_agreements.store');
+    Route::patch('admin/user_agreements/{user_agreement}', 'UserAgreementsController@update')->name('user_agreements.update');
+    Route::get('admin/user_agreements/{user_agreement}', 'UserAgreementsController@show')->name('user_agreements.show');
+    Route::delete('admin/user_agreements/{user_agreement}', 'UserAgreementsController@destroy')->name('user_agreements.destroy');
 });

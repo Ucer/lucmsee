@@ -250,6 +250,14 @@ export default[
           title: '操作日志'
         },
         component: () => import('@/view/system-security/logs/list.vue')
+      }, {
+        path: '/dashboard/userAgreements',
+        name: 'userAgreements',
+        meta: {
+          title: '协议管理',
+          access: ['Founder', 'Maintainer']
+        },
+        component: () => import('@/view/system-security/user_agreements/list.vue')
       }
     ]
   }, {

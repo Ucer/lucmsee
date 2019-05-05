@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\StatusMap;
-use App\Models\Table;
-use App\Validates\TableValidate;
+use App\Models\UserAgreement;
+use App\Validates\UserAgreementValidate;
 use Illuminate\Http\Request;
 use Auth;
 
-class TablesController extends AdminController
+class UserAgreementsController extends AdminController
 {
     public function __construct()
     {
@@ -16,14 +15,24 @@ class TablesController extends AdminController
         $this->middleware('auth:api');
     }
 
-    public function list(Request $request, Table $model)
+    public function list(Request $request, UserAgreement $model)
     {
         $per_page = $request->get('per_page', 10);
         $search_data = json_decode($request->get('search_data'), true);
 
-        $table_name = isset_and_not_empty($search_data, 'table_name');
-        if ($table_name) {
-            $model = $model->where('table_name', 'like', '%' . $table_name . '%')->orWhere('table_name_cn', 'like', '%' . $table_name . '%');
+        $name = isset_and_not_empty($search_data, 'name');
+        if ($name) {
+            $model = $model->columnLikeSearch('name', '%' . $name);
+        }
+
+        $agree_type = isset_and_not_empty($search_data, 'agree_type');
+        if ($agree_type) {
+            $model = $model->columnEqualSearch('agree_type', $agree_type);
+        }
+
+        $enable = isset_and_not_empty($search_data, 'enable');
+        if ($enable) {
+            $model = $model->columnEqualSearch('enable', $enable);
         }
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
@@ -31,24 +40,17 @@ class TablesController extends AdminController
             $order_by = explode(',', $order_by);
             $model = $model->orderBy($order_by[0], $order_by[1]);
         }
-        $list = $model->get();
-        if ($list) {
-            $model_status_map = new StatusMap();
-            $list->each(function ($item) use ($model_status_map) {
-                $item->map_count = $model_status_map->where('table_name', $item->table_name)->count();
-            });
-        }
-
+        $list = $model->with('user')->get();
         return $this->success($list);
     }
 
 
-    public function show(Table $model)
+    public function show(UserAgreement $model)
     {
         return $this->success($model);
     }
 
-    public function store(Request $request, Table $model, TableValidate $validate)
+    public function store(Request $request, UserAgreement $model, UserAgreementValidate $validate)
     {
         $request_data = $request->all();
 
@@ -56,35 +58,48 @@ class TablesController extends AdminController
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $new_request_data = $rest_validate['data'];
 
-        $res = $model->storeAction($new_request_data);
+        $res = $model->storeAction($new_request_data, Auth::user());
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'insert', 'tables', '添加数据到 table 表', $new_request_data);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
 
     }
 
-    public function update(Table $model, Request $request, TableValidate $validate)
+    public function update(UserAgreement $model, Request $request, UserAgreementValidate $validate)
     {
-        $old_data = $model->toArray();
         $request_data = $request->all();
 
         $rest_validate = $validate->updateValidate($request_data, $model);
         if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
         $new_request_data = $rest_validate['data'];
 
-        $res = $model->updateAction($new_request_data);
+        $res = $model->updateAction($new_request_data, Auth::user());
         if ($res['status'] === true) {
-            admin_log_record(Auth::id(), 'update', 'tables',
-                '修改 table 表的数据,如果表名有改动，同时修改status_maps表中的表名',
-                ['old_data' => $old_data, 'new_data' => $new_request_data]);
             return $this->message($res['message']);
         }
         return $this->failed($res['message']);
     }
 
-    public function destroy(Table $model, TableValidate $validate)
+    /**
+     * 启用禁用
+     * @param UserAgreement $model
+     * @param UserAgreementValidate $validate
+     * @return mixed
+     */
+    public function enableOrDisable(UserAgreement $model, UserAgreementValidate $validate)
+    {
+        $rest_validate = $validate->enableOrDisableValidate($model);
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message']);
+
+        $res = $model->enableOrDisableAction();
+        if ($res['status'] === true) {
+            return $this->message($res['message']);
+        }
+        return $this->failed($res['message']);
+    }
+
+    public function destroy(UserAgreement $model, UserAgreementValidate $validate)
     {
 
         $rest_validate = $validate->destroyValidate($model);
@@ -96,16 +111,4 @@ class TablesController extends AdminController
         }
         return $this->failed($rest_destroy['message'], 500);
     }
-
-    public function getAllTables(Table $model, Request $request)
-    {
-        $table_name = $request->table_name;
-        if ($table_name) {
-            $model = $model->columnLikeSearch('table_name', '%' . $table_name);
-        }
-        $list = $model->select('id', 'table_name', 'table_name_cn')->get()->keyBy('table_name');
-        return $this->success($list);
-    }
-
-
 }

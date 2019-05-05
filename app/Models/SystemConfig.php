@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use DB;
 
 
 class SystemConfig extends Model
@@ -19,7 +20,20 @@ class SystemConfig extends Model
             $this->save();
             return $this->baseSucceed([], '操作成功');
         } catch (\Exception $e) {
-            throw $e;
+            return $this->baseFailed('内部错误');
+        }
+    }
+
+    public function updateAction($input)
+    {
+        DB::beginTransaction();
+        try {
+            $input['value'] = str_replace([',', '，', '，'], [',', ',', ','], $input['value']);
+            $this->fill($input)->save();
+            DB::commit();
+            return $this->baseSucceed([], '操作成功');
+        } catch (\Exception $e) {
+            DB::rollBack();
             return $this->baseFailed('内部错误');
         }
     }
