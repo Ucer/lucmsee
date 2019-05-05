@@ -16,14 +16,6 @@ class CreateModelHasTagsTable extends Migration
         Schema::create('model_has_tags', function (Blueprint $table) {
             $table->bigIncrements('tag_id');
             $table->morphs('model');
-
-            $table->foreign('tag_id')
-                ->references('id')
-                ->on('tags')
-                ->onDelete('cascade');
-
-            $table->primary(['tag_id', 'model_type', 'model_id']);
-
         });
     }
 
