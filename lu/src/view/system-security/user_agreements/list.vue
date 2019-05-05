@@ -149,6 +149,7 @@ export default {
       {
         title: '描述',
         key: 'description',
+        tooltip: true,
         minWidth: 100
       },
       {
