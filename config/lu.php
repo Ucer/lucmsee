@@ -18,6 +18,7 @@ return [
         'first_key' => env('ARTICLE_AES_FIRST_ENCRYPT_KEY'),
         'second_key' => env('ARTICLE_AES_SECOND_ENCRYPT_KEY'),
     ],
+    // 项目上线后修改
     'accept_other_host' => [
         'common' => [ // 访问 AcceptCommonAccessController
             'hosts' => [
@@ -30,6 +31,12 @@ return [
                 'http://lucmsee_api.test',
             ],
             'access_token' => '',
+        ]
+    ],
+    'access_other_host' => [
+        'filesystem' => [
+            'host' => 'http://filesystem.test',
+            'access_token' => 'kjsdfiyYnsdfsadfYkT@#$',
         ]
     ]
 ];

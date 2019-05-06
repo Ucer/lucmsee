@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Handlers\FileUploadHandler;
-use App\Validates\AcceptLucmseeApiAccessValidate;
+use App\Handlers\FileUploadFromPlatHandler;
+use App\Validates\AcceptCommonAccessValidate;
 use DB;
 use Auth;
 use Illuminate\Http\Request;
@@ -37,14 +38,14 @@ class AcceptCommonAccessController extends ApiController
     }
 
     /**
-     * base 64图片上传
+     *供 luapi base 64图片上传
      * @param Request $request
-     * @param AcceptLucmseeApiAccessValidate $validate
+     * @param AcceptCommonAccessValidate $validate
      * @param FileUploadHandler $fileUploadHandler
      * @return mixed
      * 返回
      */
-    public function uploadImageUseBase64(Request $request, AcceptLucmseeApiAccessValidate $validate, FileUploadHandler $fileUploadHandler)
+    public function uploadImageUseBase64(Request $request, AcceptCommonAccessValidate $validate, FileUploadHandler $fileUploadHandler)
     {
         $request_data = $request->all();
         $rest_validate = $validate->uploadImageUseBase64Validate($request_data);

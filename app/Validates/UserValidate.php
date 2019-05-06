@@ -18,7 +18,7 @@ class  UserValidate extends Validate
     public function storeValidate($request_data)
     {
         $rules = [
-            'real_name' => 'required|between:3,50',
+            'real_name' => 'required|between:2,50',
             'password' => 'bail|required|between:6,12|alpha_num|confirmed',
         ];
         $rest_validate = $this->validate($request_data, $rules);
@@ -51,7 +51,7 @@ class  UserValidate extends Validate
     public function updateValidate($request_data, $model = '')
     {
         $rules = [
-            'real_name' => 'required|between:3,50',
+            'real_name' => 'required|between:2,50',
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {

@@ -62,7 +62,7 @@ export default {
           const data = res.data
           commit('setAnyState', ['avator', data.avatar])
           commit('setAnyState', ['email', data.email])
-          commit('setAnyState', ['user_id', data.user_id])
+          commit('setAnyState', ['user_id', data.id])
           commit('setAnyState', ['access', data.roles])
           commit('setAnyState', ['nickname', data.nickname])
           commit('setAnyState', ['real_name', data.real_name])

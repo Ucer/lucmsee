@@ -158,9 +158,10 @@ export default {
       this.ViewImage()
     },
     handleError (error, file) {
+      console.log(error)
       this.$Notice.error({
         title: '出错了',
-        desc: '服务内部错误'
+        desc: error
       })
     },
     fomatFile () {

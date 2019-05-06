@@ -41,7 +41,11 @@ export default {
       developmentOff: true // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
     }
   },
-  domainForFileSystem: 'https://filesystem.codehaoshi.com', // 文件管理系统域名，[图片文件传到文件服务器上]
+  // domainForFileSystem: 'https://filesystem.codehaoshi.com', // 文件管理系统域名，[图片文件传到文件服务器上]
+  domainForFileSystem: {
+    host: 'http://filesystem.test', // 文件管理系统域名，[图片文件传到文件服务器上]
+    access_token: 'kjsdfiyYnsdfsadfYkT@#$'
+  },
   platName: 'lucmsee', // 平台名称  plat，文件上传时用到
   noSuccessUrlArray: ['table_bak_sql_file_download'] // 如果 api url 中包含此数组中的字符串，则无需有 status 返回值，如文件上传接口
 

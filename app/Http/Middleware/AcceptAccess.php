@@ -34,12 +34,20 @@ class AcceptAccess
 
         }
         $this->accessToken = $baseConfig['access_token'];
-        $requestHost = $request->header("Referer");
+        $requestHost = $this->dealReferer($request->header("Referer"));
         $requestAccessToken = $request->input('access_token');
         if (!in_array($requestHost, $baseConfig['hosts'])) {
             return $this->failed('不允许该域名访问', 200);
         }
         if ($this->accessToken != $requestAccessToken) return $this->failed('token不正确', 200);
         return $next($request);
+    }
+
+
+    protected function dealReferer($referer)
+    {
+        if (!$referer) return '';
+        $array = explode('/', $referer);
+        return $array[0] . '//' . $array[2];
     }
 }

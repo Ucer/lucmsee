@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Handlers\FileUploadHandler;
-use App\Validates\AcceptLucmseeApiAccessValidate;
+use App\Validates\AcceptCommonAccessValidate;
 use DB;
 use Auth;
 use Illuminate\Http\Request;

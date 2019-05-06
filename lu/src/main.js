@@ -22,17 +22,16 @@ window.$ = window.jQuery = require('jquery')
 /* eslint-disable */
 // if (process.env.NODE_ENV !== 'production') require('@/mock')
 
-
-require('./assets/vendor/fancybox/jquery.fancybox');
+require('./assets/vendor/fancybox/jquery.fancybox')
 
 const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
+const baseUrlProxy = process.env.NODE_ENV === 'development' ? config.baseUrl.proxy : config.baseUrl.pro // 使用代理
 window.baseUrl = baseUrl
 window.systemConfigIndexFile = config
 
 window.uploadUrl = {
-  imageUploadToFileSystemUrl: config.domainForFileSystem + '/api/image_upload/' + config.platName,
-  fileUploadToFileSystemUrl: config.domainForFileSystem + '/api/file_upload/' + config.platName,
-  uploadToLocaleUrl: baseUrl + '/api/uploads/common_upload'
+  uploadToFileSystemUrl: config.domainForFileSystem.host + '/api/accept/common/common_upload', // 要跟上 file_type 与 category
+  uploadToLocaleUrl: baseUrlProxy + '/api/uploads/common_upload' // 要跟上 file_type 与 category
 }
 
 Vue.use(iView, {
@@ -58,18 +57,18 @@ Vue.prototype.$config = config
 importDirective(Vue)
 Vue.directive('clickOutside', clickOutside)
 
-Vue.prototype.globalPlatformType = function() {
-  function IsPC() {
-    var userAgentInfo = navigator.userAgent;
-    var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
-    var flag = true;
+Vue.prototype.globalPlatformType = function () {
+  function IsPC () {
+    var userAgentInfo = navigator.userAgent
+    var Agents = new Array('Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod')
+    var flag = true
     for (var v = 0; v < Agents.length; v++) {
       if (userAgentInfo.indexOf(Agents[v]) > 0) {
-        flag = false;
-        break;
+        flag = false
+        break
       }
     }
-    return flag;
+    return flag
   }
 
   if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
@@ -81,9 +80,9 @@ Vue.prototype.globalPlatformType = function() {
   }
 }
 
-Vue.prototype.globalFancybox = function() {
+Vue.prototype.globalFancybox = function () {
   this.$nextTick(() => {
-    $(function() {
+    $(function () {
       $('.fancybox').attr('rel', 'media-gallery').fancybox({
         openEffect: 'none',
         closeEffect: 'none',
@@ -95,7 +94,7 @@ Vue.prototype.globalFancybox = function() {
           media: {},
           buttons: {}
         }
-      });
+      })
     })
   })
 }

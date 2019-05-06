@@ -170,7 +170,7 @@ export default {
       this.loading = false
       this.$Notice.error({
         title: '出错了',
-        desc: '服务内部错误'
+        desc: error
       })
     },
 

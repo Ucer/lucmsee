@@ -209,7 +209,8 @@ function http_post_request($url, array $params)
     $params = json_encode($params, JSON_FORCE_OBJECT);
     $headers = [
         "Content-Type:application/json;charset=utf-8",
-        "Accept:application/json;charset=utf-8"
+        "Accept:application/json;charset=utf-8",
+        "Referer:".env("APP_URL")
     ];
 
     $ch = curl_init();

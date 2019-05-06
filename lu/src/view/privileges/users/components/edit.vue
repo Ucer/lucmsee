@@ -60,7 +60,7 @@ export default {
     },
     'tableStatus_is_admin': ''
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
@@ -75,7 +75,7 @@ export default {
         avatar: {
           attachment_id: 0,
           url: ''
-        },
+        }
       },
       formdataFinished: false,
       imguploadConfig: {
@@ -84,48 +84,53 @@ export default {
         },
         format: ['jpg', 'jpeg', 'png', 'gif'],
         max_size: 500,
-        upload_url: window.uploadUrl.uploadToLocaleUrl + '/pic/avatar',
+        upload_url: window.uploadUrl.uploadToFileSystemUrl + '/pic/avatar',
         file_name: 'file',
         multiple: false,
         file_num: 1,
-        data: {},
+        data: {
+          user_id: this.$store.state.user.user_id,
+          max_width: 300,
+          plat_name: window.systemConfigIndexFile.platName,
+          access_token: window.systemConfigIndexFile.domainForFileSystem.access_token
+        },
         default_list: []
       },
       rules: {
         real_name: [{
-            required: true,
-            message: '请填写真实姓名',
-            trigger: 'blur'
-          },
-          {
-            type: 'string',
-            min: 2,
-            message: '真实姓名至少要 2 个字符',
-            trigger: 'blur'
-          }
+          required: true,
+          message: '请填写真实姓名',
+          trigger: 'blur'
+        },
+        {
+          type: 'string',
+          min: 2,
+          message: '真实姓名至少要 2 个字符',
+          trigger: 'blur'
+        }
         ],
         email: [{
-            required: true,
-            message: '请填写邮箱',
-            trigger: 'blur'
-          },
-          {
-            type: 'email',
-            message: '邮箱格式不正确',
-            trigger: 'blur'
-          },
-        ],
-      },
+          required: true,
+          message: '请填写邮箱',
+          trigger: 'blur'
+        },
+        {
+          type: 'email',
+          message: '邮箱格式不正确',
+          trigger: 'blur'
+        }
+        ]
+      }
     }
   },
-  mounted() {
+  mounted () {
     if (this.modalId > 0) {
       this.getInfoByIdExcute()
     }
   },
   methods: {
-    getInfoByIdExcute() {
-      let t = this;
+    getInfoByIdExcute () {
+      let t = this
       getInfoById(t.modalId).then(res => {
         let res_data = res.data
         t.formData = {
@@ -139,16 +144,15 @@ export default {
           avatar: {
             attachment_id: 0,
             url: res_data.avatar
-          },
+          }
         }
         t.imguploadConfig.default_list = [t.formData.avatar]
         t.formdataFinished = true
         t.spinLoading = false
       })
-
     },
-    editExcute() {
-      let t = this;
+    editExcute () {
+      let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
@@ -160,22 +164,22 @@ export default {
             t.$Notice.success({
               title: res.message
             })
-          }, function(error) {
-            t.saveLoading = false;
+          }, function (error) {
+            t.saveLoading = false
           })
         } else {
           t.saveLoading = false
         }
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-edit-modal-hide')
     },
-    editContentChange(html, text) {
+    editContentChange (html, text) {
       // console.log(this.formData.content)
     },
-    uploadChange(fileList, formatFileList) {}
+    uploadChange (fileList, formatFileList) {}
   }
 }
 </script>

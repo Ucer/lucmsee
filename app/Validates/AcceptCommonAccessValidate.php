@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use DB;
 use Auth;
 
-class  AcceptLucmseeApiAccessValidate extends Validate
+class  AcceptCommonAccessValidate extends Validate
 {
     protected $message = '操作成功';
     protected $data = [];
@@ -19,9 +19,9 @@ class  AcceptLucmseeApiAccessValidate extends Validate
         ];
         $rest_validate = $this->validate($request_data, $rules);
         if ($rest_validate === true) {
-            $request_data['user_id'] = isset_and_not_empty($request_data,'user_id');
-            $request_data['original_name'] = isset_and_not_empty($request_data,'original_name');
-            $request_data['max_width'] = isset_and_not_empty($request_data,'max_width');
+            $request_data['user_id'] = isset_and_not_empty($request_data, 'user_id');
+            $request_data['original_name'] = isset_and_not_empty($request_data, 'original_name');
+            $request_data['max_width'] = isset_and_not_empty($request_data, 'max_width');
             return $this->baseSucceed($request_data);
         } else {
             $this->message = $rest_validate;
@@ -29,7 +29,6 @@ class  AcceptLucmseeApiAccessValidate extends Validate
         }
 
     }
-
 
     protected function validate($request_data, $rules)
     {
