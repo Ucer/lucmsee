@@ -28,8 +28,8 @@ Route::namespace('Api')->group(function () {
 
 /**       ==========================          其它域名来访Api           ====================   */
 Route::namespace('Api')->prefix('accept')->group(function () {
-    Route::post('lucmsee_api/get_config_data', 'AcceptLucmseeApiAccessController@getConfigData')->name('accept.lucmsee_api.get_config_data');
-    Route::post('lucmsee_api/upload_image_use_base64', 'AcceptLucmseeApiAccessController@uploadImageUseBase64')->name('accept.lucmsee_api.upload_image_use_base64');
+    Route::post('common/get_config_data', 'AcceptCommonAccessController@getConfigData')->name('accept.common.get_config_data');
+    Route::post('common/upload_image_use_base64', 'AcceptCommonAccessController@uploadImageUseBase64')->name('accept.common.upload_image_use_base64');
 });
 
 

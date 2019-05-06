@@ -19,9 +19,16 @@ return [
         'second_key' => env('ARTICLE_AES_SECOND_ENCRYPT_KEY'),
     ],
     'accept_other_host' => [
-        'lucmsee_api' => [
-            // 项目上线后修改
-            'host' => 'http://lucmsee_api.test',
+        'common' => [ // 访问 AcceptCommonAccessController
+            'hosts' => [
+                'http://lucmsee_api.test',
+            ],
+            'access_token' => '',
+        ],
+        'lucmsee_api' => [ // 访问  AcceptLucmseeApiAccessController
+            'hosts' => [
+                'http://lucmsee_api.test',
+            ],
             'access_token' => '',
         ]
     ]
