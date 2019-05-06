@@ -32,7 +32,7 @@
             <DropdownItem name='photo_editor'>图片裁剪</DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <error-store v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader" :has-read="hasReadErrorPage" :count="errorCount"></error-store>
+<!--        <error-store v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader" :has-read="hasReadErrorPage" :count="errorCount"></error-store>-->
       </header-bar>
     </Header>
     <Content class="main-content-con">
