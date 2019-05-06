@@ -13,7 +13,7 @@ export default {
     text: String,
     subtext: String
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       let xAxisData = Object.keys(this.value)
       let seriesData = Object.values(this.value)

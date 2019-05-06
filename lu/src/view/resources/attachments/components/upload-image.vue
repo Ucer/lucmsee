@@ -21,7 +21,7 @@ export default {
   components: {
     Upload
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
@@ -29,7 +29,7 @@ export default {
         image: {
           attachment_id: 0,
           url: ''
-        },
+        }
       },
       imguploadConfig: {
         headers: {
@@ -43,18 +43,18 @@ export default {
         file_num: 10,
         data: {},
         default_list: []
-      },
+      }
     }
   },
   methods: {
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-upload-image-modal-hide')
     },
-    editContentChange(html, text) {
+    editContentChange (html, text) {
       // console.log(this.formData.content)
     },
-    uploadChange(fileList, formatFileList) {}
+    uploadChange (fileList, formatFileList) {}
   }
 }
 </script>

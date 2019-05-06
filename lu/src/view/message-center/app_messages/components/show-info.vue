@@ -21,20 +21,20 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {
       show: true,
-      agreement: '',
+      agreement: ''
 
     }
   },
   computed: {
-    platformIsPc: function() {
-      return this.globalPlatformType() == 'pc' ? true : false
+    platformIsPc: function () {
+      return this.globalPlatformType() === 'pc'
     }
   },
   methods: {
-    closed() {
+    closed () {
       this.show = false
       this.$emit('show-modal-close')
     }

@@ -47,13 +47,12 @@
 </div>
 </template>
 
-
 <script>
 import './style.less'
-import Viewer from 'viewerjs';
-import 'viewerjs/dist/viewer.css';
+import Viewer from 'viewerjs'
+import 'viewerjs/dist/viewer.css'
 import {
-  getTableStatus,
+  getTableStatus
 } from '@/api/common'
 
 import {
@@ -61,50 +60,50 @@ import {
 } from '@/api/attachment'
 
 export default {
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'id,desc',
         type: '',
-        mime_type: "image",
+        mime_type: 'image',
         original_name: ''
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableLoading: false,
       tableStatus: {
-        category: [],
+        category: []
       },
       feeds: {
         data: [],
         total: 0,
         current_page: 1,
         per_page: 18,
-        last_page: 0,
+        last_page: 0
       },
       scroll_text: '拼命加载中...'
     }
   },
-  mounted() {
+  mounted () {
     let t = this
     t.getTableStatusExcute('attachments/category')
     t.getTableDataExcute(t.feeds.current_page)
   },
   methods: {
-    handleOnPageChange: function(to_page) {
+    handleOnPageChange: function (to_page) {
       this.getTableDataExcute(to_page)
     },
-    onPageSizeChange: function(per_page) {
+    onPageSizeChange: function (per_page) {
       this.feeds.per_page = per_page
       this.getTableDataExcute(this.feeds.current_page)
     },
-    getTableStatusExcute(params) {
+    getTableStatusExcute (params) {
       let t = this
       getTableStatus(params).then(res => {
         const response_data = res.data
         t.tableStatus.category = response_data
       })
     },
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -114,11 +113,11 @@ export default {
         t.feeds.last_page = res.meta.last_page
         t.tableLoading = false
         this.ViewImage()
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -127,67 +126,67 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    handleReachEdge(dir) {
+    handleReachEdge (dir) {
       this.scroll_text = '拼命加载中...'
       return new Promise(resolve => {
-        let new_page = this.feeds.current_page;
+        let new_page = this.feeds.current_page
         if (dir > 0) {
-          new_page = this.feeds.current_page - 1;
+          new_page = this.feeds.current_page - 1
           if (new_page < 1) {
             this.scroll_text = '已经是第一页了'
-            resolve();
-            return;
+            resolve()
+            return
           }
         } else {
-          new_page = this.feeds.current_page + 1;
+          new_page = this.feeds.current_page + 1
           if (new_page > this.feeds.last_page) {
             this.scroll_text = '已经是最后一页了'
-            resolve();
-            return;
+            resolve()
+            return
           }
         }
         this.getTableDataExcute(new_page)
-        resolve();
-      });
+        resolve()
+      })
     },
-    ViewImage() {
+    ViewImage () {
       this.$nextTick(() => {
-        $(function() {
-          $('.l-hide').click(function() {
-            $('.l-show').removeAttr('id').addClass('l-hide').removeClass('l-show');
-            $(this).attr('id', 'galley-photo');
-            $(this).addClass('l-show');
-            $(this).removeClass('l-hide');
-            var galley = document.getElementById('galley-photo');
+        $(function () {
+          $('.l-hide').click(function () {
+            $('.l-show').removeAttr('id').addClass('l-hide').removeClass('l-show')
+            $(this).attr('id', 'galley-photo')
+            $(this).addClass('l-show')
+            $(this).removeClass('l-hide')
+            var galley = document.getElementById('galley-photo')
             var viewer = new Viewer(galley, {
               url: 'data-original',
               toolbar: {
                 oneToOne: true,
-                prev: function() {
-                  viewer.prev(true);
+                prev: function () {
+                  viewer.prev(true)
                 },
                 play: true,
-                next: function() {
-                  viewer.next(true);
+                next: function () {
+                  viewer.next(true)
                 },
-                update: function() {
+                update: function () {
 
                 },
-                download: function() {
-                  const a = document.createElement('a');
+                download: function () {
+                  const a = document.createElement('a')
 
-                  a.href = viewer.image.src;
-                  a.download = viewer.image.alt;
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-                },
-              },
-            });
-          });
-        });
-      });
-    },
+                  a.href = viewer.image.src
+                  a.download = viewer.image.alt
+                  document.body.appendChild(a)
+                  a.click()
+                  document.body.removeChild(a)
+                }
+              }
+            })
+          })
+        })
+      })
+    }
   }
 }
 </script>

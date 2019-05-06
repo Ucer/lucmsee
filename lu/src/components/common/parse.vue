@@ -13,26 +13,26 @@
 </template>
 
 <script>
-    import marked from 'marked'
+import marked from 'marked'
 
-    export default {
-        props: {
-            content: {
-                type: String,
-                default() {
-                    return null
-                }
-            }
-        },
-        data() {
-            return {
-                rawHtml: null,
-            }
-        },
-        created() {
-            this.rawHtml = marked(this.content)
-        },
+export default {
+  props: {
+    content: {
+      type: String,
+      default () {
+        return null
+      }
     }
+  },
+  data () {
+    return {
+      rawHtml: null
+    }
+  },
+  created () {
+    this.rawHtml = marked(this.content)
+  }
+}
 </script>
 
 <style lang="css">

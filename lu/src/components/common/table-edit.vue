@@ -54,34 +54,34 @@ import {
 export default {
   name: 'TablesEdit',
   props: ['table', 'column', 'id', 'value', 'index'],
-  data() {
+  data () {
     return {
       edittingCellId: '',
       columnValue: this.value
     }
   },
   computed: {
-    isEditting() {
+    isEditting () {
       return this.edittingCellId === `editting-${this.column}-${this.id}`
     }
   },
   methods: {
-    startEdit() {
+    startEdit () {
       this.edittingCellId = `editting-${this.column}-${this.id}`
     },
-    saveEdit() {
+    saveEdit () {
       this.commonEditTableColumnExcute()
     },
-    canceltEdit() {
+    canceltEdit () {
       this.edittingCellId = ''
     },
-    commonEditTableColumnExcute() {
+    commonEditTableColumnExcute () {
       let t = this
       commonEditTableColumn(t.id, t.table, t.column, t.columnValue).then(res => {
         t.edittingCellId = ''
         t.value = t.columnValue
       })
-    },
+    }
   }
 }
 </script>

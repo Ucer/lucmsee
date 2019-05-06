@@ -49,12 +49,12 @@ export default {
     AddComponent,
     EditComponent
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'id,desc'
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableLoading: true,
       dataList: [],
       addModal: {
@@ -68,27 +68,27 @@ export default {
         title: 'ID',
         key: 'id',
         sortable: 'customer',
-        minWidth: 100,
+        minWidth: 100
       }, {
         title: '权限名称',
         key: 'name',
-        minWidth: 150,
+        minWidth: 150
       }, {
         title: '看守器',
         key: 'guard_name',
-        minWidth: 150,
+        minWidth: 150
       }, {
         title: '权限描述',
         key: 'description',
-        minWidth: 150,
+        minWidth: 150
       }, {
         title: '创建时间',
         key: 'created_at',
-        minWidth: 150,
+        minWidth: 150
       }, {
         title: '更新时间',
         key: 'created_at',
-        minWidth: 150,
+        minWidth: 150
       }, {
         title: '操作',
         minWidth: 200,
@@ -96,26 +96,26 @@ export default {
       }]
     }
   },
-  mounted() {
+  mounted () {
     this.getTableDataExcute()
   },
   methods: {
-    getTableDataExcute() {
+    getTableDataExcute () {
       let t = this
       t.loading = true
       getTableData(t.searchForm).then(res => {
         const response_data = res.data
         t.dataList = response_data
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -124,7 +124,7 @@ export default {
         })
       })
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -133,13 +133,13 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    addBtn() {
+    addBtn () {
       this.addModal.show = true
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    editModalHide() {
+    editModalHide () {
       this.editModal.show = false
     }
   }

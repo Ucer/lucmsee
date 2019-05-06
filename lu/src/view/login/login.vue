@@ -35,13 +35,13 @@
 
 <script>
 import {
-  getCaptcha,
+  getCaptcha
 } from '@/api/common'
 import {
   mapActions
 } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       saveLoading: false,
       captcha_url: '',
@@ -49,7 +49,7 @@ export default {
         email: '',
         password: '',
         captcha: '',
-        captcha_key: '',
+        captcha_key: ''
       },
       rules: {
         email: [{
@@ -66,11 +66,11 @@ export default {
           required: true,
           message: '验证码不能为空',
           trigger: 'blur'
-        }],
-      },
+        }]
+      }
     }
   },
-  created() {
+  created () {
     this.getCaptchaExcute()
   },
   methods: {
@@ -78,7 +78,7 @@ export default {
       'handleLogin',
       'getUserInfoExcute'
     ]),
-    handleSubmit() {
+    handleSubmit () {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
@@ -99,16 +99,15 @@ export default {
           })
         }
       })
-
     },
-    getCaptchaExcute() {
+    getCaptchaExcute () {
       let t = this
       getCaptcha().then(res => {
         const response_data = res.data
         t.captcha_url = response_data.img
         t.formData.captcha_key = response_data.key
-      }, function(error) {})
-    },
+      }, function (error) {})
+    }
   }
 }
 </script>

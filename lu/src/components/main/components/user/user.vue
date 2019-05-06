@@ -36,10 +36,10 @@ import './user.less'
 import ShowInfo from './components/show-info'
 import {
   getUserInfo
-} from '@/api/user'
-import {
+  ,
   resetPassword
 } from '@/api/user'
+
 import {
   mapActions
 } from 'vuex'
@@ -47,7 +47,7 @@ export default {
   components: {
     ShowInfo
   },
-  data() {
+  data () {
     const validatePassword = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入登录密码'))
@@ -76,7 +76,7 @@ export default {
       modalShow: false,
       formData: {
         password: '',
-        password_confirmation: '',
+        password_confirmation: ''
       },
       saveLoading: false,
       rules: {
@@ -87,29 +87,29 @@ export default {
         password_confirmation: [{
           validator: validatePasswordConfirm,
           trigger: 'blur'
-        }],
-      },
+        }]
+      }
     }
   },
   computed: {
-    stateAvatar() {
+    stateAvatar () {
       return this.$store.state.user.avator
     },
-    stateNickname() {
+    stateNickname () {
       return this.$store.state.user.nickname
     },
-    stateRealName() {
+    stateRealName () {
       return this.$store.state.user.real_name
     },
-    stateEmail() {
+    stateEmail () {
       return this.$store.state.user.email
-    },
+    }
   },
   methods: {
     ...mapActions([
-      'handleLogOut',
+      'handleLogOut'
     ]),
-    handleClick(name) {
+    handleClick (name) {
       switch (name) {
         case 'logout':
           this.handleLogOut().then(() => {
@@ -117,28 +117,28 @@ export default {
               name: 'login'
             })
           })
-          break;
+          break
         case 'profile':
           this.getUserInfoExcute()
-          break;
+          break
         case 'editPassword':
           this.modalShow = true
-          break;
+          break
       }
     },
-    showModalClose() {
+    showModalClose () {
       this.showInfoModal.show = false
     },
-    getUserInfoExcute() {
-      let t = this;
+    getUserInfoExcute () {
+      let t = this
       getUserInfo().then(res => {
         let res_data = res.data
         t.showInfoModal.info = res_data
         t.showInfoModal.show = true
       })
     },
-    resetPasswordExcute() {
-      let t = this;
+    resetPasswordExcute () {
+      let t = this
       t.$refs.editPasswordFormData.validate((valid) => {
         if (valid) {
           t.saveLoading = true
@@ -148,21 +148,21 @@ export default {
             t.$Notice.success({
               title: res.message
             })
-          }, function(error) {
-            t.saveLoading = false;
+          }, function (error) {
+            t.saveLoading = false
           })
         } else {
           t.saveLoading = false
         }
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.formData = {
         password: '',
-        password_confirmation: '',
+        password_confirmation: ''
       }
-    },
+    }
   }
 }
 </script>

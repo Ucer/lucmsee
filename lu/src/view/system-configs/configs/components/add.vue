@@ -51,7 +51,7 @@ export default {
       value: []
     }
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
@@ -79,11 +79,11 @@ export default {
           message: '请选择配置分组',
           trigger: 'blur'
         }]
-      },
+      }
     }
   },
   methods: {
-    addExcute() {
+    addExcute () {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
@@ -96,13 +96,13 @@ export default {
             t.$Notice.success({
               title: res.message
             })
-          }, function(error) {
-            t.saveLoading = false;
+          }, function (error) {
+            t.saveLoading = false
           })
         }
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-add-modal-hide')
     }

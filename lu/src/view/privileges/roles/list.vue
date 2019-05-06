@@ -59,12 +59,12 @@ export default {
     AddComponent,
     EditComponent
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'id,desc'
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableLoading: true,
       dataList: [],
       permissionModal: {
@@ -86,66 +86,66 @@ export default {
         id: 0
       },
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '角色限名称',
-          key: 'name',
-          minWidth: 150,
-        },
-        {
-          title: '角色看守器',
-          key: 'guard_name',
-          minWidth: 150,
-        },
-        {
-          title: '角色描述',
-          key: 'description',
-          minWidth: 150,
-        },
-        {
-          title: '创建时间',
-          key: 'created_at',
-          minWidth: 150,
-        },
-        {
-          title: '更新时间',
-          key: 'created_at',
-          minWidth: 150,
-        },
-        {
-          title: '操作',
-          minWidth: 200,
-          slot: 'action',
-        }
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '角色限名称',
+        key: 'name',
+        minWidth: 150
+      },
+      {
+        title: '角色看守器',
+        key: 'guard_name',
+        minWidth: 150
+      },
+      {
+        title: '角色描述',
+        key: 'description',
+        minWidth: 150
+      },
+      {
+        title: '创建时间',
+        key: 'created_at',
+        minWidth: 150
+      },
+      {
+        title: '更新时间',
+        key: 'created_at',
+        minWidth: 150
+      },
+      {
+        title: '操作',
+        minWidth: 200,
+        slot: 'action'
+      }
       ]
     }
   },
-  created() {
+  created () {
     let t = this
     t.getTableDataExcute()
     t.getAllPermissionExcute()
   },
   methods: {
-    getTableDataExcute() {
+    getTableDataExcute () {
       let t = this
       t.tableLoading = true
       getTableData(t.searchForm).then(res => {
         const response_data = res.data
         t.dataList = response_data
         t.tableLoading = false
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
     },
-    tableButtonEdit(row, index) {
+    tableButtonEdit (row, index) {
       this.editModal.show = true
       this.editModal.id = row.id
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -154,13 +154,13 @@ export default {
         })
       })
     },
-    tableButtonGiveUserPermission(row, index) {
+    tableButtonGiveUserPermission (row, index) {
       let t = this
       t.getRolePermissionsExcute(row.id)
       t.permissionModal.show = true
       t.permissionModal.id = row.id
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -169,39 +169,39 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    addBtn() {
+    addBtn () {
       this.addModal.show = true
     },
-    addModalHide() {
+    addModalHide () {
       this.addModal.show = false
     },
-    editModalHide() {
+    editModalHide () {
       this.editModal.show = false
     },
-    renderFormat(item) {
+    renderFormat (item) {
       return item.label + '「' + item.description + '」'
     },
-    cancelPermissionModal() {
+    cancelPermissionModal () {
       let t = this
       t.permissionModal.show = false
       t.permissionModal.saveLoading = false
     },
-    getAllPermissionExcute() {
+    getAllPermissionExcute () {
       let t = this
       getAllPermission().then(res => {
         t.permissionModal.allPermissions = res.data
-      }, function(error) {})
+      }, function (error) {})
     },
-    handleTransferChange(newTargetKeys) {
+    handleTransferChange (newTargetKeys) {
       this.permissionModal.hasPermissions = newTargetKeys
     },
-    getRolePermissionsExcute(id) {
+    getRolePermissionsExcute (id) {
       let t = this
       getRolePermissions(id).then(res => {
         t.permissionModal.hasPermissions = res.data
       })
     },
-    giveRolePermissionExcute() {
+    giveRolePermissionExcute () {
       let t = this
       giveRolePermission(t.permissionModal.id, t.permissionModal.hasPermissions).then(res => {
         t.$Notice.success({
@@ -209,7 +209,7 @@ export default {
         })
         t.permissionModal.show = false
       })
-    },
+    }
   }
 }
 </script>

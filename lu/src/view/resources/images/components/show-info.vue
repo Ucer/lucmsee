@@ -27,7 +27,7 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {
       show: true,
       agreement: '',
@@ -35,18 +35,18 @@ export default {
     }
   },
   computed: {
-    platformIsPc: function() {
-      return this.globalPlatformType() == 'pc' ? true : false
+    platformIsPc: function () {
+      return this.globalPlatformType() === 'pc'
     },
-    getAttachmentUrl() {
+    getAttachmentUrl () {
       return this.info.domain + '/' + this.info.link_path + '/' + this.info.storage_name
     },
-    attachmentIsImage() {
-      return (this.info.mime_type.indexOf('image') === -1) ? false : true
+    attachmentIsImage () {
+      return this.info.mime_type.indexOf('image') !== -1
     }
   },
   methods: {
-    closed() {
+    closed () {
       this.show = false
       this.$emit('show-modal-close')
     }

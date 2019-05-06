@@ -37,21 +37,21 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {
       show: true,
       agreement: '',
       spinLoading: true
     }
   },
-  created() {},
+  created () {},
   computed: {
-    platformIsPc: function() {
-      return this.globalPlatformType() == 'pc' ? true : false
+    platformIsPc: function () {
+      return this.globalPlatformType() === 'pc'
     }
   },
   methods: {
-    closed() {
+    closed () {
       this.show = false
       this.$emit('show-modal-close')
     }

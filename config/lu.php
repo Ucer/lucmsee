@@ -24,7 +24,7 @@ return [
             'hosts' => [
                 'http://lucmsee_api.test',
             ],
-            'access_token' => '',
+            'access_token' => 'xccvxcvxKMSDFYIIadfN*&^%$#@~~!',
         ],
         'lucmsee_api' => [ // 访问  AcceptLucmseeApiAccessController
             'hosts' => [

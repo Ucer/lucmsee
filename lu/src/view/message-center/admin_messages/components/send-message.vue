@@ -16,7 +16,7 @@
       </FormItem>
       <FormItem label="消息接收人：">
         <Select v-model="formData.users" multiple filterable remote :remote-method="searchAdminUserPassEmailExcute" :loading="searchLoading" placeholder="请输入管理员邮箱搜索">
-          <Option v-for="(item, key) in userList" :value="item.id" :key="item.id">{{item.email}}({{item.mobile}})</Option>
+          <Option v-for="(item, key) in userList" :value="item.id" :key="key">{{item.email}}({{item.mobile}})</Option>
         </Select>
         <input-helper text="不选将发送给所有人" :style-class="'input-helper-error'"></input-helper>
       </FormItem>
@@ -42,7 +42,7 @@ export default {
   components: {
     InputHelper
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
@@ -53,7 +53,7 @@ export default {
         message_type: '',
         url: '',
         users: '',
-        content: '',
+        content: ''
       },
       rules: {
         title: [{
@@ -70,13 +70,13 @@ export default {
           required: true,
           message: '请选择消息类型',
           trigger: 'blur'
-        }],
-      },
+        }]
+      }
     }
   },
   methods: {
-    searchAdminUserPassEmailExcute: function(input) {
-      let t = this;
+    searchAdminUserPassEmailExcute: function (input) {
+      let t = this
       if (input.length < 3) {
         return false
       }
@@ -86,7 +86,7 @@ export default {
         t.searchLoading = false
       })
     },
-    sendMessageToAdminExcute() {
+    sendMessageToAdminExcute () {
       let t = this
       t.$refs.formData.validate((valid) => {
         if (valid) {
@@ -103,10 +103,10 @@ export default {
         }
       })
     },
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-add-modal-hide')
-    },
+    }
   }
 }
 </script>

@@ -78,7 +78,6 @@ import {
   destroy
 } from '@/api/attachment'
 
-
 import {
   getTableStatus
 } from '@/api/common'
@@ -90,19 +89,20 @@ export default {
   components: {
     uploadImageComponent,
     uploadFileComponent,
-    uploadVideoComponent,
+    uploadVideoComponent
   },
-  data() {
+  data () {
     return {
       searchForm: {
         order_by: 'created_at,desc',
         file_type: '',
         category: ''
       },
-      notRealySortKey:[],
+      notRealySortKey: [],
       tableLoading: false,
       tableStatus: {
         file_type: [],
+        category: []
       },
       feeds: {
         data: [],
@@ -120,78 +120,78 @@ export default {
         show: false
       },
       columns: [{
-          title: 'ID',
-          key: 'id',
-          sortable: 'customer',
-          minWidth: 100,
-        },
-        {
-          title: '上传者',
-          minWidth: 80,
-          slot: 'user_id'
-        },
-        {
-          title: '下载',
-          minWidth: 60,
-          slot: 'download'
-        },
-        {
-          title: '原文件名',
-          key: 'original_name',
-          minWidth: 80,
-        },
-        {
-          title: '存储名称',
-          minWidth: 120,
-          key: 'storage_name'
-        },
-        {
-          title: 'mimeType',
-          minWidth: 80,
-          key: 'mime_type',
-          sortable: 'customer',
-        },
-        {
-          title: '文件归类',
-          minWidth: 80,
-          key: 'category',
-          sortable: 'customer',
-          slot: 'category'
-        }, {
-          title: '大小',
-          key: 'size',
-          sortable: 'customer',
-          minWidth: 80,
-        },
-        {
-          title: '上传时间',
-          key: 'created_at',
-          sortable: 'customer',
-          minWidth: 150,
-        },
-        {
-          title: '操作',
-          minWidth: 50,
-          slot: 'action'
-        }
-      ],
+        title: 'ID',
+        key: 'id',
+        sortable: 'customer',
+        minWidth: 100
+      },
+      {
+        title: '上传者',
+        minWidth: 80,
+        slot: 'user_id'
+      },
+      {
+        title: '下载',
+        minWidth: 60,
+        slot: 'download'
+      },
+      {
+        title: '原文件名',
+        key: 'original_name',
+        minWidth: 80
+      },
+      {
+        title: '存储名称',
+        minWidth: 120,
+        key: 'storage_name'
+      },
+      {
+        title: 'mimeType',
+        minWidth: 80,
+        key: 'mime_type',
+        sortable: 'customer'
+      },
+      {
+        title: '文件归类',
+        minWidth: 80,
+        key: 'category',
+        sortable: 'customer',
+        slot: 'category'
+      }, {
+        title: '大小',
+        key: 'size',
+        sortable: 'customer',
+        minWidth: 80
+      },
+      {
+        title: '上传时间',
+        key: 'created_at',
+        sortable: 'customer',
+        minWidth: 150
+      },
+      {
+        title: '操作',
+        minWidth: 50,
+        slot: 'action'
+      }
+      ]
 
     }
   },
-  created() {
+  created () {
     let t = this
     t.getTableStatusExcute('attachments')
   },
   computed: {},
   methods: {
-    handleOnPageChange: function(to_page) {
+    handleOnPageChange: function (to_page) {
       this.getTableDataExcute(to_page)
     },
-    onPageSizeChange: function(per_page) {
+    onPageSizeChange: function (per_page) {
       this.feeds.per_page = per_page
       this.getTableDataExcute(this.feeds.current_page)
     },
-    getTableStatusExcute(params) {
+    getTableStatusExcute (params) {
       let t = this
       getTableStatus(params).then(res => {
         t.tableStatus.file_type = res.data.file_type
@@ -199,7 +199,7 @@ export default {
         t.getTableDataExcute(t.feeds.current_page)
       })
     },
-    getTableDataExcute(to_page) {
+    getTableDataExcute (to_page) {
       let t = this
       t.tableLoading = true
       t.feeds.current_page = to_page
@@ -208,12 +208,11 @@ export default {
         t.feeds.total = res.meta.total
         t.tableLoading = false
         t.globalFancybox()
-      }, function(error) {
+      }, function (error) {
         t.tableLoading = false
       })
-
     },
-    onSortChange: function(data) {
+    onSortChange: function (data) {
       const order = data.column.key + ',' + data.order
       if (oneOf(data.column.key, this.notRealySortKey)) {
 
@@ -222,7 +221,7 @@ export default {
         this.getTableDataExcute(this.feeds.current_page)
       }
     },
-    tableButtonDestroyOk(row, index) {
+    tableButtonDestroyOk (row, index) {
       let t = this
       destroy(row.id).then(res => {
         t.feeds.data.splice(index, 1)
@@ -231,27 +230,27 @@ export default {
         })
       })
     },
-    uploadBtnGroup(type) {
+    uploadBtnGroup (type) {
       this['upload' + type + 'Modal'].show = true
     },
-    uploadImageModalHide() {
+    uploadImageModalHide () {
       this.uploadImageModal.show = false
       this.getTableStatusExcute(this.feeds.current_page)
     },
-    uploadFileModalHide() {
+    uploadFileModalHide () {
       this.uploadFileModal.show = false
       this.getTableStatusExcute(this.feeds.current_page)
     },
-    uploadVideoModalHide() {
+    uploadVideoModalHide () {
       this.uploadVideoModal.show = false
       this.getTableStatusExcute(this.feeds.current_page)
     },
-    getAttachmentUrl(row) {
+    getAttachmentUrl (row) {
       return row.domain + '/' + row.link_path + '/' + row.storage_name
     },
-    attachmentIsImage(row) {
+    attachmentIsImage (row) {
       let min_type = row.mime_type
-      return (min_type.indexOf('image') === -1) ? false : true
+      return min_type.indexOf('image') !== -1
     }
   }
 }

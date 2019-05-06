@@ -20,7 +20,7 @@ export default {
   components: {
     UploadFile
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
@@ -28,13 +28,13 @@ export default {
         video: {
           attachment_id: 0,
           url: ''
-        },
+        }
       },
       fileuploadConfig: {
         headers: {
           'Authorization': window.access_token
         },
-        format: ['xlsx', 'doc', 'docx', 'txt', 'sql','exe'],
+        format: ['xlsx', 'doc', 'docx', 'txt', 'sql', 'exe'],
         max_size: 1024 * 1000, // 800KB
         upload_url: window.uploadUrl.uploadToLocaleUrl + '/file/lucmsee',
         file_name: 'file',
@@ -44,15 +44,15 @@ export default {
         button_text: '上传文件',
         default_list: []
 
-      },
+      }
     }
   },
   methods: {
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-upload-file-modal-hide')
     },
-    uploadfileChange(fileList, formatFileList) {}
+    uploadfileChange (fileList, formatFileList) {}
   }
 }
 </script>

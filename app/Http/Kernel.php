@@ -45,7 +45,7 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
             /** Third package */
-            \Barryvdh\Cors\HandleCors::class,
+//            \Barryvdh\Cors\HandleCors::class, // 跨域解决
         ],
     ];
 

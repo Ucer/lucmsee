@@ -48,26 +48,25 @@ export default {
   name: 'home',
   components: {
     InforCard,
-    CountTo,
+    CountTo
   },
-  data() {
+  data () {
     return {
       tableLoading: true,
-      inforCardData: {},
+      inforCardData: {}
     }
   },
-  mounted() {
+  mounted () {
     this.getStatisticsDataExcute()
-
   },
   methods: {
-    quickToRouter(name, param) {
+    quickToRouter (name, param) {
       this.$router.push({
         name: name,
         params: param
-      });
+      })
     },
-    getStatisticsDataExcute() {
+    getStatisticsDataExcute () {
       let t = this
       getStatisticsData().then(res => {
         t.tableLoading = false
@@ -85,12 +84,12 @@ export default {
           count: res_data.article_count,
           color: '#2D8cF0',
           routerName: 'articleList'
-        }, ]
+        } ]
       })
     },
-    userEchart(res_data) {
+    userEchart (res_data) {
       // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(document.getElementById('user-echart-data'), userChartTheme);
+      var myChart = echarts.init(document.getElementById('user-echart-data'), userChartTheme)
 
       // 指定图表的配置项和数据
       var option = {
@@ -111,10 +110,10 @@ export default {
           type: 'bar',
           data: res_data['values']
         }]
-      };
+      }
 
       // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
+      myChart.setOption(option)
     }
   }
 }

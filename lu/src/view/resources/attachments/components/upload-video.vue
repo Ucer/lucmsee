@@ -20,7 +20,7 @@ export default {
   components: {
     UploadFile
   },
-  data() {
+  data () {
     return {
       modalShow: true,
       saveLoading: false,
@@ -28,7 +28,7 @@ export default {
         video: {
           attachment_id: 0,
           url: ''
-        },
+        }
       },
       fileuploadConfig: {
         headers: {
@@ -40,19 +40,19 @@ export default {
         file_name: 'file',
         multiple: false,
         file_num: 1,
-        data:{},
+        data: {},
         button_text: '上传视频',
         default_list: []
 
-      },
+      }
     }
   },
   methods: {
-    cancel() {
+    cancel () {
       this.modalShow = false
       this.$emit('on-upload-video-modal-hide')
     },
-    uploadfileChange(fileList, formatFileList) {}
+    uploadfileChange (fileList, formatFileList) {}
   }
 }
 </script>
