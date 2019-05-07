@@ -22,8 +22,8 @@
 </div>
 <div class="main container pusher" id="app">
     @yield('content')
-    <messages message-session="{{ session()->get('toastrMsg.message') }}"
-              message-type="{{ session()->get('toastrMsg.status') }}"></messages>
+    <global-message message-session="{{ session()->get('toastrMsg.message') }}"
+                    message-type="{{ session()->get('toastrMsg.status') }}"></global-message>
 </div>
 @include('layouts.common.footer')
 
