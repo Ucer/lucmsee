@@ -9,16 +9,23 @@ trait ArticleFilterTrait
 {
 
     /**
-     * @param $filter  所有文章、公开、私密
-     * @param int $user_id 用户 id
-     * @param string $title 文章标题
-     * @param int $year 创建 年份
-     * @param int $month ....
-     * @param int $limit
+     * @param $searchData
+     * @param $order
+     * @param $order_type
+     * @param $limit
      * @return mixed
      */
-    public function getArticlesWithFilter($filter, $user_id = 0, $title = '', $tag_id = 0, $category_id = 0, $recommend = '', $top = '', $enable = '', $order = 'created_at', $order_type = 'desc', $limit = 15)
+    public function getArticlesWithFilter($searchData, $order, $order_type, $limit)
     {
+        $filter = $searchData['filter'];
+        $user_id = $searchData['user_id'];
+        $title = $searchData['title'];
+        $tag_id = $searchData['tag_id'];
+        $category_id = $searchData['category_id'];
+        $recommend = $searchData['recommend'];
+        $top = $searchData['top'];
+        $enable = $searchData['enable'];
+
         $filter = $this->getArticleFilter($filter);
 
         return $this->applyFilter($filter, $user_id, $title, $tag_id, $category_id, $recommend, $top, $enable, $order, $order_type)

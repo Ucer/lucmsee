@@ -9,7 +9,10 @@ class Tag extends Model
     protected $fillable = [
         'name'
     ];
-
+    public function articles()
+    {
+        return $this->morphedByMany('App\Models\Article', 'model', 'model_has_tags', 'tag_id');
+    }
 
     public function storeAction($input)
     {

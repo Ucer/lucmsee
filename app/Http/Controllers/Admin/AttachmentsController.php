@@ -27,7 +27,7 @@ class AttachmentsController extends AdminController
         }
         $category = isset_and_not_empty($search_data, 'category');
         if ($category) {
-            $model = $model->columnLikeSearch('category', $category);
+            $model = $model->columnEqualSearch('category', $category);
         }
         $mime_type = isset_and_not_empty($search_data, 'mime_type');
         if ($mime_type) {

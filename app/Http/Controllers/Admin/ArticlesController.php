@@ -20,16 +20,17 @@ class ArticlesController extends AdminController
     {
         $per_page = $request->get('per_page', 10);
         $search_data = json_decode($request->get('search_data'), true);
-        $tag_id = 0;
-        $user_id = 0;
-        $filter = isset_and_not_empty($search_data, 'access_type');
-        $title = isset_and_not_empty($search_data, 'title');
-        $article_category_id = isset_and_not_empty($search_data, 'article_category_id');
-        $recommend = isset_and_not_empty($search_data, 'recommend');
-        $top = isset_and_not_empty($search_data, 'top');
-        $enable = isset_and_not_empty($search_data, 'enable');
-        $order = 'created_at';
-        $order_type = 'desc';
+        $searchData = [
+            'filter' => isset_and_not_empty($search_data, 'access_type'),
+            'user_id' => 0,
+            'title' => isset_and_not_empty($search_data, 'title'),
+            'tag_id' => 0,
+            'category_id' => isset_and_not_empty($search_data, 'article_category_id'),
+            'recommend' => isset_and_not_empty($search_data, 'recommend'),
+            'top' => isset_and_not_empty($search_data, 'top'),
+            'enable' => isset_and_not_empty($search_data, 'enable'),
+            'limit' => $per_page,
+        ];
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
         if ($order_by) {
@@ -38,7 +39,7 @@ class ArticlesController extends AdminController
             $order_type = $order_by[1];
         }
 
-        $list = $model->getArticlesWithFilter($filter, $user_id, $title, $tag_id, $article_category_id, $recommend, $top, $enable, $order, $order_type, $per_page);
+        $list = $model->getArticlesWithFilter($searchData, $order, $order_type, $per_page);
         return new CommonCollection($list);
     }
 
