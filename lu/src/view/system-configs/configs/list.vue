@@ -138,7 +138,8 @@ export default {
       }, {
         title: '配置值',
         key: 'value',
-        minWidth: 150
+        minWidth: 150,
+        tooltip: true
       }, {
         title: '启用状态',
         key: 'enable',
