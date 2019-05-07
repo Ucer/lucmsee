@@ -51,8 +51,8 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'articles', 'column' => 'recommend', 'status_code' => 'T', 'status_description' => '启用', 'remark' => ''],
             ['table_name' => 'articles', 'column' => 'recommend', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => ''],
 
-            ['table_name' => 'articles', 'column' => 'top', 'status_code' => 'T', 'status_description' => '启用', 'remark' => ''],
-            ['table_name' => 'articles', 'column' => 'top', 'status_code' => 'F', 'status_description' => '禁用', 'remark' => ''],
+            ['table_name' => 'articles', 'column' => 'top', 'status_code' => 'T', 'status_description' => '是', 'remark' => '置顶'],
+            ['table_name' => 'articles', 'column' => 'top', 'status_code' => 'F', 'status_description' => '否', 'remark' => '不置顶'],
 
             ['table_name' => 'articles', 'column' => 'access_type', 'status_code' => 'pub', 'status_description' => '公开', 'remark' => ''],
             ['table_name' => 'articles', 'column' => 'access_type', 'status_code' => 'pri', 'status_description' => '私密', 'remark' => ''],
