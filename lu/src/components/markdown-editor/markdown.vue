@@ -8,6 +8,8 @@
 import Simplemde from 'simplemde'
 import 'simplemde/dist/simplemde.min.css'
 
+import { Notice } from 'iview'
+
 require('./js/inline-attachment')
 require('./js/codemirror-4.inline-attachment.js')
 
@@ -146,7 +148,7 @@ export default {
         return false
       },
       onFileUploadError: function (data) {
-        this.$Notice.error({
+        Notice.error({
           title: '出错了',
           desc: data
         })

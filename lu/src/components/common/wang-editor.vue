@@ -44,6 +44,8 @@
 import Editor from 'wangeditor'
 // import 'wangeditor/release/wangEditor.min.css'
 
+import { Notice } from 'iview'
+
 import {
   oneOf
 } from '@/libs/tools'
@@ -134,7 +136,7 @@ export default {
     this.editor.customConfig.uploadImgServer = this.uploadConfig.uploadUrl // 上传图片到服务器
     this.editor.customConfig.uploadImgMaxSize = this.uploadConfig.wang_size
     this.editor.customConfig.uploadImgParams = this.uploadConfig.params
-    this.editor.customConfig.uploadImgParams = this.uploadConfig.max_length
+    // this.editor.customConfig.uploadImgParams = this.uploadConfig.max_length
     this.editor.customConfig.uploadFileName = this.uploadConfig.file_name
     this.editor.customConfig.uploadImgHeaders = this.uploadConfig.headers
     this.editor.customConfig.zIndex = this.uploadConfig.z_index
@@ -175,6 +177,13 @@ export default {
         // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
 
         // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
+        if (result.status !== 'success') {
+          Notice.error({
+            title: '出错了',
+            desc: result.message
+          })
+          return false
+        }
         var url = result.data.url
         insertImg(url)
 
@@ -209,7 +218,7 @@ export default {
       let text = this.editor.txt.text()
       this.$emit('input', this.valueType === 'html' ? html : text)
       this.$emit('on-change', html, text)
-      this.$Notice.success({
+      Notice.success({
         title: '修改成功'
       })
     }

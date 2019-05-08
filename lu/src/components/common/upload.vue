@@ -140,7 +140,7 @@ export default {
       this.ViewImage()
     },
     handleSuccess (res, file) {
-      if (!res.hasOwnProperty('status') || (res.status != 'success')) {
+      if (!res.hasOwnProperty('status') || (res.status !== 'success')) {
         this.$Notice.error({
           title: '出错了，请删除后重新上传',
           desc: res.message
