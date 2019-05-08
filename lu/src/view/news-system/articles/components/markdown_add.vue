@@ -67,7 +67,7 @@
         <Input v-model="formData.weight" placeholder="请输入序号" style="width: auto"></Input>
       </FormItem>
       <FormItem label="文章内容">
-          <markdown-editor v-model="formData.content" :upload_url="markdownEditorUploadUrl" :cache='true' />
+          <markdown-editor v-model="formData.content" :editorUploadConfig="editorUploadConfig"  :cache='true' />
       </FormItem>
     </Form>
     <div slot="footer">
@@ -124,7 +124,6 @@ export default {
       Openness: '公开',
       articleTags: [],
       newTagName: '',
-      markdownEditorUploadUrl: window.uploadUrl.uploadToLocaleUrl + '/pic/markdown_editor_article_content',
       formData: {
         title: '',
         cover_image: {
@@ -142,6 +141,14 @@ export default {
         access_type: 'pub',
         access_value: '',
         tags: 0
+      },
+      editorUploadConfig: {
+        headers: {
+          'Authorization': window.access_token
+        },
+        upload_url: window.uploadUrl.uploadToLocaleUrl + '/pic/markdown_editor_article_content',
+        file_name: 'file',
+        data: {}
       },
       imguploadConfig: {
         headers: {
