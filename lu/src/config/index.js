@@ -8,8 +8,9 @@ export default {
   /**
    * @description 配置显示在浏览器标签的title
    */
-  title: 'Lucmsee',
-  systemTitle: 'Lucmsee', // 菜单栏上方的大标题
+  title: 'Lucmsee', // 网站标题
+  systemTitle: '我有一个家你不短简', // 菜单栏上方的大标题
+  copyRight: 'Lucmsee', // 请务改动 copyRight，违者必纠
   /**
    * @description token在Cookie中存储的天数，默认1天 (最好与后端 oauth_token的有效时间保持一致)
    */

@@ -55,6 +55,9 @@
       <template slot-scope="{ row, index }" slot="article_category">
         {{ row.article_category.name }}
       </template>
+      <template slot-scope="{ row, index }" slot="access_type">
+        <Tag>{{ tableStatus.access_type[row.access_type]}}</Tag>
+      </template>
       <template slot-scope="{ row, index }" slot="enable">
         <iSwitch :slot="'open'" type='primary' :value="row.enable === 'T'" @on-change="switchChange(row,index,'enable')"></iSwitch>
       </template>
@@ -67,6 +70,7 @@
 
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
+        <Button type="primary" size="small" style="margin-right: 5px" @click="tableButtonShowInfo(row,index)">{{ $t('show_info') }}</Button>
         <Poptip confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
@@ -81,6 +85,7 @@
     @on-add-modal-hide="addModalHide"></add-component>
   <edit-component v-if='editModal.show' :articleCategories="articleCategories" :tableStatus_recommend="tableStatus.recommend" :tableStatus_top="tableStatus.top" :tableStatus_enable="tableStatus.enable" :modal-id='editModal.id' @on-edit-modal-success='getTableDataExcute(feeds.current_page)'
     @on-edit-modal-hide="editModalHide"> </edit-component>
+  <show-info v-if='showInfoModal.show' :info='showInfoModal.info' @show-modal-close="showModalClose"></show-info>
 </div>
 </template>
 
@@ -93,6 +98,7 @@ import {
 // import EditComponent from './components/edit'
 import AddComponent from './components/markdown_add'
 import EditComponent from './components/markdown_edit'
+import ShowInfo from './components/show-info'
 
 import {
   getAllCategories
@@ -108,7 +114,8 @@ import {
 export default {
   components: {
     AddComponent,
-    EditComponent
+    EditComponent,
+    ShowInfo
   },
   data () {
     return {
@@ -144,6 +151,10 @@ export default {
         show: false,
         id: 0
       },
+      showInfoModal: {
+        show: false,
+        info: ''
+      },
       articleCategories: [],
       columns: [{
         title: 'ID',
@@ -154,12 +165,19 @@ export default {
       {
         title: '标题',
         key: 'title',
+        minWidth: 80,
+        tooltip: true
+      },
+      {
+        title: '访问权限',
+        slot: 'access_type',
         minWidth: 80
       },
       {
         title: '分类',
         minWidth: 90,
-        slot: 'article_category'
+        slot: 'article_category',
+        tooltip: true
       },
       {
         title: '启用状态',
@@ -192,7 +210,7 @@ export default {
       },
       {
         title: '操作',
-        minWidth: 50,
+        minWidth: 100,
         slot: 'action'
       }
       ]
@@ -263,6 +281,13 @@ export default {
           title: res.message
         })
       })
+    },
+    tableButtonShowInfo (row, index) {
+      this.showInfoModal.show = true
+      this.showInfoModal.info = row
+    },
+    showModalClose () {
+      this.showInfoModal.show = false
     },
     switchChange: function (row, index, column) {
       let t = this

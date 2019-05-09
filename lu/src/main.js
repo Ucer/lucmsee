@@ -16,6 +16,7 @@ import '@/assets/icons/iconfont.css'
 import TreeTable from 'tree-table-vue'
 import VOrgTree from 'v-org-tree'
 import 'v-org-tree/dist/v-org-tree.css'
+import Highlight from '@/libs/highlight.js'
 
 window.$ = window.jQuery = require('jquery')
 // 实际打包时应该不引入mock
@@ -39,6 +40,7 @@ Vue.use(iView, {
 })
 Vue.use(TreeTable)
 Vue.use(VOrgTree)
+Vue.use(Highlight)
 /**
  * @description 注册admin内置插件
  */
@@ -51,6 +53,8 @@ Vue.config.productionTip = false
  * @description 全局注册应用配置
  */
 Vue.prototype.$config = config
+
+
 /**
  * 注册指令
  */

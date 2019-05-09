@@ -48,7 +48,7 @@
         </Content>
       </Layout>
     </Content>
-    <Footer class="text-center"><span class="blod-font">{{title}}{{stateSystemVersion}}</span> - 2019 &copy; Ucer</Footer>
+    <Footer class="text-center"><span class="blod-font">{{copyRight}}{{stateSystemVersion}}</span> - 2019 &copy; Ucer</Footer>
   </Layout>
 </Layout>
 </template>
@@ -93,7 +93,8 @@ export default {
       maxLogo,
       isFullscreen: false,
       systemTitle: window.systemConfigIndexFile.systemTitle,
-      title: window.systemConfigIndexFile.title
+      title: window.systemConfigIndexFile.title,
+      copyRight: window.systemConfigIndexFile.copyRight
     }
   },
   computed: {
