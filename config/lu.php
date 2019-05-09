@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'current_version' => '1.1.4.01',
+    'current_version' => '1.1.5.01',
     'api_app_url' => env('API_APP_URL'),
     'system_config_group_list' => [
         'basic' => ['title' => '基本配置', 'icon' => 'ios-medal', 'desc' => ''],
