@@ -1,36 +1,36 @@
 <style lang="less">
-@import './login.less';
+  @import './login.less';
 </style>
 
 <template>
-<div class="login">
-  <div class="login-con">
-    <Card icon="log-in" title="欢迎登录" :bordered="false">
-      <div class="form-con">
-        <Form ref="formData" :model="formData" :rules="rules" @keydown.enter.native="handleSubmit">
-          <FormItem prop="email">
-            <Input prefix="ios-person" v-model="formData.email" placeholder="请输入用户名" />
-          </FormItem>
-          <FormItem prop="password">
-            <Input prefix="md-lock" type="password" v-model="formData.password" placeholder="请输入密码" />
-          </FormItem>
-          <FormItem prop="captcha" class="captcha-img">
-            <Input v-model="formData.captcha" placeholder="请输入验证码">
-            <img style="padding:0" @click="getCaptchaExcute()" slot="append" :src="captcha_url" alt="" />
-            </Input>
-          </FormItem>
-          <FormItem>
-            <Button type="primary" :loading="saveLoading" @click="handleSubmit">
-              <span v-if="!saveLoading">登录</span>
-              <span v-else>正在登录...</span>
-            </Button>
-          </FormItem>
-        </Form>
-        <p class="login-tip">Lucms EE © 2019 Powered by Ucer ❤</p>
-      </div>
-    </Card>
+  <div class="login" id="loginPage">
+    <div class="login-con">
+      <Card icon="log-in" title="欢迎登录" :bordered="false">
+        <div class="form-con">
+          <Form ref="formData" :model="formData" :rules="rules" @keydown.enter.native="handleSubmit">
+            <FormItem prop="email">
+              <Input prefix="ios-person" v-model="formData.email" placeholder="请输入用户名"/>
+            </FormItem>
+            <FormItem prop="password">
+              <Input prefix="md-lock" type="password" v-model="formData.password" placeholder="请输入密码"/>
+            </FormItem>
+            <FormItem prop="captcha" class="captcha-img">
+              <Input v-model="formData.captcha" placeholder="请输入验证码">
+                <img style="padding:0" @click="getCaptchaExcute()" slot="append" :src="captcha_url" alt=""/>
+              </Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" :loading="saveLoading" @click="handleSubmit">
+                <span v-if="!saveLoading">登录</span>
+                <span v-else>正在登录...</span>
+              </Button>
+            </FormItem>
+          </Form>
+          <p class="login-tip">Lucms EE © 2019 Powered by Ucer ❤</p>
+        </div>
+      </Card>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -40,6 +40,8 @@ import {
 import {
   mapActions
 } from 'vuex'
+import particles from 'particles.js'
+
 export default {
   data () {
     return {
@@ -72,6 +74,9 @@ export default {
   },
   created () {
     this.getCaptchaExcute()
+  },
+  mounted: function () {
+    particlesJS.load('loginPage', window.baseUrl + '/storage/common/particles.json')
   },
   methods: {
     ...mapActions([
@@ -106,7 +111,8 @@ export default {
         const response_data = res.data
         t.captcha_url = response_data.img
         t.formData.captcha_key = response_data.key
-      }, function (error) {})
+      }, function (error) {
+      })
     }
   }
 }

@@ -25,6 +25,7 @@
     "iview-area": "^1.6.0",
     "jquery": "^3.4.1",
     "js-cookie": "^2.2.0",
+    "particles.js": "^2.0.0",
     "simplemde": "^1.11.2",
     "sortablejs": "^1.9.0",
     "tree-table-vue": "^1.1.0",
