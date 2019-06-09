@@ -30,9 +30,14 @@ const baseUrlProxy = process.env.NODE_ENV === 'development' ? config.baseUrl.pro
 window.baseUrl = baseUrl
 window.systemConfigIndexFile = config
 
+let requestBaseUrl = process.env.NODE_ENV === 'development'
+  ? baseUrlProxy
+  : baseUrl
+window.requestBaseUrl = requestBaseUrl // axios 接口请求地址
+
 window.uploadUrl = {
   uploadToFileSystemUrl: config.domainForFileSystem.host + '/api/accept/common/common_upload', // 要跟上 file_type 与 category
-  uploadToLocaleUrl: baseUrlProxy + '/api/uploads/common_upload' // 要跟上 file_type 与 category
+  uploadToLocaleUrl: requestBaseUrl + '/api/uploads/common_upload' // 要跟上 file_type 与 category
 }
 
 Vue.use(iView, {

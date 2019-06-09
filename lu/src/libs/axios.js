@@ -1,5 +1,4 @@
 import axios from 'axios'
-import store from '@/store'
 import { Notice, Message } from 'iview'
 import { getTokenFromCookies } from '@/libs/util'
 import config from '@/config'
@@ -23,17 +22,17 @@ class HttpRequest {
   constructor (baseUrl = baseURL) {
     this.baseUrl = baseUrl
     this.queue = {}
-    this.configIndex = config
+    // this.configIndex = config
   }
   getInsideConfig () {
     window.access_token = getTokenFromCookies()
 
-    let requestBaseUrl = process.env.NODE_ENV === 'development'
-      ? this.configIndex.baseUrl.proxy
-      : this.baseUrl
+    // let requestBaseUrl = process.env.NODE_ENV === 'development'
+    //   ? this.configIndex.baseUrl.proxy
+    //   : this.baseUrl
 
     const config = {
-      baseURL: requestBaseUrl,
+      baseURL: window.requestBaseUrl,
       headers: {
         Authorization: window.access_token
       }

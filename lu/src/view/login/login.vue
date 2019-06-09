@@ -76,6 +76,7 @@ export default {
     this.getCaptchaExcute()
   },
   mounted: function () {
+    // 此处不能写代理地址，否则会报 vue 错误
     particlesJS.load('loginPage', window.baseUrl + '/storage/common/particles.json')
   },
   methods: {
