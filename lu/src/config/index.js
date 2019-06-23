@@ -10,7 +10,7 @@ export default {
    */
   title: 'Lucmsee', // 网站标题
   systemTitle: 'Lucmsee', // 菜单栏上方的大标题
-  copyRight: 'Lucmsee', // 请务改动 copyRight，违者必纠
+  copyRight: 'Lucmsee', // 请务改动 copyRight，违者必究
   /**
    * @description token在Cookie中存储的天数，默认1天 (最好与后端 oauth_token的有效时间保持一致)
    */
