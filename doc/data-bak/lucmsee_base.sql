@@ -4,8 +4,10 @@
 *@status_maps 数据字典表
 *@users 用户表
 *@logs 日志表
+* <<<==== 先禁用所有外键 =====
 *@permissions  权限表
 *@roles  角色表
+* ==== 重启外键约束  =====>>>
 *@model_has_permissions  用户多权限表
 *@model_has_roles  用户多角色表
 *@role_has_permissions  角色多权限表
@@ -107,7 +109,10 @@ create table `logs` (
   key `logs_type_index` (`type`)
 ) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci;
 
+SET FOREIGN_KEY_CHECKS=0; -- 先禁用所有外键
 /* 表的结构 permissions*/
+-- alter table `role_has_permissions` drop foreign key  `role_has_permissions_permission_id_foreign` ;
+-- alter table `model_has_permissions` drop foreign key  `model_has_permissions_permission_id_foreign`;
 drop table if exists permissions;
 create table `permissions` (
   `id` int(10) unsigned not null auto_increment,
@@ -121,6 +126,8 @@ create table `permissions` (
 ) engine=innodb auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
 
 /* 表的结构 roles*/
+-- alter table `role_has_permissions` drop foreign key  `role_has_permissions_role_id_foreign`;
+-- alter table `model_has_roles` drop foreign key  `model_has_roles_role_id_foreign`;
 drop table if exists roles;
 create table `roles` (
   `id` int(10) unsigned not null auto_increment,
@@ -132,6 +139,7 @@ create table `roles` (
   `updated_at` timestamp null default null,
   primary key (`id`)
 ) engine=innodb auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
+SET FOREIGN_KEY_CHECKS=1; -- 重启外键约束
 
 /* 表的结构 model_has_permissions*/
 drop table if exists model_has_permissions;
@@ -471,4 +479,3 @@ create table `oauth_refresh_tokens` (
   primary key (`id`),
   key `oauth_refresh_tokens_access_token_id_index` (`access_token_id`)
 ) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci;
-
