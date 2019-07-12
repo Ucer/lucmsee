@@ -27,7 +27,7 @@ export default {
   baseUrl: {
     proxy: 'http://localhost:8089', // 如果使用了代理，aioxs.js 中的 getInsideConfig baseURL修改为这个(开发环境统一使用代理)
     dev: 'http://lucmsee.test',
-    pro: 'http://lucmsee.test'
+    pro: 'lucmsee.codehaoshi.com'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home
@@ -45,7 +45,7 @@ export default {
   // domainForFileSystem: 'https://filesystem.codehaoshi.com', // 文件管理系统域名，[图片文件传到文件服务器上]
   domainForFileSystem: {
     host: 'http://filesystem.test', // 文件管理系统域名，[图片文件传到文件服务器上]
-    access_token: 'kjsdfiyYnsdfsadfYkT@#$'
+    access_token: ''
   },
   platName: 'lucmsee', // 平台名称  plat，文件上传时用到
   noSuccessUrlArray: ['table_bak_sql_file_download'] // 如果 api url 中包含此数组中的字符串，则无需有 status 返回值，如文件上传接口

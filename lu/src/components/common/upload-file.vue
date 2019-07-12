@@ -97,7 +97,7 @@ export default {
         },
         format: ['txt', 'video', 'doc', 'sql', 'xlsx', 'docx'],
         max_size: 800, // 800KB
-        upload_url: window.uploadUrl.uploadTmp,
+        upload_url: '',
         file_name: 'file',
         multiple: false,
         file_num: 0,
