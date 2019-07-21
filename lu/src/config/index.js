@@ -27,7 +27,7 @@ export default {
   baseUrl: {
     proxy: 'http://localhost:8089', // 如果使用了代理，aioxs.js 中的 getInsideConfig baseURL修改为这个(开发环境统一使用代理)
     dev: 'http://lucmsee.test',
-    pro: 'lucmsee.codehaoshi.com'
+    pro: 'http://lucmsee.codehaoshi.com'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home
