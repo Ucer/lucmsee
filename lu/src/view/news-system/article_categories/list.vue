@@ -110,7 +110,7 @@ export default {
       }, {
         title: '排序',
         key: 'weight',
-        minWidth: 50,
+        minWidth: 100,
         sortable: 'customer',
         slot: 'weight'
       }, {

@@ -29,7 +29,7 @@
 <template>
 <div class="tables-edit-outer">
   <div v-if="!isEditting" class="tables-edit-con">
-    <span class="value-con">{{ value }}</span>
+    <span class="value-con">{{ columnValue }}</span>
     <Button @click="startEdit" class="tables-edit-btn" style="padding: 2px 4px;" type="text">
       <Icon type="md-create"></Icon>
     </Button>
@@ -79,7 +79,7 @@ export default {
       let t = this
       commonEditTableColumn(t.id, t.table, t.column, t.columnValue).then(res => {
         t.edittingCellId = ''
-        t.value = t.columnValue
+        // t.value = t.columnValue
       })
     }
   }
