@@ -6,14 +6,14 @@
 - [] 中为用户需要拥有相关角色才可访问功能
 
 #### 系统管理 ['Founder']
-- 数据库监控
+- 数据库监控 ['Developer']
     - 表备份 (备份目录可在 set_file_path.php 配置文件中更改)
     - 查看备份记录(table_bak_records)
         - 下载备份文件 (格式为 zip)
         - 批量删除备份记录
     - 表优化
     - 表修复
-- 数据字典(tables)
+- 数据字典(tables) ['Developer']
     - 添加表
     - 修改表
     - 删除表
@@ -52,8 +52,8 @@
 - 用户管理(users) ['Founder', 'Maintainer', 'WebsiteEditor']
     - 添加  ['Founder', 'Maintainer']
     - 修改  ['Founder', 'Maintainer']
-    - 删除  ['Founder', 'Maintainer']
-    - 分配角色(model_has_roles) ['Founder', 'Maintainer']
+    - 删除  ['Founder', 'Developer']
+    - 分配角色(model_has_roles) ['Founder', 'Developer']
 
 #### 新闻系统 ['Founder', 'Maintainer', 'WebsiteEditor']
 - 标签管理(tags)
