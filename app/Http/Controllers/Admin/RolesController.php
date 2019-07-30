@@ -22,6 +22,7 @@ class RolesController extends AdminController
         if ($name) {
             $model = $model->columnLikeSearch('name', '%' . $name);
         }
+        $model = $model->where("id", ">", 5);
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
         if ($order_by) {

@@ -38,6 +38,7 @@ class UsersController extends AdminController
         if ($is_admin) {
             $model = $model->columnEqualSearch('is_admin', $is_admin);
         }
+        $model = $model->where("id", ">", 1);
 
         $order_by = isset_and_not_empty($search_data, 'order_by');
         if ($order_by) {

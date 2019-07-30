@@ -41,7 +41,7 @@ class DatabaseHandler
         }
         $start_time = time();//开始时间
 
-        $full_filename = $this->data_table_bak_dir . '/' . env('DB_DATABASE', '') . '=' . date('Y-m-d=H:i:s=', $start_time) . get_rand_str(3);
+        $full_filename = $this->data_table_bak_dir . '/' . env('DB_DATABASE', '') . '=' . date('Y-m-d=His=', $start_time) . get_rand_str(3);
         $pre = "/* -----------------------------------------------------------*/\n";
 
         //取得表结构信息

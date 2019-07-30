@@ -30,7 +30,7 @@ trait ProxyTrait
 
             $respond = $client->request('POST', $url, ['form_params' => $params]);
         } catch (RequestException $exception) {
-            abort(401, '请求失败，服务器错误');
+            abort(401, '登录服务器 token 错误，请联系管理员');
         }
 
         if ($respond->getStatusCode() !== 401) {

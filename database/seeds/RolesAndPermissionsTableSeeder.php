@@ -34,5 +34,7 @@ class RolesAndPermissionsTableSeeder extends Seeder
         // 创建网站编辑角色，并赋予权限
         $maintainer = Role::create(['name' => 'WebsiteEditor', 'description' => '网站编辑']);
         $maintainer->givePermissionTo('manage_contents');
+
+        $maintainer = Role::create(['name' => 'Developer', 'description' => '开发人员']);
     }
 }

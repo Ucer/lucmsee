@@ -23,6 +23,7 @@ class StatusMapsTableSeeder extends Seeder
             ['table_name' => 'logs', 'column' => 'type', 'status_code' => 'update', 'status_description' => '修改', 'remark' => '修改数据'],
             ['table_name' => 'logs', 'column' => 'type', 'status_code' => 'destroy', 'status_description' => '删除', 'remark' => '删除数据'],
             ['table_name' => 'logs', 'column' => 'type', 'status_code' => 'error', 'status_description' => '错误日志', 'remark' => '错误日志记录'],
+            ['table_name' => 'logs', 'column' => 'type', 'status_code' => 'login', 'status_description' => '登录日志', 'remark' => '管理员登录日志'],
             // attachments_table
             ['table_name' => 'attachments', 'column' => 'file_type', 'status_code' => 'file', 'status_description' => '文件', 'remark' => ''],
             ['table_name' => 'attachments', 'column' => 'file_type', 'status_code' => 'pic', 'status_description' => '图片', 'remark' => ''],

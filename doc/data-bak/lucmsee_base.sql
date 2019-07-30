@@ -32,6 +32,9 @@
 *@oauth_refresh_tokens
  */
 
+ create database if not exists lucmsee default character set utf8mb4 collate utf8mb4_unicode_ci;
+ use lucmsee;
+
 /* 表的结构 tables*/
 drop table if exists tables;
 create table `tables` (

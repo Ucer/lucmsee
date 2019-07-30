@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
         $user->is_admin = 'T';
         $user->save();
 
-        $user->assignRole('Founder');
+        $user->assignRole('Founder', "Developer");
 
         $user = \App\Models\User::find(2);
         $user->nickname = '小管家';

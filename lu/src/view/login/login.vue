@@ -95,11 +95,18 @@ export default {
             captcha: t.formData.captcha,
             captcha_key: t.formData.captcha_key
           }).then(res => {
-            t.getUserInfoExcute().then(res => {
-              t.$router.push({
-                name: 'home'
+            if (res.status === 'success') {
+              t.getUserInfoExcute().then(res => {
+                t.$router.push({
+                  name: 'home'
+                })
               })
-            })
+            } else {
+              t.$Notice.error({
+                title: '出错了',
+                desc: res.message
+              })
+            }
           }).catch((err) => {
             t.saveLoading = false
           })

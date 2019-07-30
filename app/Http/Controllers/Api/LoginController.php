@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use Illuminate\Http\Request;
 use App\Validates\LoginValidate;
 use App\Models\User;
@@ -10,7 +11,7 @@ use App\Http\Controllers\Api\Traits\ProxyTrait;
 
 class LoginController extends ApiController
 {
-    use AuthenticatesUsers,ProxyTrait;
+    use AuthenticatesUsers, ProxyTrait;
 
     public function __construct()
     {
@@ -38,7 +39,7 @@ class LoginController extends ApiController
         if (!Hash::check($request->password, $user->password)) {
             return $this->failed('密码不正确');
         }
-        $user->last_login_at = date('Y-m-d H:i:s',time());
+        $user->last_login_at = date('Y-m-d H:i:s', time());
         $user->save();
         $return = $user->toArray();
 
@@ -47,6 +48,7 @@ class LoginController extends ApiController
         }
 
         $tokens = $this->authenticate();
+        admin_log_record($user->id, 'login', 'users', '登录后台');
         return $this->success(['token' => $tokens, 'user' => $return]);
     }
 

@@ -182,7 +182,7 @@ export default {
       {
         title: '启用状态',
         key: 'enable',
-        minWidth: 50,
+        minWidth: 100,
         slot: 'enable'
       },
       {
@@ -210,7 +210,7 @@ export default {
       },
       {
         title: '操作',
-        minWidth: 100,
+        minWidth: 150,
         slot: 'action'
       }
       ]

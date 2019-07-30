@@ -3,6 +3,7 @@
 return [
     'current_version' => '1.1.6.02',
     'api_app_url' => env('API_APP_URL'),
+    'developerId' => 1, // 超级管理员id
     'system_config_group_list' => [
         'basic' => ['title' => '基本配置', 'icon' => 'ios-medal', 'desc' => ''],
         'content' => ['title' => '内容配置', 'icon' => 'md-menu', 'desc' => ''],

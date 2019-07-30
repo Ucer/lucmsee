@@ -63,7 +63,8 @@ export default[
         path: '/dashboard/databases',
         name: 'databaseManage',
         meta: {
-          title: '数据库监控'
+          title: '数据库监控',
+          access: ['Developer']
         },
         component: () => import('@/view/system-configs/databases/list.vue')
       }, {
@@ -79,7 +80,8 @@ export default[
         path: '/dashboard/tables',
         name: 'statusMap',
         meta: {
-          title: '数据字典'
+          title: '数据字典',
+          access: ['Developer']
         },
         component: () => import('@/view/system-configs/status_maps/list.vue')
       }, {

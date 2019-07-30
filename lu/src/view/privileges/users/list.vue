@@ -53,8 +53,8 @@
 
       <template slot-scope="{ row, index }" slot="action">
         <Button v-if="isHasRoleToAccess(['Founder', 'Maintainer'])" type="success" size="small" style="margin-right: 5px" @click="tableButtonEdit(row,index)">{{ $t('edit') }}</Button>
-        <Button v-if="isHasRoleToAccess(['Founder', 'Maintainer'])" type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('role') }}</Button>
-        <Poptip v-if="isHasRoleToAccess(['Founder', 'Maintainer'])" confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
+        <Button v-if="isHasRoleToAccess(['Founder', 'Developer'])" type="info" size="small" style="margin-right: 5px" @click="tableButtonGiveUserRoles(row,index)">{{ $t('role') }}</Button>
+        <Poptip v-if="isHasRoleToAccess(['Founder', 'Developer'])" confirm :title="'您确定要删除ID为：' + row.id + ' 的记录？'" @on-ok="tableButtonDestroyOk(row,index)"> <Button type='error' size="small" style="margin-right: 5px">{{ $t('destroy')}}</Button> </Poptip>
       </template>
     </Table>
     <div style="margin: 10px;overflow: hidden">
