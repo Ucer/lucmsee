@@ -93,6 +93,15 @@ create table `users` (
   key `users_is_admin_index` (`is_admin`)
 ) engine=innodb auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
 
+-- 2019-08-01 api 增加微信小程序登录功能,用于保存用户微信相关信息
+ALTER TABLE users ADD COLUMN  `weixin_openid` varchar(100) not null default '';
+ALTER TABLE users ADD COLUMN  `mini_openid` varchar(100)  not null default '';
+ALTER TABLE users ADD COLUMN  `weixin_unionid` varchar(100) not null default '';
+ALTER TABLE users ADD COLUMN  `weixin_session_key` varchar(100) not null default '';
+ALTER TABLE users ADD COLUMN  `country` varchar(30) not null default '';
+ALTER TABLE users ADD COLUMN  `province` varchar(30) not null default '';
+ALTER TABLE users ADD COLUMN  `city` varchar(30) not null default '';
+
 /* 表的结构 logs*/
 drop table if exists logs;
 create table `logs` (
