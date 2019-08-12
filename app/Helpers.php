@@ -289,7 +289,7 @@ function obj_to_array($obj)
  * @param string $sort  排序类型  SORT_ASC     SORT_DESC
  * @return array 排序后的数组
  */
-function arraySort($array, $keys, $sort = SORT_DESC) {
+function array_sort_by_column($array, $keys, $sort = SORT_DESC) {
     $keysValue = [];
     foreach ($array as $k => $v) {
         $keysValue[$k] = $v[$keys];
