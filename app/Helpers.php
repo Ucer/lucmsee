@@ -61,29 +61,12 @@ function get_client_ip()
  * @param $column
  * @return null
  */
-function isset_and_not_empty($arr, $column, $data_type = 'string')
+function isset_and_not_empty($arr, $column, $defaultValue = '')
 {
     if ((isset($arr[$column]) && $arr[$column])) {
         return $arr[$column];
     } else {
-        switch ($data_type) {
-            case 'string':
-                $empty = '';
-                break;
-            case 'boolean':
-                $empty = false;
-                break;
-            case 'array':
-                $empty = [];
-                break;
-            case 'number':
-                $empty = 0;
-                break;
-            default:
-                $empty = '';
-                break;
-        }
-        return $empty;
+        return $defaultValue;
     }
 }
 
