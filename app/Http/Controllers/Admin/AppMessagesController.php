@@ -25,7 +25,7 @@ class AppMessagesController extends AdminController
         $search_data = json_decode($request->get('search_data'), true);
 
         $send_user_mobile = isset_and_not_empty($search_data, 'send_user_mobile');
-        if ($search_data) {
+        if ($send_user_mobile) {
             $user_ids = User::columnLikeSearch('mobile', '%' . $send_user_mobile)->pluck('id')->toArray();
             $model = $model->columnInSearch('admin_id', $user_ids);
         }
