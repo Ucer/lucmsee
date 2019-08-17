@@ -63,7 +63,7 @@ export function oneOf (value, validList) {
  * @param {Number} timeStamp 判断时间戳格式是否是毫秒
  * @returns {Boolean}
  */
-const isMillisecond = timeStamp => {
+export const isMillisecond = timeStamp => {
   const timeStr = String(timeStamp)
   return timeStr.length > 10
 }
@@ -73,7 +73,7 @@ const isMillisecond = timeStamp => {
  * @param {Number} currentTime 当前时间时间戳
  * @returns {Boolean} 传入的时间戳是否早于当前时间戳
  */
-const isEarly = (timeStamp, currentTime) => {
+export const isEarly = (timeStamp, currentTime) => {
   return timeStamp < currentTime
 }
 
@@ -82,7 +82,7 @@ const isEarly = (timeStamp, currentTime) => {
  * @returns {String} 处理后的字符串
  * @description 如果传入的数值小于10，即位数只有1位，则在前面补充0
  */
-const getHandledValue = num => {
+export const getHandledValue = num => {
   return num < 10
     ? '0' + num
     : num
@@ -92,7 +92,7 @@ const getHandledValue = num => {
  * @param {Number} timeStamp 传入的时间戳
  * @param {Number} startType 要返回的时间字符串的格式类型，传入'year'则返回年开头的完整时间
  */
-const getDate = (timeStamp, startType) => {
+export const getDate = (timeStamp, startType) => {
   const d = new Date(timeStamp * 1000)
   const year = d.getFullYear()
   const month = getHandledValue(d.getMonth() + 1)
