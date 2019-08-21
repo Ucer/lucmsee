@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Hash;
 use App\Http\Controllers\Api\Traits\ProxyTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends ApiController
 {
@@ -28,7 +29,7 @@ class LoginController extends ApiController
 
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-            return $this->failed('操作过于频繁，请稍后再试', 429);
+            return $this->failed('操作过于频繁，请稍后再试', Response::HTTP_TOO_MANY_REQUESTS);
         }
 
         $user = User::enableSearch('T')

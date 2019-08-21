@@ -45,7 +45,7 @@ trait ApiResponseTraits
 
     public function failed($message, $code = FoundationResponse::HTTP_BAD_REQUEST, $status = 'error', $data = '')
     {
-        return $this->setStatusCode($code)->message($message, $status, $data);
+        return $this->status($status, compact('data'), $code, $message);
     }
 
     public function status($status, array $data, $code = null, $message = '')

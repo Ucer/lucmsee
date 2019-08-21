@@ -7,6 +7,7 @@ use App\Http\Resources\PermissionResource;
 use App\Models\Permission;
 use App\Validates\PermissionValidate;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PermissionsController extends AdminController
 {
@@ -68,12 +69,12 @@ class PermissionsController extends AdminController
 
     public function destroy(Permission $model, PermissionValidate $validate)
     {
-        if (!$model) return $this->failed('找不到权限', 404);
+        if (!$model) return $this->failed('找不到权限', Response::HTTP_NOT_FOUND);
         $rest_destroy_validate = $validate->destroyValidate($model);
         if ($rest_destroy_validate['status'] === true) {
             $rest_destroy = $model->destroyAction();
             if ($rest_destroy['status'] === true) return $this->message($rest_destroy['message']);
-            return $this->failed($rest_destroy['message'], 500);
+            return $this->failed($rest_destroy['message']);
         } else {
             return $this->failed($rest_destroy_validate['message']);
         }

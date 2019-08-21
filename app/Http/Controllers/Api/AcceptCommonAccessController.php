@@ -9,6 +9,7 @@ use DB;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Symfony\Component\HttpFoundation\Response;
 
 class AcceptCommonAccessController extends ApiController
 {
@@ -49,7 +50,7 @@ class AcceptCommonAccessController extends ApiController
     {
         $request_data = $request->all();
         $rest_validate = $validate->uploadImageUseBase64Validate($request_data);
-        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message'], 200);
+        if ($rest_validate['status'] === false) return $this->failed($rest_validate['message'], Response::HTTP_OK);
         $new_request_data = $rest_validate['data'];
 
         $rest_fileUploadHandler = $fileUploadHandler->base64ImageUpload($new_request_data['base_string'], 'api_img', $new_request_data['user_id'], $new_request_data['max_width'], $new_request_data['original_name']);
@@ -57,7 +58,7 @@ class AcceptCommonAccessController extends ApiController
         if ($rest_fileUploadHandler['status'] === true) {
             return $this->success($rest_fileUploadHandler['data']);
         } else {
-            return $this->failed($rest_fileUploadHandler['message'], 200);
+            return $this->failed($rest_fileUploadHandler['message'], Response::HTTP_OK);
         }
     }
 

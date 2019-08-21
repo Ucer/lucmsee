@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExcelsController extends ApiController
 {
@@ -68,10 +69,10 @@ class ExcelsController extends ApiController
         $file = $request->file('file');
         $min_type = $file->getClientMimeType();
         $file_name = explode('.', $file->getClientOriginalName());
-        if (count($file_name) < 2) return $this->failed('无法识别文件类型', 200);
+        if (count($file_name) < 2) return $this->failed('无法识别文件类型', Response::HTTP_OK);
         $real_file_type = array_pop($file_name);
         if (!in_array($real_file_type, ['xlsx', 'xls', 'csv'])) {
-            return $this->failed('不支持的文件类型', 200);
+            return $this->failed('不支持的文件类型', Response::HTTP_OK);
         }
         $rest_upload_file = $fileuploadHandler->uploadFile($file, $min_type, 'file', Auth::id(), 'tmp', $real_file_type);
 

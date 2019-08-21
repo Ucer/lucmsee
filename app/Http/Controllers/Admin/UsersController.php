@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Config;
+use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends AdminController
 {
@@ -89,7 +90,7 @@ class UsersController extends AdminController
 
     public function destroy(User $model, UserValidate $validate)
     {
-        if (!$model) return $this->failed('找不到用户', 404);
+        if (!$model) return $this->failed('找不到用户', Response::HTTP_NOT_FOUND);
 
         $rest_validate = $validate->destroyValidate($model);
 
@@ -98,7 +99,7 @@ class UsersController extends AdminController
         if ($rest_destroy['status'] === true) {
             return $this->message($rest_destroy['message']);
         }
-        return $this->failed($rest_destroy['message'], 500);
+        return $this->failed($rest_destroy['message']);
     }
 
     public function currentUser()
