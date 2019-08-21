@@ -56,7 +56,7 @@ function get_client_ip()
 }
 
 /**
- * 判断数组的键是否存在，并且佱不为空
+ * 判断数组的键是否存在，并且佱不为空,如果为空，取给定的值作为默认值
  * @param $arr
  * @param $column
  * @return null
@@ -70,6 +70,12 @@ function isset_and_not_empty($arr, $column, $defaultValue = '')
     }
 }
 
+/**
+ * 如果数组中字段值为空，则删除并返回新数组
+ * @param $arr
+ * @param array $columns
+ * @return mixed
+ */
 function unset_if_no_value($arr, $columns = [])
 {
     foreach ($columns as $column) {
