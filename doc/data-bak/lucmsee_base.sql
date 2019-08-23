@@ -30,6 +30,7 @@
 *@oauth_clients
 *@oauth_personal_access_clients
 *@oauth_refresh_tokens
+*@failed_jobs 消息队列失败记录表
  */
 
  create database if not exists lucmsee default character set utf8mb4 collate utf8mb4_unicode_ci;
@@ -491,3 +492,15 @@ create table `oauth_refresh_tokens` (
   primary key (`id`),
   key `oauth_refresh_tokens_access_token_id_index` (`access_token_id`)
 ) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci;
+
+/* 表的结构 failed_jobs*/
+drop table if exists failed_jobs;
+CREATE TABLE `failed_jobs` (
+  `id` bigint not null auto_increment,
+  `connection` text,
+  `queue` text,
+  `payload` longtext,
+  `exception` longtext,
+  `failed_at` timestamp null default null,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
