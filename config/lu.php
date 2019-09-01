@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'current_version' => '1.1.7',
+    'current_version' => '1.2.0',
     'api_app_url' => env('API_APP_URL'),
     'developerId' => 1, // 超级管理员id
     'system_config_group_list' => [
