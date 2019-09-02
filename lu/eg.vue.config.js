@@ -18,7 +18,13 @@ const BASE_URL = process.env.NODE_ENV === 'production'
 const luOutPath = '../'
 
 module.exports = {
-
+  css: {
+    loaderOptions: { // 向 CSS 相关的 loader 传递选项
+      less: {
+        javascriptEnabled: true
+      }
+    }
+  },
   publicPath: BASE_URL,
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
