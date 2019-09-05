@@ -262,7 +262,28 @@ export default[
         component: () => import('@/view/system-security/user_agreements/list.vue')
       }
     ]
-  }, {
+  },
+  {
+    path: '/dashboard/systemSecurity',
+    name: 'luDemos',
+    component: Main,
+    meta: {
+      icon: 'ios-basket',
+      title: '组件示例',
+      showAlways: true
+    },
+    children: [
+      {
+        path: '/dashboard/amap',
+        name: 'amap',
+        meta: {
+          title: '地图'
+        },
+        component: () => import('@/view/a-lu-demos/vue_amap/vue-amap.vue')
+      }
+    ]
+  },
+  {
     path: '/401',
     name: 'error_401',
     meta: {

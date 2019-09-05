@@ -60,6 +60,21 @@ Vue.config.productionTip = false
 Vue.prototype.$config = config
 
 
+// 引入vue-amap
+import VueAMap from 'vue-amap';
+Vue.use(VueAMap);
+
+// 初始化vue-amap
+VueAMap.initAMapApiLoader({
+  // 高德的key
+  key: '8ed8e3cb3c68a58385b251456de91f9e',
+  // 插件集合
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor','AMap.Geolocation','AMap.Geocoder'],
+  // 高德 sdk 版本，默认为 1.4.4
+  v: '1.4.4'
+});
+
+
 /**
  * 注册指令
  */

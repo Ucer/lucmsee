@@ -1,6 +1,6 @@
 <?php
 
-/**       ==========================          基本APi           ====================   */
+/**       ==========================          基本APi part           ====================   */
 Route::namespace('Api')->group(function () {
 
     Route::get('get_captcha', 'OtherController@getCaptcha')->name('other.get_captcha');
@@ -15,27 +15,26 @@ Route::namespace('Api')->group(function () {
     Route::post('common_get_config_file_data', 'CommonController@getConfigData')->name('common.get_config_file_data');
 
 
-    /**       ==========================          文件上传           ====================   */
+    /**       ==========================          文件上传  part         ====================   */
     Route::post('uploads/common_upload/{file_type}/{category}', 'UploadController@commonUpload')->name('uploads.common_upload');
 
-    /**       ==========================          Excel           ====================   */
+    /**       ==========================          Excel   part      ====================   */
     Route::post('excels/export_excel_log', 'ExcelsController@exportExcelLog')->name('excels.export_excel_log');
     Route::post('excels/import_excel_tag', 'ExcelsController@importExcelTag')->name('excels.import_excel_tag');
 
 });
 
 
-/**       ==========================          其它域名来访Api           ====================   */
+/**       ==========================          其它域名来访Api    part     ====================   */
 Route::namespace('Api')->prefix('accept')->group(function () {
     Route::post('common/get_config_data', 'AcceptCommonAccessController@getConfigData')->name('accept.common.get_config_data');
     Route::post('common/upload_image_use_base64', 'AcceptCommonAccessController@uploadImageUseBase64')->name('accept.common.upload_image_use_base64');
 });
 
 
-/**       ==========================          后台APi           ====================   */
+/**       ==========================          后台自带 Api   part          ====================   */
 Route::namespace('Admin')->group(function () {
 
-    /**       ==========================          自带 Api           ====================   */
     Route::get('admin/users/current_user', 'UsersController@currentUser')->name('users.current_user');
     Route::get('admin/users/search_user_pass_mobile/{mobile}', 'UsersController@searchUserPassMobile')->name('users.search_user_pass_mobile');
     Route::get('admin/users/search_admin_user_pass_email/{email}', 'UsersController@searchAdminUserPassEmail')->name('users.search_admin_user_pass_email');
@@ -161,4 +160,12 @@ Route::namespace('Admin')->group(function () {
     Route::patch('admin/user_agreements/{user_agreement}', 'UserAgreementsController@update')->name('user_agreements.update');
     Route::get('admin/user_agreements/{user_agreement}', 'UserAgreementsController@show')->name('user_agreements.show');
     Route::delete('admin/user_agreements/{user_agreement}', 'UserAgreementsController@destroy')->name('user_agreements.destroy');
+});
+
+
+/**       ==========================          后台自定义 Api   part          ====================   */
+Route::namespace('Admin')->group(function () {
+    /**
+     * 实际项目中，你自己定义的路由应写在此处
+     **/
 });
