@@ -26,7 +26,7 @@ export default {
   appVersion: 'App版本管理',
   userAgreements: '协议管理',
   luDemos: '组件示例',
-  amap: '地图',
+  ucer_amap: 'ucer-amap',
 
 
   edit: '修改',

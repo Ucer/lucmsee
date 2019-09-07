@@ -274,12 +274,12 @@ export default[
     },
     children: [
       {
-        path: '/dashboard/amap',
-        name: 'amap',
+        path: '/dashboard/ucer_amap',
+        name: 'ucer_amap',
         meta: {
           title: '地图'
         },
-        component: () => import('@/view/a-lu-demos/vue_amap/vue-amap.vue')
+        component: () => import('@/view/a-lu-demos/ucer_amap/ucer-amap.vue')
       }
     ]
   },
