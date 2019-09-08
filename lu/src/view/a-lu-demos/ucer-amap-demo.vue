@@ -16,7 +16,6 @@
       </Col>
     </Row>
 
-    <hr class="hr-line-0"/>
     <h1>二、示例</h1>
     <Button type="info" size="small" style="margin-right: 5px" @click="showMapModal()">地图选点</Button>
     <ucer-map v-if='formdataFinished && mapModal.show' :width="600" :height="300" :amapData="formData.amapData"
@@ -74,13 +73,13 @@ export default {
           name: 'width',
           type: 'Integer',
           description: '地图宽度(px)',
-          default: 600
+          default: ':width="600"'
         },
         {
           name: 'height',
           type: 'Integer',
           description: '地图高度(px)',
-          default: 300
+          default: ':height="400"'
         },
         {
           name: 'amapData',

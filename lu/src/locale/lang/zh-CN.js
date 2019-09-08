@@ -27,6 +27,8 @@ export default {
   userAgreements: '协议管理',
   luDemos: '组件示例',
   ucer_amap: 'ucer-amap',
+  css: 'css',
+  inputHelp: 'input-help',
 
 
   edit: '修改',

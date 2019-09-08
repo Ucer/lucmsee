@@ -279,7 +279,23 @@ export default[
         meta: {
           title: '地图'
         },
-        component: () => import('@/view/a-lu-demos/ucer_amap/ucer-amap.vue')
+        component: () => import('@/view/a-lu-demos/ucer-amap-demo.vue')
+      },
+      {
+        path: '/dashboard/css',
+        name: 'css',
+        meta: {
+          title: 'css样式'
+        },
+        component: () => import('@/view/a-lu-demos/css-demo.vue')
+      },
+      {
+        path: '/dashboard/inputHelp',
+        name: 'inputHelp',
+        meta: {
+          title: 'input-help'
+        },
+        component: () => import('@/view/a-lu-demos/input-help-demo.vue')
       }
     ]
   },
