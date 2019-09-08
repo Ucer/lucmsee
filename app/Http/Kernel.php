@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\AcceptAccess;
+use App\Http\Middleware\OnlyDevModel;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -68,7 +69,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         /** Third package */
-        'accept_access' => AcceptAccess::class
+        'accept_access' => AcceptAccess::class,
+        'only_dev_model' => OnlyDevModel::class
     ];
 
     /**

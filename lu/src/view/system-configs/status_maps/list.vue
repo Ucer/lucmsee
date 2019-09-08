@@ -5,7 +5,7 @@
     <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
     </Col>
     <Col :xs="6" :lg="3" class="hidden-mobile">
-    <Input icon="search" @on-enter="getTableDataExcute(feeds.current_page) placeholder="请输入表名搜索..." v-model="searchForm.table_name"></Input>
+    <Input icon="search" @on-enter="getTableDataExcute(feeds.current_page)" placeholder="请输入表名搜索..." v-model="searchForm.table_name"></Input>
     </Col>
     <Col :xs="3" :lg="3">
     <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>

@@ -31,6 +31,11 @@ Route::namespace('Api')->prefix('accept')->group(function () {
     Route::post('common/upload_image_use_base64', 'AcceptCommonAccessController@uploadImageUseBase64')->name('accept.common.upload_image_use_base64');
 });
 
+/**       ==========================          测试域名    part     ====================   */
+Route::namespace('Api')->prefix('test')->middleware('only_dev_model')->group(function () {
+    Route::post('testJob', 'TestController@testJob')->name('test.testJob');
+    Route::post('testMessageSend', 'TestController@testMessageSend')->name('test.testMessageSend');
+});
 
 /**       ==========================          后台自带 Api   part          ====================   */
 Route::namespace('Admin')->group(function () {
