@@ -18,10 +18,10 @@
         <Button type="success" icon="plus" @click="addBtn()">{{ $t('add') }}</Button>
         </Col>
         <Col :xs="6" :lg="6" class="hidden-mobile">
-        <Input icon="search" placeholder="请输入表名搜索..." v-model="searchForm.column" ></Input>
+        <Input icon="search" placeholder="请输入字段名搜索..." v-model="searchForm.column" @on-enter="getTableDataExcute(feeds.current_page)" ></Input>
         </Col>
         <Col :xs="3" :lg="3">
-        <Button type="primary" icon="ios-search" @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
+        <Button type="primary" icon="ios-search"  @click="getTableDataExcute(feeds.current_page)">{{ $t('search') }}</Button>
         </Col>
       </Row>
       <br>
@@ -101,6 +101,7 @@ export default {
       {
         title: '字段名',
         key: 'column',
+        sortable: 'customer',
         minWidth: 100
       },
       {
