@@ -296,6 +296,14 @@ export default[
           title: 'input-help'
         },
         component: () => import('@/view/a-lu-demos/input-help-demo.vue')
+      },
+      {
+        path: '/dashboard/tableEdit',
+        name: 'tableEdit',
+        meta: {
+          title: 'table-edit'
+        },
+        component: () => import('@/view/a-lu-demos/table-edit-demo.vue')
       }
     ]
   },

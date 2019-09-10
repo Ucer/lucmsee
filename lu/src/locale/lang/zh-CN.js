@@ -29,6 +29,7 @@ export default {
   ucer_amap: 'ucer-amap',
   css: 'css',
   inputHelp: 'input-help',
+  tableEdit: 'table-edit',
 
 
   edit: '修改',
