@@ -1,3 +1,22 @@
+## 系统简介
+
+- laravel5.8
+- vue2.0
+- iview3.4
+- php7.2
+- mysql8.0
+- redis
+- 支持响应式布局
+- 前后端完全分离
+- 可扩展性高
+
+文档位于  doc 目录下
+
+演示地址： http://lucmsee.codehaoshi.com/dashboard 
+
+演示账号密码： dev@lucms.com   123456
+
+
 ## 功能模块
 
 ### 菜单
@@ -116,6 +135,9 @@
 - 集成图片裁剪工具
 - 管理员重置自己的登录密码
 - echarts 图表
+- 消息队列
+- 钉钉机器人
+- AES加密算法
 
 
 
