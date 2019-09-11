@@ -68,8 +68,8 @@
 @btn-padding-small-icon: 1px 7px 2px;
 @btn-font-size: 12px;
 @btn-font-size-large: 14px;
-@btn-border-radius: 0px;
-@btn-border-radius-small: 0px;
+@btn-border-radius: 4px;
+@btn-border-radius-small: 3px;
 @btn-group-border: shade(@primary-color, 5%);
 @btn-disable-color: #c5c8ce;
 @btn-disable-bg: @background-color-base;
@@ -566,13 +566,9 @@ img.head_image {
   max-height: 500px;
   overflow-y: auto;
 }
-// message 提示位置
+
 .ivu-message-notice {
   text-align: left;
-}
-// 模态框
-.ivu-modal-content {
-  border-radius:0px;
 }
 /*滚动条样式*/
 ::-webkit-scrollbar {
@@ -600,4 +596,3 @@ img.head_image {
     max-height: 700px;
   }
 }
-

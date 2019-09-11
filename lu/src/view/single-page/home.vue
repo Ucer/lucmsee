@@ -6,7 +6,7 @@
 <template>
 <div>
   <Row :gutter="20">
-    <i-col span="8" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" style="height: 120px;">
+    <i-col span="8" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" style="height: 120px;margin-top:13px;">
       <infor-card shadow :color="infor.color" :icon="infor.icon" :icon-size="36">
         <a @click="quickToRouter(infor.routerName,{})">
           <count-to :end=" infor.count" count-class="count-style" />
@@ -39,7 +39,7 @@ import userChartTheme from './user-chart/theme.json'
 
 import InforCard from './components/info-card'
 import CountTo from '_c/count-to'
-import ChartBar from './user-chart/bar.vue'
+// import ChartBar from './user-chart/bar.vue'
 
 import {
   getStatisticsData
@@ -82,9 +82,20 @@ export default {
           title: '文章数量',
           icon: 'ios-paper',
           count: res_data.article_count,
-          color: '#2D8cF0',
+          color: '#6f40f0',
           routerName: 'articleList'
-        } ]
+        }, {
+          title: '订单',
+          icon: 'md-sunny',
+          count: 1234,
+          color: '#7e391a',
+          routerName: 'useCarOrder'
+        }, {
+          title: '总收入',
+          icon: 'ios-paper',
+          count: 1231,
+          color: '#f0650f'
+        }]
       })
     },
     userEchart (res_data) {
