@@ -1,12 +1,12 @@
 <style lang="less">
 .count-style {
-    font-size: 50px;
+    font-size: 30px;
 }
 </style>
 <template>
 <div>
   <Row :gutter="20">
-    <i-col span="4" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" style="height: 120px;">
+    <i-col span="8" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" style="height: 120px;">
       <infor-card shadow :color="infor.color" :icon="infor.icon" :icon-size="36">
         <a @click="quickToRouter(infor.routerName,{})">
           <count-to :end=" infor.count" count-class="count-style" />
