@@ -19,7 +19,7 @@
     "cropperjs": "^1.5.1",
     "dayjs": "^1.8.13",
     "echarts": "^4.2.1",
-    "highlight.js": "^9.15.6",
+    "highlight.js": "^10.1.2",
     "html2canvas": "^1.0.0-rc.1",
     "iview": "^3.4.1",
     "iview-area": "^1.6.0",
